@@ -951,6 +951,19 @@
   .bp-tt{fill:#DCE9F5;font-family:'Montserrat';font-weight:800;font-size:10.5px;letter-spacing:1.5px}
   .bp-ts{fill:rgba(220,233,245,.75);font-family:'Montserrat';font-weight:600;font-size:8.5px;letter-spacing:1.2px}
   .dc-room:hover rect{stroke:#fff;stroke-width:2.6}
+
+  /* motions + guests */
+  .motion-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+  .raise-btn{background:rgba(232,119,34,.14);border:1.5px solid var(--orange);color:var(--orange-br);border-radius:4px;
+    padding:12px 22px;font-family:'Cinzel';font-weight:700;font-size:13px;letter-spacing:1.5px;cursor:pointer;transition:.14s}
+  .raise-btn:hover{background:rgba(232,119,34,.28);transform:translateY(-2px)}
+  .motion-banner{background:linear-gradient(160deg,var(--panel,#102C54),var(--navy-1));border:1px solid var(--orange);border-left:5px solid var(--orange);
+    border-radius:6px;padding:16px 18px;margin-bottom:10px;box-shadow:0 2px 0 rgba(0,0,0,.4);animation:mbIn .35s cubic-bezier(.2,.7,.3,1)}
+  @keyframes mbIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  .mb-tag{font-family:'Cinzel';font-size:10.5px;font-weight:800;letter-spacing:2.5px;color:var(--orange-br);animation:syncPulse 2.2s infinite}
+  .mb-body{font-size:15px;color:var(--cream);margin:8px 0 10px;line-height:1.5}
+  .mb-btns{display:flex;gap:8px}
+  .guest-top{display:flex;gap:16px;align-items:center;margin-top:6px}
 </style>
 </head>
 <body>
@@ -1173,6 +1186,7 @@
       <section class="view" id="v-meeting">
         <div class="sec">Chapter Meeting</div>
         <div class="meet-head card" id="meetHead"></div>
+        <div id="motionBoard"></div>
         <div id="praetorConsole"></div>
         <div id="topicsBoard"></div>
         <div class="sec-sub">Secret Ballots</div>
@@ -1448,6 +1462,37 @@
       <div class="pg-check">&#10003;</div>
       <h3>You're in — welcome!</h3>
       <p class="pg-sub">A brother will come find you. While you're here: we're a brotherhood built on <b>Fellowship, Leadership, Scholarship, Service, and Tradition</b> — and our national philanthropy supports <b>The B+ Foundation</b>, fighting childhood cancer.</p>
+    </div>
+  </div>
+</div>
+<div class="modal-bg" id="guestModal" onclick="if(event.target.id==='guestModal')closeGuestList()"><div class="modal" style="max-width:520px">
+  <h3 id="guestTitle">Guest List</h3>
+  <div class="guest-top">
+    <div class="iq-code" id="guestQr"></div>
+    <div class="iq-cap"><b>Guests scan to RSVP</b> — it lands on this list live.<br>
+      <button class="mini-btn" id="guestCopyBtn" onclick="copyGuestLink()">Copy link</button>
+      <div class="gallery-count" id="guestCounts" style="margin-top:8px"></div></div>
+  </div>
+  <div id="guestRows" style="max-height:40vh;overflow-y:auto;margin-top:12px"></div>
+  <div class="inline-add" style="margin-top:10px"><input id="guestAddName" placeholder="Walk-up guest name" onkeydown="if(event.key==='Enter')addGuestManual()"><button onclick="addGuestManual()">Check in</button></div>
+  <div class="row"><button class="btn-save" onclick="closeGuestList()">Done</button></div>
+</div></div>
+<div class="pnm-gate" id="guestGate">
+  <div class="pg-card">
+    <div class="pg-crest" id="ggCrest"></div>
+    <div class="pg-kicker">&#922;&#916;&#929; &middot; RHO CHAPTER &middot; LAFAYETTE</div>
+    <h2 id="ggEvent">Chapter Event</h2>
+    <p class="pg-sub">You're invited. RSVP below and we'll have you on the list at the door.</p>
+    <div id="ggForm">
+      <input id="ggName" placeholder="Full name" autocomplete="name">
+      <div class="pg-row"><input id="ggPhone" placeholder="Phone (optional)" inputmode="tel"><input id="ggParty" type="number" min="1" value="1" title="Party size" style="max-width:110px"></div>
+      <button class="kg-btn" onclick="submitGuestGate()">RSVP — see you there</button>
+      <div class="pg-err" id="ggErr"></div>
+    </div>
+    <div id="ggDone" style="display:none">
+      <div class="pg-check">&#10003;</div>
+      <h3>You're on the list!</h3>
+      <p class="pg-sub">Give your name at the door. — The Brothers of Kappa Delta Rho</p>
     </div>
   </div>
 </div>
@@ -1901,9 +1946,10 @@ async function save(){if(applyingRemote)return;flash();lsSave();
     metaRev=uid()+Date.now();
     clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveTimer=null;doMetaWrite();},350);return;}
   if(!hasStore)return;clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{saveTimer=null;try{
-    let str=JSON.stringify(state);
-    if(str.length>4200000){const slim=Object.assign({},state,{gallery:[]});str=JSON.stringify(slim);} /* keep under the store's request cap */
-    await window.storage.set(STORE_KEY,str);}catch(e){}},300);}
+    let str;
+    if(window.storage._netlify){str=JSON.stringify(Object.assign({},state,{gallery:[]}));} /* photos live in their own cloud key */
+    else{str=JSON.stringify(state);}
+    await window.storage.set(STORE_KEY,str);lastCloudMeta=str;}catch(e){}},300);}
 function doMetaWrite(){if(!fbLive()||!FB.meta)return;lastMetaWriteTs=Date.now();
   FB.meta.set({rev:metaRev,ts:lastMetaWriteTs,data:stripState()}).catch(()=>{syncToast('Board changes haven’t reached the cloud — check your connection.');});}
 /* flush a pending debounced write immediately (lock/reload/tab-close) */
@@ -1919,7 +1965,7 @@ function syncPhoto(p,quiet){if(!fbLive()||!FB.photos)return;
     if(!quiet)syncToast('A photo failed to sync — tap "Retry sync" on it. ('+((e&&e.code)||'connection')+')');});}
 function retryPhoto(id){const p=state.gallery.find(g=>g.id===id);if(!p)return;syncToast('Retrying photo sync…');syncPhoto(p);}
 function removePhotoCloud(id){if(!fbLive()||!FB.photos)return;FB.photos.child(id).remove().catch(()=>syncToast('Couldn’t delete the photo from the cloud — it may reappear. Check your connection and try again.'));}
-function saveGallery(){save();/* meta save covers non-photo state; photos sync individually via syncPhoto */}
+function saveGallery(){save();cloudSaveGallery();/* Firebase mode: photos sync individually via syncPhoto */}
 function flash(){const f=document.getElementById('flash');f.classList.add('show');setTimeout(()=>f.classList.remove('show'),1100);}
 function pushLog(kind,text){state.log.unshift({date:new Date().toISOString().slice(0,10),kind,text});if(state.log.length>60)state.log.pop();}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download="rho-mainframe-backup.json";a.click();URL.revokeObjectURL(a.href);}
@@ -1999,7 +2045,7 @@ function renderFamEdit(){const c=document.getElementById('famEdit');if(!editing)
 function renderSocial(){const t=document.getElementById('socialTable');const rows=[...state.social].sort((a,b)=>(a.date||'').localeCompare(b.date||''));const ec="background:rgba(0,0,0,.25);border:1px solid var(--line);color:var(--cream);border-radius:6px;padding:6px;width:100%;font-family:'Montserrat'";
   t.innerHTML='<tr><th>Date</th><th>Function</th><th>Sorority</th><th>Theme</th>'+(editing?'<th></th>':'')+'</tr>'+(rows.length?rows.map(r=>{const i=state.social.indexOf(r);const d=r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'TBD';
     if(editing)return `<tr><td><input type="date" value="${escAttr(r.date)}" oninput="state.social[${i}].date=this.value;save()" style="${ec}"></td><td><input value="${escAttr(r.title)}" oninput="state.social[${i}].title=this.value;save()" style="${ec}"></td><td><input value="${escAttr(r.sorority)}" oninput="state.social[${i}].sorority=this.value;save()" style="${ec}"></td><td><input value="${escAttr(r.theme)}" oninput="state.social[${i}].theme=this.value;save()" style="${ec}"></td><td><button onclick="state.social.splice(${i},1);renderSocial();save()" style="width:30px;height:30px;background:rgba(224,102,79,.15);color:var(--bad);border:none;border-radius:6px;cursor:pointer">\u00d7</button></td></tr>`;
-    return `<tr><td style="white-space:nowrap;color:var(--gold)">${d}</td><td>${esc(r.title)}</td><td>${r.sorority?esc(r.sorority):'<span style="color:var(--cream-dim)">TBD</span>'}</td><td>${esc(r.theme)}</td></tr>`;}).join(''):'<tr><td colspan="5" style="color:var(--cream-dim);text-align:center;padding:24px">No functions scheduled yet.</td></tr>');}
+    return `<tr><td style="white-space:nowrap;color:var(--gold)">${d}</td><td>${esc(r.title)}</td><td>${r.sorority?esc(r.sorority):'<span style="color:var(--cream-dim)">TBD</span>'}</td><td>${esc(r.theme)} <button class="mini-btn" style="float:right" onclick="openGuestList('soc-${r.id}','${escAttr(r.title)}')">Guests</button></td></tr>`;}).join(''):'<tr><td colspan="5" style="color:var(--cream-dim);text-align:center;padding:24px">No functions scheduled yet.</td></tr>');}
 function addSocial(){const d=document.getElementById('soDate'),t=document.getElementById('soTitle'),so=document.getElementById('soSorority'),th=document.getElementById('soTheme');const v=t.value.trim();if(!v)return;state.social.push({id:uid(),date:d.value,title:v,sorority:so.value.trim(),theme:th.value.trim()});d.value='';t.value='';so.value='';th.value='';renderSocial();pushLog('social','Added social function: '+v);save();}
 
 /* ---------- MINUTES ---------- */
@@ -2582,6 +2628,7 @@ function renderRecruit(){const b=document.getElementById('pipeBoard');if(!b)retu
     return `<div class="linkcard"><div class="lc-top"><div class="badge">\u{1F389}</div><h4>${esc(ev.title)}</h4></div>
       <p>${esc(ev.date||'')}${ev.loc?' · '+esc(ev.loc):''}</p>
       <p style="color:var(--gold)"><b>${n}</b> PNM${n===1?'':'s'} attended</p>
+      <button class="openb" onclick="openGuestList('rush-${ev.id}','${escAttr(ev.title)}')">Guest list / RSVP</button>
       ${editing?`<button class="del-btn" onclick="state.recruit.events=state.recruit.events.filter(x=>x.id!=='${ev.id}');renderRecruit();save()">×</button>`:''}</div>`;}).join('')||'<p class="lead">No rush events yet — add one and start checking PNMs in.</p>';}}
 function renderRecInbox(){const c=document.getElementById('recInbox');if(!c)return;
   let local=[];try{local=JSON.parse(localStorage.getItem('rho-pnm-queue')||'[]');}catch(e){}
@@ -2857,12 +2904,15 @@ function meetTimer(){(mlState().items||[]).forEach(it=>{if(it.openedTs&&!it.clos
   const s=Math.floor((Date.now()-state.meeting.started)/1000);
   el.textContent=String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
 setInterval(meetTimer,1000);
-function renderMeeting(){const h=document.getElementById('meetHead');if(!h)return;renderPraetor();renderTopics();
+function renderMeeting(){const h=document.getElementById('meetHead');if(!h)return;renderPraetor();renderTopics();renderMotionQueue();
   const consul=officerHolder('Consul');
   h.innerHTML=state.meeting.active?
     `<div class="mh-live"><span class="mh-dot"></span> IN SESSION</div>
      <div class="mh-mid"><b>Rho Chapter — Regular Meeting</b><span>Presiding: ${esc(consul||'Consul')} · convened ${new Date(state.meeting.started).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}</span></div>
-     <div class="mh-right"><span class="mh-timer" id="meetElapsed">00:00:00</span><button class="rec-ghost" onclick="adjournMeeting()">Adjourn</button></div>`:
+     <div class="mh-right"><span class="mh-timer" id="meetElapsed">00:00:00</span>
+       <button class="rec-ghost" onclick="openGuestList('meet-'+state.minutesLive.date,'Chapter Meeting Guests')">Guest sign-in</button>
+       <button class="rec-ghost" onclick="rollFromCheckins()">Roll from check-ins</button>
+       <button class="rec-ghost" onclick="adjournMeeting()">Adjourn</button></div>`:
     `<div class="mh-mid" style="text-align:center;width:100%"><b>No meeting in session</b><span>Hit <b>Chapter Meeting</b> in the sidebar to convene — the gavel comes down, and secret ballots open to every brother's phone.</span></div>`;
   const open=state.votes.filter(b=>b.status==='open'),closed=state.votes.filter(b=>b.status!=='open');
   const bl=document.getElementById('ballotList');
@@ -3029,6 +3079,119 @@ function printAgendaSheet(){const t=topicsState();const d=new Date();
   const done=()=>{document.body.classList.remove('print-reg');window.removeEventListener('afterprint',done);};
   window.addEventListener('afterprint',done);
   setTimeout(()=>{try{window.print();}catch(e){done();}},60);}
+
+/* ================== CHAPTER-CLOUD LIVE LAYER ==================
+   In cloud mode (hosted, no Firebase yet) the board polls its own serverless
+   store: chat (5s), floor motions (4s), gallery (25s), whole board (30s).
+   Every poll is guarded so it never yanks a field mid-edit. */
+function cloudMode(){return hasStore&&window.storage&&window.storage._netlify&&!fbLive();}
+let lastCloudMeta='',lastCloudGal='',lastMotionStr='',motionsLive=[];
+async function cloudRefreshBoard(){if(!cloudMode()||editing||saveTimer||document.hidden)return;
+  try{const r=await window.storage.get(STORE_KEY);if(!r||!r.value||r.value===lastCloudMeta)return;lastCloudMeta=r.value;
+    applyingRemote=true;const g=state.gallery,ch=state.chat;state=merge(JSON.parse(r.value));state.gallery=g;state.chat=ch;
+    renderAll();setTimeout(()=>{applyingRemote=false;},0);}catch(e){}}
+async function cloudLoadGallery(){if(!cloudMode())return;
+  try{const r=await window.storage.get('rho-gallery');if(r&&r.value&&r.value!==lastCloudGal){lastCloudGal=r.value;
+    const arr=JSON.parse(r.value);if(Array.isArray(arr)){state.gallery=arr;renderGallery();renderDashGallery();}}}catch(e){}}
+async function cloudRefreshGallery(){if(editing)return;await cloudLoadGallery();}
+async function cloudSaveGallery(){if(!cloudMode())return;
+  try{const str=JSON.stringify(state.gallery);if(str.length>4400000){syncToast('Album is getting big — oldest photos may need pruning to keep syncing.');return;}
+    await window.storage.set('rho-gallery',str);lastCloudGal=str;}catch(e){}}
+/* ---- motions from the floor (any brother's phone -> the main screen) ---- */
+function raiseMotion(){modalFields([{k:'by',l:'Your name',v:meName()||chatNick()||''},{k:'text',l:'Your motion',v:''}],'✋ Raise a Motion from the Floor',async vals=>{
+  if(!vals.text.trim())return;
+  const m={id:uid(),by:vals.by.trim()||'A brother',text:vals.text.trim(),ts:Date.now(),status:'pending'};
+  if(cloudMode()){try{const r=await window.storage.get('rho-motions');let arr=r&&r.value?JSON.parse(r.value):[];arr.push(m);if(arr.length>40)arr=arr.slice(-40);
+    const str=JSON.stringify(arr);await window.storage.set('rho-motions',str);lastMotionStr=str;motionsLive=arr;}catch(e){motionsLive.push(m);}}
+  else motionsLive.push(m);
+  renderMotionQueue();sfxVote();});}
+async function pollMotions(){if(!cloudMode())return;if(cur!=='meeting'&&!state.meeting.active)return;
+  try{const r=await window.storage.get('rho-motions');if(!r||!r.value||r.value===lastMotionStr)return;
+    const had=motionsLive.filter(m=>m.status==='pending').length;
+    lastMotionStr=r.value;motionsLive=JSON.parse(r.value);renderMotionQueue();
+    if(motionsLive.filter(m=>m.status==='pending').length>had)sfxVote();}catch(e){}}
+async function setMotionStatus(id,status){const m=motionsLive.find(x=>x.id===id);if(!m)return;m.status=status;
+  if(cloudMode()){try{const str=JSON.stringify(motionsLive);await window.storage.set('rho-motions',str);lastMotionStr=str;}catch(e){}}
+  renderMotionQueue();}
+function recordFloorMotion(id){const m=motionsLive.find(x=>x.id===id);if(!m)return;
+  modalFields([
+    {k:'sec',l:'Seconded?',v:'seconded',sel:[['seconded','Seconded'],['not seconded','Not seconded — dies']]},
+    {k:'out',l:'Outcome',v:'Passes',sel:[['Passes','Passes'],['Passed unanimously','Passed unanimously'],['Fails','Fails'],['Tabled','Tabled'],['Withdrawn','Withdrawn']]}
+  ],'Record: '+m.by+' motions '+m.text.slice(0,60),vals=>{
+    const ml=mlState();if(!ml.active){alert('Start taking minutes first (Praetor console).');return;}
+    let it=ml.items[ml.items.length-1];
+    if(!it){it={id:uid(),title:'Motions from the Floor',lines:[]};ml.items.push(it);}
+    it.lines.push({t:'motion',text:m.by+' motions '+m.text+', '+vals.sec+' - '+vals.out});
+    setMotionStatus(id,'recorded');renderMeeting();save();});}
+function renderMotionQueue(){const c=document.getElementById('motionBoard');if(!c)return;
+  const pending=motionsLive.filter(m=>m.status==='pending');
+  c.innerHTML=`<div class="motion-bar">
+    <button class="raise-btn" onclick="raiseMotion()">✋ Raise a motion</button>
+    <span class="gallery-count">${cloudMode()?'Motions appear on every screen within seconds.':'Motions appear on this screen.'}</span></div>`+
+    pending.map(m=>`<div class="motion-banner">
+      <div class="mb-tag">✋ MOTION FROM THE FLOOR</div>
+      <div class="mb-body"><b>${esc(m.by)}</b> moves: ${esc(m.text)}</div>
+      <div class="mb-btns"><button class="mini-btn ok" onclick="recordFloorMotion('${m.id}')">Second &amp; record</button>
+      <button class="mini-btn" onclick="setMotionStatus('${m.id}','dismissed')">Dismiss</button></div>
+    </div>`).join('');}
+/* ---- guest RSVP + door check-in (social / rush / meetings) ---- */
+let guestKeyOpen=null,guestPollT=null,guestCache=[];
+function guestStoreKey(k){return 'rho-guest:'+k;}
+function guestLink(k,title){return location.origin+location.pathname+'#guest='+encodeURIComponent(k)+':'+encodeURIComponent(title||'Chapter Event');}
+async function loadGuests(k){try{const r=await window.storage.get(guestStoreKey(k));return r&&r.value?JSON.parse(r.value):[];}catch(e){return [];}}
+async function saveGuests(k,arr){try{await window.storage.set(guestStoreKey(k),JSON.stringify(arr));}catch(e){}}
+async function openGuestList(k,title){guestKeyOpen=k;
+  const m=document.getElementById('guestModal');document.getElementById('guestTitle').textContent=title;
+  m.classList.add('show');guestCache=await loadGuests(k);renderGuestList();
+  const qb=document.getElementById('guestQr');qb.innerHTML='';
+  try{new QRCode(qb,{text:guestLink(k,title),width:120,height:120,colorDark:'#0A1E3F',colorLight:'#F4ECD8',correctLevel:QRCode.CorrectLevel.M});}catch(e){}
+  clearInterval(guestPollT);guestPollT=setInterval(async()=>{if(!guestKeyOpen)return;const g=await loadGuests(guestKeyOpen);
+    if(JSON.stringify(g)!==JSON.stringify(guestCache)){guestCache=g;renderGuestList();}},6000);}
+function closeGuestList(){guestKeyOpen=null;clearInterval(guestPollT);document.getElementById('guestModal').classList.remove('show');}
+function renderGuestList(){const l=document.getElementById('guestRows');if(!l)return;
+  const inN=guestCache.filter(g=>g.in).length;
+  document.getElementById('guestCounts').textContent=guestCache.length+' RSVP'+(guestCache.length===1?'':'s')+' · '+inN+' checked in';
+  l.innerHTML=guestCache.length?guestCache.map(g=>`<div class="hour-row">
+      <button class="sp-status ${g.in?'received':'pledged'}" onclick="toggleGuestIn('${g.id}')">${g.in?'✓ In':'RSVP’d'}</button>
+      <b>${esc(g.name)}</b><span class="hr-desc">${g.party>1?('+'+(g.party-1)+' guests · '):''}${esc(g.phone||'')}</span>
+      <button class="row-del" style="position:static" onclick="removeGuest('${g.id}')">×</button>
+    </div>`).join(''):'<p class="lead" style="font-size:12.5px">No RSVPs yet — share the QR or link.</p>';}
+async function toggleGuestIn(id){const g=guestCache.find(x=>x.id===id);if(!g)return;g.in=!g.in;renderGuestList();await saveGuests(guestKeyOpen,guestCache);}
+async function removeGuest(id){guestCache=guestCache.filter(x=>x.id!==id);renderGuestList();await saveGuests(guestKeyOpen,guestCache);}
+async function addGuestManual(){const n=document.getElementById('guestAddName');if(!n.value.trim())return;
+  guestCache.push({id:uid(),name:n.value.trim(),phone:'',party:1,ts:Date.now(),in:true});n.value='';
+  renderGuestList();await saveGuests(guestKeyOpen,guestCache);}
+function copyGuestLink(){try{navigator.clipboard.writeText(guestLink(guestKeyOpen,document.getElementById('guestTitle').textContent));const b=document.getElementById('guestCopyBtn');if(b){b.textContent='Copied ✓';setTimeout(()=>{b.textContent='Copy link';},1500);}}catch(e){}}
+/* guest-facing RSVP page (#guest=key:title) */
+function isGuestLink(){return /^#guest=/.test(location.hash);}
+function guestLinkParts(){const m=location.hash.match(/^#guest=([^:]+):(.*)$/);return m?{k:decodeURIComponent(m[1]),title:decodeURIComponent(m[2]||'Chapter Event')}:null;}
+function showGuestGate(){const p=guestLinkParts();if(!p)return;
+  const b=document.getElementById('bootScreen');if(b)b.style.display='none';
+  const g=document.getElementById('guestGate');
+  document.getElementById('ggCrest').innerHTML=(typeof DEFAULT_CREST!=='undefined'&&DEFAULT_CREST)?('<img src="'+DEFAULT_CREST+'" alt="crest">'):EMBLEM;
+  document.getElementById('ggEvent').textContent=p.title;
+  g.classList.add('show');}
+async function submitGuestGate(){const p=guestLinkParts();if(!p)return;const err=document.getElementById('ggErr');
+  const name=(document.getElementById('ggName').value||'').trim();
+  const phone=(document.getElementById('ggPhone').value||'').trim();
+  const party=Math.max(1,parseInt(document.getElementById('ggParty').value,10)||1);
+  if(!name){err.textContent='Your name, at least!';return;}
+  err.textContent='Sending…';
+  const entry={id:uid(),name,phone,party,ts:Date.now(),in:false};
+  try{const url=CLOUD_STORE+'?key='+encodeURIComponent(BOARD_NS+':'+guestStoreKey(p.k));
+    const r=await fetch(url,{cache:'no-store'});let arr=[];if(r.ok){const t=await r.text();if(t)arr=JSON.parse(t);}
+    arr.push(entry);
+    const w=await fetch(url,{method:'PUT',body:JSON.stringify(arr)});
+    if(!w.ok)throw 0;
+    document.getElementById('ggForm').style.display='none';document.getElementById('ggDone').style.display='block';}
+  catch(e){err.textContent='Couldn’t reach the chapter — grab a brother at the door.';}}
+/* meeting attendance from check-ins */
+function rollFromCheckins(){const m=mlState();if(!m.active)return;
+  const today=new Date().toISOString().slice(0,10);
+  const evs=state.events.filter(e=>e.ci&&e.date===today).map(e=>e.id);
+  if(!evs.length){alert('No check-in-enabled event today. Enable check-in on today’s meeting first (My Standing → Edit).');return;}
+  Object.keys(m.roll).forEach(n=>{m.roll[n]=state.checkins.some(c=>evs.includes(c.eventId)&&c.who===n)?'Present':'Absent';});
+  renderMeeting();save();}
 
 /* ================== DASHBOARD PERSONAL POINTS ================== */
 function renderDashStanding(){const c=document.getElementById('dashStanding');if(!c)return;const me=meName();
@@ -3451,10 +3614,12 @@ async function init(){
   /* PNM phones landing on the QR link (#rush=code) get ONLY the sign-in card —
      no boot, no passkey, no board. */
   if(isRushLink()){showPnmGate();return;}
+  if(isGuestLink()){showGuestGate();return;}
   buildManifest();registerSW();const kc=document.getElementById('keyGateCrest');if(kc)kc.innerHTML=(typeof DEFAULT_CREST!=='undefined'&&DEFAULT_CREST)?('<img src="'+DEFAULT_CREST+'" alt="crest">'):EMBLEM;await loadState();const bc=document.getElementById('bootCrest');if(bc)bc.innerHTML=(typeof DEFAULT_CREST!=='undefined'&&DEFAULT_CREST)?('<img src="'+DEFAULT_CREST+'" alt="crest">'):EMBLEM;const cbx=document.getElementById('creedBox');if(cbx)cbx.value=state.creed||'';wireCalendar();generateRecap(false);renderAll();tickClock();setInterval(tickClock,30000);
   if(window.speechSynthesis){try{window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){};}catch(e){}}
   const cn=document.getElementById('chatName');if(cn)cn.value=chatNick();loadChat();setInterval(()=>{if(!fbLive())loadChat();},5000);startIdle();fetchDonations();setInterval(fetchDonations,30000);wirePhotoInput();
   fetchTasks();if(taskTimer)clearInterval(taskTimer);taskTimer=setInterval(function(){if(tasksCsvUrl())fetchTasks();},45000);
+  cloudLoadGallery();setInterval(cloudRefreshBoard,30000);setInterval(cloudRefreshGallery,25000);setInterval(pollMotions,4000);
   setSync(fbLive()?'live':(window.storage&&window.storage._netlify?'cloud':(fbConfigured()?(BOARD_KEY?'offline':'locked'):'local')));
   if(fbLive()&&state.recruit.rushCode)bindRushInbox();
   if(!fbLive())lsLoadDoor();

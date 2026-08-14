@@ -1,7 +1,7 @@
 /* Rho Chapter Mainframe — Service Worker
    Gives the app true offline support + installability on iPhone, Android,
    desktop (Chrome/Edge), and smartboards. Bump CACHE on every release. */
-const CACHE = 'rho-mainframe-v34';
+const CACHE = 'rho-mainframe-v35';
 
 /* App shell + the two CDN libraries the board needs to render charts / QR codes.
    Everything else (Google Calendar/Forms iframes) is network-only by nature. */
@@ -42,6 +42,8 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
+  // Live data endpoints must NEVER be cached — always straight to the network.
+  if (url.pathname.startsWith('/api/')) return;
 
   // Never cache Google embeds, the donations CSV, or other live data — always go to network.
   if (/google\.com|gstatic\.com|googleusercontent\.com/.test(url.hostname)) return;
