@@ -24,9 +24,10 @@ export default async (req) => {
   const token = process.env.RHO_NETLIFY_TOKEN || (globalThis.Netlify && Netlify.env.get("RHO_NETLIFY_TOKEN"));
   if (!token) return new Response("store not configured", { status: 500, headers: cors });
   const api = `https://api.netlify.com/api/v1/blobs/${SITE_ID}/${STORE}/${encodeURIComponent(key)}`;
+  const apiRead = api + "?consistency=strong"; /* chat needs read-your-writes across regions */
 
   if (req.method === "GET") {
-    const r = await fetch(api, { headers: { Authorization: `Bearer ${token}` } });
+    const r = await fetch(apiRead, { headers: { Authorization: `Bearer ${token}` } });
     if (!r.ok) return new Response("", { status: 204, headers: cors }); /* absent key = empty */
     const t = await r.text();
     return new Response(t, { status: 200, headers: { ...cors, "content-type": "application/json", "cache-control": "no-store" } });
