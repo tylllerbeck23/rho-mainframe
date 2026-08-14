@@ -302,8 +302,11 @@
   .boot-enter{margin-top:16px;background:var(--orange);color:var(--navy);border:none;border-radius:13px;padding:17px 38px;font-family:'Cinzel';font-weight:700;letter-spacing:2px;font-size:clamp(14px,1.6vw,17px);cursor:pointer;box-shadow:0 14px 34px -8px rgba(232,119,34,.65);animation:bpulse 2s ease-in-out infinite}
   .boot-enter:hover{background:var(--orange-br)}
   @keyframes bpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
-  .boot-skip{display:block;margin:15px auto 0;background:none;border:none;color:var(--cream-dim2);font-size:11px;letter-spacing:1px;cursor:pointer;text-decoration:underline}
-  .booting .boot-enter,.booting .boot-skip{display:none}
+  .boot-skip{position:fixed;right:26px;bottom:26px;z-index:1002;display:inline-flex;align-items:center;gap:9px;
+    background:rgba(255,255,255,.07);border:1.5px solid var(--line);color:var(--cream);border-radius:999px;
+    padding:14px 26px;font-family:'Cinzel';font-weight:700;font-size:14px;letter-spacing:2px;cursor:pointer;backdrop-filter:blur(6px);transition:.15s}
+  .boot-skip:hover{border-color:var(--gold);color:var(--gold-br);transform:translateY(-2px)}
+  .booting .boot-enter{display:none}
   /* ===== RECAP MODE TOGGLE ===== */
   .rc-modes{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
   .rc-mode{font-family:'Cinzel';font-size:10px;letter-spacing:1px;text-transform:uppercase;background:rgba(255,255,255,.05);color:var(--cream-dim);border:1px solid var(--line);padding:7px 13px;border-radius:20px;cursor:pointer}
@@ -818,6 +821,70 @@
   @media(min-width:1700px){.app{max-width:1860px;margin:0 auto}.gallery-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}}
   @media print{#bootScreen,aside,.bar,.quick-actions,.gallery-add,.pc-edit,.dg-all,.lightbox,.update-toast{display:none!important}
     body{overflow:visible;background:#fff;color:#111}.main-wrap{background:#fff}}
+
+  /* ================= HERITAGE OVERRIDE — engraved chapter-house identity =================
+     Squared plaque corners, certificate double-rules, letterpress shadows, linen texture.
+     Replaces the generic soft-glow dark-app look. */
+  :root{--r:5px;--shadow:0 2px 0 rgba(0,0,0,.4),0 14px 26px -20px rgba(0,0,0,.8);--shadow-sm:0 2px 0 rgba(0,0,0,.35)}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;
+    background-image:repeating-linear-gradient(45deg,transparent 0 5px,rgba(244,236,216,.5) 5px 6px),repeating-linear-gradient(-45deg,transparent 0 5px,rgba(244,236,216,.3) 5px 6px)}
+  .app{position:relative;z-index:1}
+  aside{border-right:3px double var(--line)}
+  .side-crest{border-bottom:3px double var(--line-soft)}
+  .bar{border-bottom:3px double var(--line)}
+  .card,.panel,.recap-card,.linkcard,.metric,.stat,.pillar-card,.photo-card,.reg-card,.ballot,.dc-zone,.rm-metric,
+  .pipe-col,.pnm-card,.chart-card,.member-card,.pos-card,.kg-card,.pg-card,.modal,.give-hero,.welcome-card,
+  .dash-gallery,.dash-standing,.dash-live,.gallery-hero,.stand-hero,.meet-head,.exec-head,.form-tile,.rm-qr-card{border-radius:6px!important}
+  .card,.recap-card,.linkcard,.pillar-card,.reg-card,.ballot,.dc-zone,.modal,.kg-card,.pg-card{
+    box-shadow:inset 0 0 0 1px rgba(201,168,76,.10),0 2px 0 rgba(0,0,0,.4),0 14px 26px -20px rgba(0,0,0,.8)}
+  .card,.recap-card,.reg-card,.ballot{border-top:2px solid rgba(201,168,76,.4)}
+  .quick-actions button,.tool,.mini-btn,.openb,.btn-save,.btn-cancel,.gallery-add,.rec-rush,.rec-ghost,.kg-btn,
+  .boot-enter,.dz-btns button,.bl-btns button,.dg-all,.task-reset,.rg-status,.rf input,.rf select,#meSelect,
+  .inline-add input,.inline-add select,.inline-add button,.tse-row input,.tse-row button{border-radius:4px!important}
+  .gallery-add,.kg-btn,.boot-enter,.btn-save{box-shadow:0 3px 0 rgba(0,0,0,.45)!important;transition:.12s}
+  .gallery-add:active,.kg-btn:active,.boot-enter:active,.btn-save:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.45)!important}
+  nav.side button{border-radius:4px}
+  nav.side button.active{background:rgba(232,119,34,.1);box-shadow:inset 0 0 0 1px rgba(232,119,34,.25)}
+  .sec{position:relative}
+  .sec::before{content:"◆";color:var(--orange);font-size:10px;margin-right:11px;vertical-align:2px}
+  .sec,.boot-title,.rm-title,.sh-name,.mh-mid b{text-shadow:0 1px 0 rgba(0,0,0,.55)}
+  .welcome-card{outline:1px solid rgba(201,168,76,.22);outline-offset:-9px}
+  .crumb{letter-spacing:3px}
+
+  /* v3.1 components */
+  .dash-standing{display:flex;align-items:center;gap:18px;padding:16px 20px;margin-bottom:16px;flex-wrap:wrap}
+  .ds-pick{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;width:100%}
+  .ds-pick b{display:block;font-family:'Cinzel';font-size:14px;color:var(--cream)}
+  .ds-pick span{font-size:12px;color:var(--cream-dim)}
+  .ds-pick select{background:var(--ink);border:1px solid var(--line);color:var(--cream);border-radius:4px;padding:10px 14px;font-family:'Montserrat';font-size:13px;min-width:200px}
+  .ds-ring{flex:none;cursor:pointer}
+  .ds-mid{flex:1;min-width:200px}
+  .ds-name{font-family:'Cinzel';font-weight:700;font-size:16px;color:var(--cream);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .tier-badge.sm{font-size:9px;padding:3px 10px}
+  .ds-bars{display:flex;gap:6px;margin:10px 0 6px}
+  .ds-bar{flex:1;height:7px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+  .ds-bar span{display:block;height:100%;border-radius:3px}
+  .ds-meta{font-size:11.5px;color:var(--cream-dim2)}
+  .dash-live{padding:14px 20px;margin-bottom:16px}
+  .dl-head{display:flex;align-items:center;gap:9px;font-family:'Cinzel';font-size:11px;font-weight:800;letter-spacing:2px;color:var(--good)}
+  .dl-head b{color:var(--cream)}
+  .dl-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .dl-chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--cream);background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:999px;padding:4px 12px 4px 4px}
+  .dl-chip i{font-style:normal;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;background:linear-gradient(135deg,var(--gold-br),var(--gold));color:var(--navy)}
+  .exec-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;margin-bottom:6px;flex-wrap:wrap}
+  .exec-head b{font-family:'Cinzel';font-size:14px;color:var(--gold);letter-spacing:1px}
+  .exec-head span{font-size:12px;color:var(--cream-dim2)}
+  .forms-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+  .form-tile{text-align:left;background:linear-gradient(160deg,var(--panel,#102C54),var(--navy-1));border:1px solid var(--line);cursor:pointer;
+    padding:16px;display:flex;flex-direction:column;gap:6px;color:var(--cream);font-family:'Montserrat';transition:.15s;border-top:2px solid rgba(201,168,76,.4)}
+  .form-tile:hover{transform:translateY(-2px);border-color:var(--gold)}
+  .form-tile span{font-size:22px}
+  .form-tile b{font-size:13.5px;font-weight:700}
+  .form-tile i{font-style:normal;font-size:11px;color:var(--cream-dim2)}
+  .conf-chip{font-size:8.5px;font-weight:800;letter-spacing:1.5px;background:rgba(224,102,79,.15);color:var(--bad);border:1px solid rgba(224,102,79,.45);border-radius:3px;padding:2px 8px;vertical-align:middle;margin-left:8px}
+  .reg-card.disc{border-left:3px solid rgba(224,102,79,.55)}
+  .pc-tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+  .pos-cmd p b{font-weight:700}
 </style>
 </head>
 <body>
@@ -831,7 +898,7 @@
     <div class="boot-status" id="bootStatus"></div>
     <div class="boot-creed" id="bootCreed"></div>
     <button class="boot-enter" id="bootEnter" onclick="bootStart()">&#9658;&nbsp; Initialize System</button>
-    <button class="boot-skip" id="bootSkip" onclick="bootEnter(true)">skip intro</button>
+    <button class="boot-skip" id="bootSkip" onclick="bootEnter(true)">SKIP &#9654;&#9654;</button>
   </div>
 </div>
 <div class="app">
@@ -842,6 +909,7 @@
       <button data-v="dash" class="active" onclick="go('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5a8 8 0 10-16 0"/><path d="M12 14.5L15.8 11"/><circle cx="12" cy="14.5" r="1.2" fill="currentColor" stroke="none"/><path d="M4 19h16"/></svg>Dashboard</button>
       <button data-v="standing" onclick="go('standing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg>My Standing</button>
       <button class="nav-action gavel" onclick="enterMeetingMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13.5 4.5l6 6M11 7l6 6M14.5 3.5l6 6-2 2-6-6zM9 9l6 6-2 2-6-6z"/><path d="M3 21h9M5.5 18.5L11 13"/></svg>Chapter Meeting</button>
+      <button data-v="exec" onclick="go('exec')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/><circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg>Exec Center</button>
       <div class="grp">Brotherhood Center</div>
       <button data-v="roster" onclick="go('roster')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.6 2.4-6 5.5-6s5.5 2.4 5.5 6"/><circle cx="16.5" cy="9" r="2.6"/><path d="M16.2 14.3c2.7.4 4.3 2.6 4.3 5.7"/></svg>Roster</button>
       <button data-v="points" onclick="go('points')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4h8v5a4 4 0 01-8 0z"/><path d="M8 5H5a3 3 0 003 4M16 5h3a3 3 0 01-3 4"/><path d="M12 13v3M8.5 20h7M10 20v-2h4v2"/></svg>Points &amp; Families</button>
@@ -886,13 +954,15 @@
 
       <section class="view active" id="v-dash">
         <div class="quick-actions">
-          <button onclick="go('donate')"><span>&#10084;</span>Donate</button>
-          <button onclick="go('calendar')"><span>&#128197;</span>Calendar</button>
+          <button onclick="go('standing')"><span>&#127919;</span>My Standing</button>
+          <button onclick="go('recruit')"><span>&#129309;</span>Recruit</button>
+          <button onclick="go('doorcount')"><span>&#128682;</span>Function</button>
           <button onclick="go('points')"><span>&#127942;</span>Points</button>
-          <button onclick="go('committees')"><span>&#128193;</span>Committees</button>
           <button onclick="go('chat')"><span>&#128172;</span>Chat</button>
-          <button onclick="go('roster')"><span>&#9881;</span>Roster</button>
+          <button onclick="go('donate')"><span>&#10084;</span>Donate</button>
         </div>
+        <div class="dash-standing card" id="dashStanding"></div>
+        <div class="dash-live card" id="dashLive" style="display:none"></div>
         <div class="hero">
           <div class="welcome-card"><div id="dashCrest"></div><img class="wm" id="wordmark" alt="Kappa Delta Rho">
             <div class="wel">Welcome, Brothers, to <b>The Rho Chapter Mainframe</b></div>
@@ -1041,6 +1111,33 @@
         <div class="meet-new" id="meetNew"></div>
         <div class="sec-sub">Closed Ballots</div>
         <div id="ballotArchive"></div>
+      </section>
+
+      <section class="view" id="v-exec">
+        <div class="sec">Executive Command Center</div>
+        <div id="execGate"></div>
+        <div id="execArea" style="display:none">
+          <div class="exec-head card">
+            <div><b>&#128274; Executive session</b><span id="execWho"></span></div>
+            <button class="rec-ghost" onclick="execLogout()">Lock exec</button>
+          </div>
+          <div class="sec-sub">Chapter Forms Center</div>
+          <p class="lead" style="font-size:12.5px;margin-bottom:12px">Every chapter form, autofilled from the board and print-ready. Disciplinary records are <b>encrypted with the exec passcode</b> — invisible to the chapter and unreadable in the cloud or in backups.</p>
+          <div class="forms-grid">
+            <button class="form-tile" onclick="newDiscipline()"><span>&#9878;</span><b>Standards / Disciplinary Report</b><i>Confidential — encrypted</i></button>
+            <button class="form-tile" onclick="newFunding()"><span>&#128181;</span><b>Funding Request</b><i>Consul + Quaestor sign-off</i></button>
+            <button class="form-tile" onclick="newEquipment()"><span>&#128736;</span><b>Equipment Sign-Out</b><i>Track chapter property</i></button>
+            <button class="form-tile" onclick="go('register')"><span>&#128221;</span><b>Event Registration</b><i>College no-alcohol form</i></button>
+          </div>
+          <div class="sec-sub">Standards Records <span class="conf-chip">CONFIDENTIAL</span></div>
+          <div id="discList"></div>
+          <div class="sec-sub">Funding Requests</div>
+          <div id="fundingList"></div>
+          <div class="sec-sub">Equipment Out</div>
+          <div id="equipList"></div>
+          <div class="sec-sub">Position Command &mdash; office-specific tools</div>
+          <div class="grid gauto" id="posCommand"></div>
+        </div>
       </section>
 
       <section class="view" id="v-roster">
@@ -1424,6 +1521,8 @@ const DEFAULTS={
   registrations:[],sponsors:[],
   regDefaults:{org:"Kappa Delta Rho — Rho Chapter",rmo:"",rmoPhone:"",presPhone:""},
   votes:[],meeting:{active:false,started:0},
+  execVault:{salt:'',blob:'',hint:''},
+  equipment:[],funding:[],
   hours:[],checkins:[],
   reqs:{fellowship:20,leadership:10,scholarship:15,service:15,tradition:10},
   committees:[
@@ -1547,7 +1646,7 @@ function fbInit(){try{if(!fbConfigured()||typeof firebase==='undefined')return f
   return true;}catch(e){FB.enabled=false;return false;}}
 function fbBindRefs(){if(!fbReady()||!BOARD_KEY)return;const b='board/'+BOARD_KEY;
   FB.meta=FB.db.ref(b+'/meta');FB.gallery=FB.db.ref(b+'/gallery');FB.chat=FB.db.ref(b+'/chat');FB.photos=FB.db.ref(b+'/photos');FB.door=FB.db.ref(b+'/doorcount');FB.votes=FB.db.ref(b+'/votes');
-  FB.ledger=FB.db.ref(b+'/ledger');FB.checkins=FB.db.ref(b+'/checkins');FB.hoursRef=FB.db.ref(b+'/hours');FB.pnms=FB.db.ref(b+'/pnms');}
+  FB.ledger=FB.db.ref(b+'/ledger');FB.checkins=FB.db.ref(b+'/checkins');FB.hoursRef=FB.db.ref(b+'/hours');FB.pnms=FB.db.ref(b+'/pnms');FB.presence=FB.db.ref(b+'/presence');}
 function setSync(mode){const p=document.getElementById('syncPill'),l=document.getElementById('syncLabel');if(!p||!l)return;
   p.classList.remove('live','offline','locked');
   if(mode==='live'){p.classList.add('live');l.textContent='Live sync';p.title='Connected — changes sync to every device live. Click to switch passkey.';p.style.cursor='pointer';p.onclick=lockBoard;}
@@ -1621,6 +1720,7 @@ async function fbTryLoad(){
   FB.pnms.on('child_changed',sn=>collUpsert(state.recruit.pnms,sn.val(),()=>{renderRecruit();refreshOpenPnm(sn.val());}));
   FB.pnms.on('child_removed',sn=>{const v=sn.val();if(!v||!v.id)return;state.recruit.pnms=state.recruit.pnms.filter(x=>x.id!==v.id);renderRecruit();});
   bindRushInbox();
+  setupPresence();
   setSync('live');return 'ok';}
 /* generic per-item collection listener: upsert-by-id makes our own write echoes harmless */
 function collUpsert(arr,v,after){if(!v||!v.id)return;const i=arr.findIndex(x=>x.id===v.id);
@@ -1681,9 +1781,10 @@ function flushPending(){
   if(pendingDoor){doorCounts=pendingDoor;pendingDoor=null;lsSaveDoor();renderDoorCount();}}
 function merge(s){const o=JSON.parse(JSON.stringify(DEFAULTS));
   if(s.chapter)Object.assign(o.chapter,s.chapter);
-  ["members","announcements","events","tasks","log","families","points","social","minutes","files","positions","chat","committees","gallery","hours","checkins","registrations","sponsors","votes"].forEach(k=>{if(Array.isArray(s[k]))o[k]=s[k];});
+  ["members","announcements","events","tasks","log","families","points","social","minutes","files","positions","chat","committees","gallery","hours","checkins","registrations","sponsors","votes","equipment","funding"].forEach(k=>{if(Array.isArray(s[k]))o[k]=s[k];});
   if(s.regDefaults&&typeof s.regDefaults==='object')o.regDefaults=Object.assign(o.regDefaults,s.regDefaults);
   if(s.meeting&&typeof s.meeting==='object')o.meeting=Object.assign(o.meeting,s.meeting);
+  if(s.execVault&&typeof s.execVault==='object')o.execVault=Object.assign(o.execVault,s.execVault);
   if(typeof s.chatName==='string')o.chatName=s.chatName;
   if(typeof s.tasksSheet==='string')o.tasksSheet=s.tasksSheet;
   if(s.taskDone&&typeof s.taskDone==='object')o.taskDone=s.taskDone;
@@ -1726,9 +1827,9 @@ function pushLog(kind,text){state.log.unshift({date:new Date().toISOString().sli
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download="rho-mainframe-backup.json";a.click();URL.revokeObjectURL(a.href);}
 function esc(s){return (s==null?'':''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
-const CRUMB={dash:'Dashboard',standing:'My Standing',meeting:'Chapter Meeting',recruit:'Recruitment Command',doorcount:'Function Control',register:'Event Registration',roster:'Roster',points:'Points & Families',social:'Social',calendar:'Calendar',giving:'Giving & Scholarship',finance:'Finance',minutes:'Meeting Minutes',officers:'Officers & Tasks',files:'Files',chat:'Chapter Chat',gallery:'Brotherhood Gallery',donate:'Support the Chapter',committees:'Committees & Workflow'};
+const CRUMB={dash:'Dashboard',standing:'My Standing',meeting:'Chapter Meeting',recruit:'Recruitment Command',doorcount:'Function Control',register:'Event Registration',exec:'Exec Center',roster:'Roster',points:'Points & Families',social:'Social',calendar:'Calendar',giving:'Giving & Scholarship',finance:'Finance',minutes:'Meeting Minutes',officers:'Officers & Tasks',files:'Files',chat:'Chapter Chat',gallery:'Brotherhood Gallery',donate:'Support the Chapter',committees:'Committees & Workflow'};
 function go(t){const changed=cur!==t;cur=t;document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active','anim');});const el=document.getElementById('v-'+t);if(el){el.classList.add('active');if(changed){void el.offsetWidth;el.classList.add('anim');sfxTick();}}document.querySelectorAll('#sidenav button').forEach(b=>b.classList.toggle('active',b.dataset.v===t));document.getElementById('crumb').textContent=CRUMB[t]||'';document.body.classList.remove('nav-open');const sc=document.querySelector('.scroll');if(sc)sc.scrollTop=0;
-  setTimeout(()=>{if(t==='finance')buildCharts();if(t==='giving')buildGiveCharts();if(t==='dash'){buildHomeCharts();renderDonate();renderDashGallery();}if(t==='donate')renderDonate();if(t==='committees')renderCommittees();if(t==='gallery')renderGallery();if(t==='standing')renderStanding();if(t==='recruit')renderRecruit();if(t==='doorcount')renderDoorCount();if(t==='register')renderRegister();if(t==='meeting')renderMeeting();},40);}
+  setTimeout(()=>{if(t==='finance')buildCharts();if(t==='giving')buildGiveCharts();if(t==='dash'){buildHomeCharts();renderDonate();renderDashGallery();}if(t==='donate')renderDonate();if(t==='committees')renderCommittees();if(t==='gallery')renderGallery();if(t==='standing')renderStanding();if(t==='recruit')renderRecruit();if(t==='doorcount')renderDoorCount();if(t==='register')renderRegister();if(t==='meeting')renderMeeting();if(t==='exec')renderExec();if(t==='dash'){renderDashStanding();renderPresence();}},40);}
 function toggleEdit(){editing=!editing;document.body.classList.toggle('editing',editing);const b=document.getElementById('editBtn');b.classList.toggle('on',editing);b.innerHTML=editing?'\u2713 Done':'\u270E Edit';if(!editing)flushPending();renderAll();}
 function toggleFs(){if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
 function tickClock(){const n=new Date();const c=document.getElementById('clock');if(c)c.innerHTML=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+' &middot; <b>'+n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</b>';}
@@ -2208,7 +2309,7 @@ const PILLARS=[
   {id:'tradition',name:'Tradition',icon:'\u{1F3DB}\u{FE0F}',color:'#cdd2da',hint:'Chapter meetings, ceremonies, showing up for KDR'}];
 PILLARS[1].icon='⭐';PILLARS[4].icon='\u{1F3F0}';
 function meName(){return localStorage.getItem('rho-me')||'';}
-function setMe(v){try{localStorage.setItem('rho-me',v);}catch(e){}renderStanding();}
+function setMe(v){try{localStorage.setItem('rho-me',v);}catch(e){}renderStanding();renderDashStanding();if(fbLive()&&FB.presence){try{FB.presence.child(voterToken()).set({name:v||'A brother',ts:Date.now()});}catch(e){}}}
 function semStart(){const n=new Date();return new Date(n.getFullYear(),n.getMonth()<6?0:6,1);}
 function semLabel(){const n=new Date();return (n.getMonth()<6?'Spring':'Fall')+' '+n.getFullYear();}
 function inSem(d){if(!d)return false;const x=new Date(d+'T00:00:00');
@@ -2692,6 +2793,200 @@ function renderMeeting(){const h=document.getElementById('meetHead');if(!h)retur
     </div>`;}).join(''):'<div class="card pad" style="color:var(--cream-dim);font-size:13px">No closed ballots yet.</div>';
   meetTimer();}
 
+/* ================== DASHBOARD PERSONAL POINTS ================== */
+function renderDashStanding(){const c=document.getElementById('dashStanding');if(!c)return;const me=meName();
+  const names=state.members.filter(m=>m.status!=='alumni'&&m.name).map(m=>m.name);
+  if(!me){c.innerHTML=`<div class="ds-pick"><div><b>Your personal points dashboard</b><span>Pick your name once — every pillar, point, and streak follows you on this device.</span></div>
+    <select onchange="setMe(this.value)"><option value="">— I am… —</option>${names.map(n=>`<option>${esc(n)}</option>`).join('')}</select></div>`;return;}
+  const d=standingData(me);
+  c.innerHTML=`<div class="ds-ring" onclick="go('standing')">${ringSVG(d.pct,d.tier[1],86,null,null)}</div>
+    <div class="ds-mid">
+      <div class="ds-name">${esc(me)} <span class="tier-badge sm" style="border-color:${d.tier[1]};color:${d.tier[1]}">${esc(d.tier[0])}</span></div>
+      <div class="ds-bars">${PILLARS.map(p=>{const need=+state.reqs[p.id]||0;const pc=need>0?Math.min(1,d.pts[p.id]/need):1;
+        return `<div class="ds-bar" title="${escAttr(p.name)}: ${d.pts[p.id]}${need?'/'+need:''}"><span style="width:${Math.round(pc*100)}%;background:${p.color}"></span></div>`;}).join('')}</div>
+      <div class="ds-meta">${d.total} pts &middot; ${d.streak}w streak${d.ciTotal?' · '+Math.round(100*d.attended/d.ciTotal)+'% attendance':''}</div>
+    </div>
+    <button class="dg-all" onclick="go('standing')">My Standing &#8599;</button>`;}
+
+/* ================== LIVE PRESENCE — who's on the board right now ================== */
+let presenceLive={};
+function setupPresence(){if(!fbLive()||!FB.presence)return;try{
+  const meRef=FB.presence.child(voterToken());
+  const write=()=>{meRef.set({name:meName()||chatNick()||'A brother',ts:Date.now()}).catch(()=>{});};
+  write();try{meRef.onDisconnect().remove();}catch(e){}
+  FB.presence.on('value',sn=>{presenceLive=sn.val()||{};renderPresence();});
+  if(!setupPresence._hb)setupPresence._hb=setInterval(write,60000);}catch(e){}}
+function presenceList(){const now=Date.now();return Object.values(presenceLive).filter(p=>p&&p.name&&now-(p.ts||0)<5*60000);}
+function renderPresence(){const el=document.getElementById('dashLive');if(!el)return;const list=presenceList();
+  if(!fbLive()||!list.length){el.style.display='none';}
+  else{el.style.display='';el.innerHTML=`<div class="dl-head"><span class="mh-dot"></span> LIVE ON THE BOARD <b>${list.length}</b></div>
+    <div class="dl-strip">${list.map(p=>`<span class="dl-chip"><i>${esc(initials(p.name))}</i>${esc(p.name)}</span>`).join('')}</div>`;}
+  const l=document.getElementById('syncLabel');if(l&&fbLive()&&list.length)l.textContent='Live · '+list.length;}
+
+/* ================== EXEC COMMAND CENTER — passcode vault, forms, position modes ==================
+   Disciplinary records are AES-GCM encrypted with a key derived from the exec passcode
+   (PBKDF2, 150k iters). The cloud, backups, and non-exec brothers only ever see ciphertext. */
+let execPass=null,execData=null;
+function cryptoOK(){return !!(window.crypto&&crypto.subtle);}
+async function execKey(pass,saltB64){const enc=new TextEncoder();
+  const salt=saltB64?Uint8Array.from(atob(saltB64),c=>c.charCodeAt(0)):crypto.getRandomValues(new Uint8Array(16));
+  const km=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+  return {key,salt:btoa(String.fromCharCode.apply(null,salt))};}
+async function execEncrypt(pass,obj,saltB64){const {key,salt}=await execKey(pass,saltB64);
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(JSON.stringify(obj))));
+  const buf=new Uint8Array(12+ct.length);buf.set(iv);buf.set(ct,12);
+  let bin='';for(let i=0;i<buf.length;i++)bin+=String.fromCharCode(buf[i]);
+  return {salt,blob:btoa(bin)};}
+async function execDecrypt(pass,saltB64,blobB64){const {key}=await execKey(pass,saltB64);
+  const raw=Uint8Array.from(atob(blobB64),c=>c.charCodeAt(0));
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:raw.slice(0,12)},key,raw.slice(12));
+  return JSON.parse(new TextDecoder().decode(pt));}
+async function execSave(){if(!execPass||!execData)return;
+  try{const enc=await execEncrypt(execPass,execData,state.execVault.salt||null);
+    state.execVault={salt:enc.salt,blob:enc.blob,hint:state.execVault.hint||''};save();}
+  catch(e){syncToast('Couldn’t seal the exec vault — record kept on screen, try again.');}}
+function renderExec(){const gate=document.getElementById('execGate'),area=document.getElementById('execArea');if(!gate)return;
+  if(execPass&&execData){gate.innerHTML='';area.style.display='';
+    const who=document.getElementById('execWho');if(who)who.textContent=' · unlocked on this device'+(meName()?' by '+meName():'');
+    renderDiscList();renderFundingList();renderEquipList();renderPosCommand();return;}
+  area.style.display='none';
+  if(!cryptoOK()){gate.innerHTML='<div class="card pad" style="color:var(--cream-dim)">The exec vault needs the hosted (https) app — open the live link to use it.</div>';return;}
+  if(!state.execVault.blob){
+    gate.innerHTML=`<div class="kg-card" style="max-width:440px;margin:0">
+      <h2 style="font-family:'Cinzel';font-size:19px;color:var(--cream)">Create the executive vault</h2>
+      <p class="pg-sub">Set an <b>exec passcode</b> — different from the chapter passkey. It encrypts standards records so only officers who know it can ever read them. <b>It cannot be recovered if lost.</b></p>
+      <input id="exSet1" type="password" placeholder="Exec passcode" style="margin-bottom:10px">
+      <input id="exSet2" type="password" placeholder="Repeat passcode">
+      <button class="kg-btn" onclick="execCreate()">Create vault</button>
+      <div class="kg-error" id="exErr"></div></div>`;return;}
+  gate.innerHTML=`<div class="kg-card" style="max-width:400px;margin:0">
+    <div class="kg-kicker">&#128274; OFFICERS ONLY</div>
+    <h2 style="font-family:'Cinzel';font-size:19px;color:var(--cream)">Executive login</h2>
+    <p class="pg-sub">Enter the exec passcode to unlock standards records, chapter forms, and position command.</p>
+    <input id="exPass" type="password" placeholder="Exec passcode" onkeydown="if(event.key==='Enter')execLogin()">
+    <button class="kg-btn" onclick="execLogin()">Unlock exec center</button>
+    <div class="kg-error" id="exErr"></div></div>`;}
+async function execCreate(){const a=document.getElementById('exSet1').value,b=document.getElementById('exSet2').value;const er=document.getElementById('exErr');
+  if(!a||a.length<4){er.textContent='Use at least 4 characters.';return;}
+  if(a!==b){er.textContent='Passcodes don’t match.';return;}
+  execPass=a;execData={records:[]};await execSave();sfxVote();renderExec();}
+async function execLogin(){const v=document.getElementById('exPass').value;const er=document.getElementById('exErr');
+  if(!v)return;er.textContent='Unlocking…';
+  try{execData=await execDecrypt(v,state.execVault.salt,state.execVault.blob);execPass=v;er.textContent='';sfxVote();renderExec();}
+  catch(e){execData=null;execPass=null;er.textContent='Wrong passcode.';}}
+function execLogout(){execPass=null;execData=null;renderExec();sfxTick();}
+/* ---- Standards / Disciplinary (encrypted) ---- */
+function newDiscipline(){if(!execData){return;}
+  modalFields([
+    {k:'brother',l:'Brother involved',v:''},
+    {k:'category',l:'Category',v:'conduct',sel:[['conduct','Conduct'],['attendance','Attendance'],['dues','Dues / financial'],['academic','Academic'],['risk','Risk management'],['other','Other']]},
+    {k:'desc',l:'What happened',v:''},
+    {k:'action',l:'Action',v:'warning',sel:[['warning','Verbal warning'],['written','Written warning'],['fine','Fine'],['probation','Probation'],['board','Referred to Standards Board'],['other','Other']]},
+    {k:'fine',l:'Fine amount ($, if any)',v:''},
+    {k:'follow',l:'Follow-up date (YYYY-MM-DD)',v:''}
+  ],'Standards / Disciplinary Report',async vals=>{
+    execData.records.unshift(Object.assign({id:uid(),ts:Date.now(),by:meName()||officerHolder('Censor')||'Officer',date:new Date().toISOString().slice(0,10),status:'open'},vals));
+    await execSave();renderDiscList();});}
+function renderDiscList(){const l=document.getElementById('discList');if(!l)return;
+  const rs=(execData&&execData.records)||[];
+  l.innerHTML=rs.length?rs.map(r=>`<div class="reg-card card disc">
+      <div class="rg-main"><b>${esc(r.brother||'—')}</b>
+        <span class="rg-meta">${esc(r.category)} · ${esc(r.action)}${r.fine?' · $'+esc(r.fine):''} · filed ${esc(r.date)} by ${esc(r.by)}${r.follow?' · follow-up '+esc(r.follow):''}</span>
+        <span class="rg-meta" style="color:var(--dim,#a9a698)">${esc(r.desc||'')}</span></div>
+      <div class="rg-side"><select class="rg-status ${r.status==='resolved'?'s-approved':''}" onchange="setDiscStatus('${r.id}',this.value)">
+          ${['open','resolved'].map(x=>`<option ${r.status===x?'selected':''}>${x}</option>`).join('')}</select>
+        <div class="rg-btns"><button class="mini-btn ok" onclick="printDiscipline('${r.id}')">Print</button>
+        <button class="mini-btn" onclick="delDiscipline('${r.id}')">Delete</button></div></div>
+    </div>`).join(''):'<div class="card pad" style="color:var(--cream-dim);font-size:13px">No standards records. That’s a good week.</div>';}
+async function setDiscStatus(id,v){const r=execData.records.find(x=>x.id===id);if(r){r.status=v;await execSave();renderDiscList();}}
+async function delDiscipline(id){if(!confirm('Permanently delete this confidential record?'))return;execData.records=execData.records.filter(x=>x.id!==id);await execSave();renderDiscList();}
+function printDiscipline(id){const r=(execData.records||[]).find(x=>x.id===id);if(!r)return;
+  printFormSheet('CONFIDENTIAL — Standards Board Report',`
+    <p class="rs-note"><b>CONFIDENTIAL.</b> For chapter Standards Board use only. Handle per KDR risk-management policy.</p>
+    <p>Date filed: ${fillLine(r.date,140)} &nbsp; Filed by: ${fillLine(r.by,200)}</p>
+    <p>Brother involved: ${fillLine(r.brother,260)}</p>
+    <p>Category: ${fillLine(r.category,180)} &nbsp; Action taken: ${fillLine(r.action,200)} ${r.fine?'&nbsp; Fine: '+fillLine('$'+r.fine,90):''}</p>
+    <p class="rs-sec">Description</p><p>${esc(r.desc||'')}</p>
+    ${r.follow?`<p>Follow-up date: ${fillLine(r.follow,140)}</p>`:''}
+    <p style="margin-top:30px">Censor signature ______________________________ &nbsp; Date ______________</p>
+    <p style="margin-top:14px">Consul signature ______________________________ &nbsp; Date ______________</p>`);}
+/* ---- Funding requests (plain) ---- */
+function newFunding(){modalFields([
+    {k:'who',l:'Requested by',v:meName()||''},
+    {k:'position',l:'Position / committee',v:''},
+    {k:'amount',l:'Amount ($)',v:''},
+    {k:'purpose',l:'Purpose',v:''},
+    {k:'account',l:'Budget line (e.g. Social, Philanthropy)',v:''},
+    {k:'needed',l:'Needed by (YYYY-MM-DD)',v:''}
+  ],'Funding Request',vals=>{state.funding.unshift(Object.assign({id:uid(),ts:Date.now(),date:new Date().toISOString().slice(0,10),status:'Pending'},vals));renderFundingList();save();});}
+function renderFundingList(){const l=document.getElementById('fundingList');if(!l)return;
+  l.innerHTML=state.funding.length?state.funding.map(r=>`<div class="reg-card card">
+      <div class="rg-main"><b>${money(+r.amount||0)} — ${esc(r.purpose||'')}</b>
+        <span class="rg-meta">${esc(r.who)}${r.position?' ('+esc(r.position)+')':''} · ${esc(r.account||'')} · filed ${esc(r.date)}${r.needed?' · needed '+esc(r.needed):''}</span></div>
+      <div class="rg-side"><select class="rg-status ${r.status==='Approved'?'s-approved':r.status==='Denied'?'':'s-submitted'}" onchange="const f=state.funding.find(x=>x.id==='${r.id}');f.status=this.value;renderFundingList();save()">
+          ${['Pending','Approved','Denied'].map(x=>`<option ${r.status===x?'selected':''}>${x}</option>`).join('')}</select>
+        <div class="rg-btns"><button class="mini-btn ok" onclick="printFunding('${r.id}')">Print</button>
+        <button class="mini-btn" onclick="state.funding=state.funding.filter(x=>x.id!=='${r.id}');renderFundingList();save()">Delete</button></div></div>
+    </div>`).join(''):'<div class="card pad" style="color:var(--cream-dim);font-size:13px">No funding requests.</div>';}
+function printFunding(id){const r=state.funding.find(x=>x.id===id);if(!r)return;
+  printFormSheet('Funding Request Form',`
+    <p>Date: ${fillLine(r.date,140)} &nbsp; Requested by: ${fillLine(r.who,220)} &nbsp; Position: ${fillLine(r.position,180)}</p>
+    <p>Amount requested: ${fillLine(money(+r.amount||0),140)} &nbsp; Budget line: ${fillLine(r.account,200)}</p>
+    <p class="rs-sec">Purpose</p><p>${esc(r.purpose||'')}</p>
+    ${r.needed?`<p>Funds needed by: ${fillLine(r.needed,140)}</p>`:''}
+    <p style="margin-top:30px">Quaestor approval ______________________________ &nbsp; Date ______________</p>
+    <p style="margin-top:14px">Consul approval ______________________________ &nbsp; Date ______________</p>`);}
+/* ---- Equipment sign-out (plain) ---- */
+function newEquipment(){modalFields([
+    {k:'item',l:'Item / equipment',v:''},
+    {k:'who',l:'Signed out by',v:meName()||''},
+    {k:'ret',l:'Expected return (YYYY-MM-DD)',v:''},
+    {k:'cond',l:'Condition out',v:'Good'}
+  ],'Equipment Sign-Out',vals=>{state.equipment.unshift(Object.assign({id:uid(),ts:Date.now(),out:new Date().toISOString().slice(0,10),returned:false},vals));renderEquipList();save();});}
+function renderEquipList(){const l=document.getElementById('equipList');if(!l)return;
+  const rs=state.equipment;
+  l.innerHTML=rs.length?rs.map(r=>`<div class="hour-row"><b>${esc(r.item)}</b>
+      <span class="hr-desc">${esc(r.who)} · out ${esc(r.out)}${r.ret?' · due '+esc(r.ret):''} · ${esc(r.cond||'')}</span>
+      <button class="sp-status ${r.returned?'received':'pledged'}" onclick="const e=state.equipment.find(x=>x.id==='${r.id}');e.returned=!e.returned;renderEquipList();save()">${r.returned?'✓ Returned':'Out'}</button>
+      <button class="mini-btn ok" onclick="printEquipment('${r.id}')">Print</button>
+      <button class="row-del" style="position:static" onclick="state.equipment=state.equipment.filter(x=>x.id!=='${r.id}');renderEquipList();save()">×</button></div>`).join(''):'<div class="card pad" style="color:var(--cream-dim);font-size:13px">Nothing signed out.</div>';}
+function printEquipment(id){const r=state.equipment.find(x=>x.id===id);if(!r)return;
+  printFormSheet('Equipment Sign-Out Sheet',`
+    <p>Item: ${fillLine(r.item,300)}</p>
+    <p>Signed out by: ${fillLine(r.who,220)} &nbsp; Date out: ${fillLine(r.out,140)} &nbsp; Expected return: ${fillLine(r.ret,140)}</p>
+    <p>Condition at sign-out: ${fillLine(r.cond,220)}</p>
+    <p style="margin-top:30px">Brother signature ______________________________ &nbsp; Officer signature ______________________________</p>
+    <p style="margin-top:18px">Returned on ______________ &nbsp; Condition in ______________________________ &nbsp; Officer ______________</p>`);}
+/* shared printable letterhead */
+function printFormSheet(title,inner){const sh=document.getElementById('regSheet');
+  sh.innerHTML=`<div class="rs-head"><div class="rs-crest">${galCrestHTML()}</div>
+      <div><div class="rs-org">Kappa Delta Rho — Rho Chapter · Lafayette College</div>
+      <div class="rs-title">${esc(title)}</div></div></div>`+inner;
+  document.body.classList.add('print-reg');
+  const done=()=>{document.body.classList.remove('print-reg');window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>{try{window.print();}catch(e){done();}},60);}
+/* ---- Position Command ---- */
+const POS_TOOLS={
+  'Consul':[['meeting','Run the meeting'],['register','Register events'],['exec','Standards']],
+  'Senior Tribune':[['officers','Tasks board'],['committees','Committees']],
+  'Quaestor':[['finance','Finance center'],['exec','Funding requests'],['giving','Giving']],
+  'Praetor':[['minutes','Minutes'],['roster','Roster']],
+  'Custodian':[['doorcount','Function Control'],['exec','Equipment log']],
+  'Centurion':[['standing','Accountability'],['points','Points']],
+  'Quartermaster':[['recruit','Recruitment'],['gallery','Gallery']],
+  'Pontifex':[['giving','Philanthropy'],['donate','Donate hub']],
+  'Aedile':[['social','Social calendar'],['register','Register events'],['doorcount','Function Control']],
+  'Censor':[['exec','Standards reports'],['standing','Compliance']]};
+function renderPosCommand(){const g=document.getElementById('posCommand');if(!g)return;
+  g.innerHTML=(state.positions||[]).map(p=>{const tools=POS_TOOLS[p.roman]||[];
+    return `<div class="linkcard pos-cmd"><div class="lc-top"><div class="badge">&#9878;</div><h4>${esc(p.roman)}</h4></div>
+      <p>${esc(p.role)}${p.holder?' — <b style="color:var(--cream)">'+esc(p.holder)+'</b>':' — vacant'}</p>
+      <div class="pc-tools">${tools.map(t=>`<button class="openb" onclick="go('${t[0]}')">${esc(t[1])}</button>`).join('')}
+      ${p.url?`<a class="openb ghost" href="${escAttr(p.url)}" target="_blank" rel="noopener">Folder ↗</a>`:''}</div></div>`;}).join('');}
+
 /* ================== SOUND + MOTION (subtle, professional) ================== */
 const SFX={ctx:null,on:(localStorage.getItem('rho-sfx')||'on')==='on'};
 function sfxCtx(){if(!SFX.ctx){try{SFX.ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
@@ -2713,17 +3008,22 @@ function toggleSfx(){SFX.on=!SFX.on;try{localStorage.setItem('rho-sfx',SFX.on?'o
    Firebase node and use transactions, so five brothers on five doors can all count
    at once without clobbering each other. */
 const DOOR_ZONES=[
-  {id:'kitchen', name:'Kitchen',        sf:326, x:14,  y:14,  w:208, h:296},
-  {id:'kstorage',name:'Kitchen Storage',sf:157, x:14,  y:412, w:268, h:148},
-  {id:'wc',      name:'WC',             sf:13,  x:222, y:210, w:76,  h:74},
-  {id:'board',   name:'Board Room',     sf:174, x:302, y:14,  w:212, h:274},
-  {id:'rec1',    name:'Rec Room No. 1', sf:315, x:302, y:290, w:330, h:270},
-  {id:'stair',   name:'Stairwell',      sf:137, x:516, y:14,  w:128, h:190},
-  {id:'rec3',    name:'Rec Room No. 3', sf:421, x:646, y:14,  w:330, h:274},
-  {id:'bar',     name:'The Bar',        sf:0,   x:700, y:96,  w:230, h:44,  bar:true},
-  {id:'storage', name:'Storage',        sf:120, x:646, y:372, w:170, h:188},
-  {id:'boiler',  name:'Boiler Room',    sf:141, x:818, y:372, w:288, h:188, off:true},
-  {id:'spr',     name:'Sprinkler',      sf:9,   x:978, y:14,  w:128, h:96,  deco:true}
+  /* geometry re-traced from the architectural plan (proportional) */
+  {id:'kitchen', name:'Kitchen',        sf:326, x:14,  y:14,  w:250, h:290},
+  {id:'wc',      name:'WC',             sf:13,  x:186, y:216, w:78,  h:66},
+  {id:'kstorage',name:'Kitchen Storage',sf:157, x:150, y:346, w:262, h:150},
+  {id:'board',   name:'Board Room',     sf:174, x:272, y:14,  w:196, h:250},
+  {id:'stair',   name:'Stairwell',      sf:137, x:476, y:14,  w:112, h:180},
+  {id:'rec1',    name:'Rec Room No. 1', sf:315, x:420, y:272, w:262, h:224},
+  {id:'rec3',    name:'Rec Room No. 3', sf:421, x:596, y:14,  w:322, h:250},
+  {id:'bar',     name:'The Bar',        sf:0,   x:756, y:196, w:230, h:42,  bar:true},
+  {id:'storage', name:'Storage',        sf:120, x:690, y:290, w:132, h:206},
+  {id:'boiler',  name:'Boiler Room',    sf:141, x:830, y:290, w:276, h:206, off:true},
+  {id:'spr',     name:'Sprinkler',      sf:9,   x:926, y:14,  w:180, h:88,  deco:true}
+];
+/* non-interactive furniture traced from the plan (pong tables etc.) */
+const DOOR_DECOR=[
+  {x:500,y:300,w:48,h:120},{x:636,y:330,w:40,h:100},{x:520,y:452,w:120,h:26},{x:706,y:120,w:44,h:52}
 ];
 let doorCounts={},doorTimer=null;
 function dcCount(id){return Math.max(0,+(doorCounts[id]||0));}
@@ -2750,7 +3050,8 @@ function renderDoorCount(){const map=document.getElementById('dcMap');if(!map)re
       <div class="dct-atbar">\u{1F37A} ${dcCount('bar')} at the bar</div>`;}
   const note=document.getElementById('dcSyncNote');if(note)note.textContent=fbLive()?'Synced live across every door.':'Counting on this device only — connect Firebase for multi-door live sync.';
   /* map */
-  map.innerHTML=DOOR_ZONES.map(z=>{const n=dcCount(z.id),cap2=dcCap(z.id);
+  const decor=DOOR_DECOR.map(d=>`<rect x="${d.x}" y="${d.y}" width="${d.w}" height="${d.h}" rx="4" fill="rgba(244,236,216,.07)" stroke="rgba(244,236,216,.18)" stroke-width="1.2"/>`).join('');
+  map.innerHTML=decor+DOOR_ZONES.map(z=>{const n=dcCount(z.id),cap2=dcCap(z.id);
     const fs=z.w<110?16:22;const small=z.w<110||z.h<90;
     return `<g class="dc-room${z.deco?' deco':''}" ${z.deco?'':`onclick="dcBump('${z.id}',1)" oncontextmenu="event.preventDefault();dcBump('${z.id}',-1)"`} role="button" aria-label="${escAttr(z.name)}: ${n} people">
       <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="7" fill="${dcColor(z.id)}" stroke="${z.off?'rgba(224,102,79,.55)':'rgba(201,168,76,.4)'}" stroke-width="1.6" ${z.off?'stroke-dasharray="6 5"':''}/>
@@ -2771,7 +3072,7 @@ function renderDoorCount(){const map=document.getElementById('dcMap');if(!map)re
 /* ---------- COMMAND PALETTE / GLOBAL SEARCH (Ctrl/Cmd+K) ---------- */
 let cmdItems=[],cmdSel=0;
 function cmdIndex(){const out=[];
-  const navs=[['dash','Dashboard','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['register','Event Registration','&#128221;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
+  const navs=[['dash','Dashboard','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['register','Event Registration','&#128221;'],['exec','Exec Center','&#128274;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
   navs.forEach(n=>out.push({label:n[1],sub:'Section',icon:n[2],view:n[0]}));
   (state.members||[]).forEach(m=>{if(m.name)out.push({label:m.name,sub:(m.role?m.role+' · ':'')+(m.status==='alumni'?'Alumnus':m.status==='new'?'New Member':'Active Brother')+(m.year?" · '"+(''+m.year).slice(-2):''),icon:'&#128100;',view:'roster',url:m.email?('mailto:'+m.email):null});});
   (state.positions||[]).forEach(p=>{if(p.holder)out.push({label:p.holder,sub:p.roman+' · '+p.role,icon:'&#11088;',view:'officers'});});
@@ -2810,7 +3111,7 @@ function closeLightbox(e,force){if(force||(e&&e.target&&e.target.id==='lightbox'
 function renderAll(){renderCrest();renderStats();renderRoster();renderAnn();renderEvents();renderFiles();renderSources();syncNames();renderPositions();
   fillFamSelect();renderFamilies();renderLeaderboard();renderFamEdit();renderSocial();renderMinutes();renderTasks();
   renderGiveHero();renderPhiloTable();renderAlumniTable();renderScholTable();renderScholKpis();
-  renderBudgetTable();renderDuesTable();renderBalanceTable();buildVisibleCharts();renderCommittees();renderDonate();renderGallery();renderDashGallery();renderStanding();renderRecruit();renderDoorCount();renderRegister();renderMeeting();renderDispatch();
+  renderBudgetTable();renderDuesTable();renderBalanceTable();buildVisibleCharts();renderCommittees();renderDonate();renderGallery();renderDashGallery();renderStanding();renderRecruit();renderDoorCount();renderRegister();renderMeeting();renderDashStanding();renderPresence();renderExec();renderDispatch();
   const gi=document.getElementById('philoGoal');if(gi)gi.oninput=()=>{state.finance.philanthropy.goal=+gi.value||0;buildGiveCharts();renderKpis();renderStats();renderGiveHero();save();};
   const ai=document.getElementById('scholAnnual');if(ai)ai.oninput=()=>{state.giving.scholarship.annual=+ai.value||0;renderScholKpis();renderGiveHero();renderStats();save();};}
 async function init(){
