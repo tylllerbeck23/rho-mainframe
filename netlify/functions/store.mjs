@@ -16,7 +16,7 @@ export default async (req) => {
     "Access-Control-Allow-Methods": "GET,PUT,POST,OPTIONS",
     "Access-Control-Allow-Headers": "content-type",
   };
-  if (req.method === "OPTIONS") return new Response("", { status: 204, headers: cors });
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
 
   /* keys are namespaced with an unguessable board id — capability-URL model */
   if (!/^rho-[A-Za-z0-9:_.-]{3,120}$/.test(key)) return new Response("bad key", { status: 400, headers: cors });
@@ -28,7 +28,7 @@ export default async (req) => {
 
   if (req.method === "GET") {
     const r = await fetch(apiRead, { headers: { Authorization: `Bearer ${token}` } });
-    if (!r.ok) return new Response("", { status: 204, headers: cors }); /* absent key = empty */
+    if (!r.ok) return new Response(null, { status: 204, headers: cors }); /* absent key = empty */
     const t = await r.text();
     return new Response(t, { status: 200, headers: { ...cors, "content-type": "application/json", "cache-control": "no-store" } });
   }
