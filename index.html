@@ -885,6 +885,40 @@
   .reg-card.disc{border-left:3px solid rgba(224,102,79,.55)}
   .pc-tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
   .pos-cmd p b{font-weight:700}
+
+  /* Praetor console + topics + minutes sheet */
+  .prae-idle{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+  .prae-idle b{font-family:'Cinzel';font-size:14px;color:var(--gold);display:block}
+  .prae-idle span{font-size:12.5px;color:var(--cream-dim);display:block;margin-top:4px;max-width:52ch}
+  .prae{margin-bottom:14px}
+  .prae-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .prae-top b{font-family:'Cinzel';font-size:13.5px;color:var(--gold)}
+  .prae-btns{display:flex;gap:9px;flex-wrap:wrap}
+  .prae-roll{display:flex;gap:7px;flex-wrap:wrap}
+  .roll-chip{font-size:12px;font-weight:700;border-radius:4px;padding:8px 13px;cursor:pointer;border:1px solid rgba(95,179,122,.5);
+    background:rgba(95,179,122,.12);color:var(--good);transition:.12s}
+  .roll-chip.abs{border-color:rgba(224,102,79,.5);background:rgba(224,102,79,.1);color:var(--bad);text-decoration:line-through}
+  .prae-item{border:1px solid var(--line-soft);border-radius:4px;padding:12px 14px;margin-bottom:10px;background:rgba(0,0,0,.16)}
+  .pi-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .pi-head b{font-family:'Cinzel';font-size:13px;color:var(--cream)}
+  .pi-btns{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .pi-timer{font-family:'Cinzel';font-size:13px;color:var(--cream-dim2);min-width:44px;text-align:right;font-variant-numeric:tabular-nums}
+  .pi-timer.live{color:var(--gold-br)}
+  .pi-line{font-size:13px;color:var(--cream-dim);padding:5px 0 5px 8px;border-bottom:1px dashed var(--line-soft);display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .pi-line.motion{color:var(--cream)}
+  .pi-line.po{color:var(--gold-br)}
+  .pi-line.vote{color:var(--china-br)}
+  .topics{margin-bottom:14px}
+  .top-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:12px}
+  @media(max-width:700px){.top-cols{grid-template-columns:1fr}}
+  .top-by{font-size:10px;color:var(--cream-dim2);margin-left:auto}
+  /* minutes/agenda print sheet */
+  .mn-title{font-size:17px;font-weight:700;margin-bottom:14px}
+  .mn-sec{font-weight:700;margin:13px 0 5px}
+  .mn-line{margin:2px 0 2px 14px}
+  .mn-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:11.5px}
+  .mn-table th,.mn-table td{border:1px solid #444;padding:6px 8px;text-align:left}
+  .mn-table th{background:#eee}
 </style>
 </head>
 <body>
@@ -1106,6 +1140,8 @@
       <section class="view" id="v-meeting">
         <div class="sec">Chapter Meeting</div>
         <div class="meet-head card" id="meetHead"></div>
+        <div id="praetorConsole"></div>
+        <div id="topicsBoard"></div>
         <div class="sec-sub">Secret Ballots</div>
         <div id="ballotList"></div>
         <div class="meet-new" id="meetNew"></div>
@@ -1520,7 +1556,7 @@ const DEFAULTS={
   doorcaps:{kitchen:45,kstorage:20,board:25,rec1:45,rec3:60,bar:12,stair:10,storage:5,wc:2,boiler:0},
   registrations:[],sponsors:[],
   regDefaults:{org:"Kappa Delta Rho — Rho Chapter",rmo:"",rmoPhone:"",presPhone:""},
-  votes:[],meeting:{active:false,started:0},
+  votes:[],meeting:{active:false,started:0},minutesLive:{active:false},topics:{week:'',items:[]},
   execVault:{salt:'',blob:'',hint:''},
   equipment:[],funding:[],
   hours:[],checkins:[],
@@ -1784,6 +1820,8 @@ function merge(s){const o=JSON.parse(JSON.stringify(DEFAULTS));
   ["members","announcements","events","tasks","log","families","points","social","minutes","files","positions","chat","committees","gallery","hours","checkins","registrations","sponsors","votes","equipment","funding"].forEach(k=>{if(Array.isArray(s[k]))o[k]=s[k];});
   if(s.regDefaults&&typeof s.regDefaults==='object')o.regDefaults=Object.assign(o.regDefaults,s.regDefaults);
   if(s.meeting&&typeof s.meeting==='object')o.meeting=Object.assign(o.meeting,s.meeting);
+  if(s.minutesLive&&typeof s.minutesLive==='object')o.minutesLive=s.minutesLive;
+  if(s.topics&&typeof s.topics==='object'&&Array.isArray(s.topics.items))o.topics=s.topics;
   if(s.execVault&&typeof s.execVault==='object')o.execVault=Object.assign(o.execVault,s.execVault);
   if(typeof s.chatName==='string')o.chatName=s.chatName;
   if(typeof s.tasksSheet==='string')o.tasksSheet=s.tasksSheet;
@@ -2749,14 +2787,16 @@ function closeBallot(id){const b=state.votes.find(x=>x.id===id);if(!b)return;
   const t=ballotTally(b);b.yes=t.yes;b.no=t.no;b.abst=t.abst;b.cast=t.cast;
   b.status='closed';b.closed=Date.now();
   b.result=t.yes>t.no?'PASSES':t.yes<t.no?'FAILS':'TIED';
+  mlAutoVote(b,t);
   renderMeeting();save();sfxGavel();}
 function deleteBallot(id){if(!confirm('Delete this ballot and its results?'))return;state.votes=state.votes.filter(x=>x.id!==id);
   if(fbLive()&&FB.votes)FB.votes.child(id).remove().catch(()=>{});renderMeeting();save();}
-function meetTimer(){const el=document.getElementById('meetElapsed');if(!el||!state.meeting.active)return;
+function meetTimer(){(mlState().items||[]).forEach(it=>{if(it.openedTs&&!it.closedTs){const el=document.getElementById('pit-'+it.id);if(el)el.textContent=mlItemElapsed(it);}});
+  const el=document.getElementById('meetElapsed');if(!el||!state.meeting.active)return;
   const s=Math.floor((Date.now()-state.meeting.started)/1000);
   el.textContent=String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
 setInterval(meetTimer,1000);
-function renderMeeting(){const h=document.getElementById('meetHead');if(!h)return;
+function renderMeeting(){const h=document.getElementById('meetHead');if(!h)return;renderPraetor();renderTopics();
   const consul=officerHolder('Consul');
   h.innerHTML=state.meeting.active?
     `<div class="mh-live"><span class="mh-dot"></span> IN SESSION</div>
@@ -2792,6 +2832,142 @@ function renderMeeting(){const h=document.getElementById('meetHead');if(!h)retur
       ${editing?`<div class="bl-admin"><button class="mini-btn" onclick="deleteBallot('${b.id}')">Delete</button></div>`:''}
     </div>`;}).join(''):'<div class="card pad" style="color:var(--cream-dim);font-size:13px">No closed ballots yet.</div>';
   meetTimer();}
+
+/* ================== PRAETOR CONSOLE — live minutes that match the chapter's format ================== */
+const ROMAN=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV'];
+function mlState(){if(!state.minutesLive||typeof state.minutesLive!=='object')state.minutesLive={active:false};return state.minutesLive;}
+function nowClock(){return new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}
+function mlStart(){const roll={};state.members.filter(m=>m.status!=='alumni'&&m.name).forEach(m=>roll[m.name]='Present');
+  state.minutesLive={active:true,date:new Date().toISOString().slice(0,10),called:nowClock(),credo:true,precepts:true,roll,items:[],closed:''};
+  if(!state.meeting.active)state.meeting={active:true,started:Date.now()};
+  renderMeeting();save();sfxGavel();}
+function mlToggleRoll(name){const m=mlState();m.roll[name]=m.roll[name]==='Present'?'Absent':'Present';renderMeeting();save();}
+function mlAddItem(){modalFields([{k:'title',l:'Agenda item (e.g. "Board Positions", "Local Dues")',v:''}],'New Agenda Item',vals=>{
+  if(!vals.title.trim())return;mlState().items.push({id:uid(),title:vals.title.trim(),lines:[]});renderMeeting();save();});}
+function mlItem(id){return mlState().items.find(x=>x.id===id);}
+function mlDelLine(iid,idx){const it=mlItem(iid);if(it){it.lines.splice(idx,1);renderMeeting();save();}}
+function mlMotion(iid){modalFields([
+    {k:'who',l:'Who motions',v:meName()||''},
+    {k:'text',l:'Motion',v:''},
+    {k:'sec',l:'Seconded?',v:'seconded',sel:[['seconded','Seconded'],['not seconded','Not seconded — dies']]},
+    {k:'out',l:'Outcome',v:'Passes',sel:[['Passes','Passes'],['Passed unanimously','Passed unanimously'],['Fails','Fails'],['Tabled','Tabled'],['Withdrawn','Withdrawn']]}
+  ],'Record a Motion',vals=>{const it=mlItem(iid);if(!it||!vals.text.trim())return;
+    it.lines.push({t:'motion',text:vals.who+' motions '+vals.text.trim()+', '+vals.sec+' - '+vals.out});
+    renderMeeting();save();sfxTick();});}
+function mlPO(iid){modalFields([{k:'who',l:'Raised by',v:''},{k:'text',l:'Point of order',v:''}],'Point of Order',vals=>{
+  const it=mlItem(iid);if(!it||!vals.text.trim())return;
+  it.lines.push({t:'po',text:'Point of order ('+(vals.who||'—')+'): '+vals.text.trim()});renderMeeting();save();});}
+function mlNote(iid){modalFields([{k:'text',l:'Note / discussion line',v:''}],'Add Note',vals=>{
+  const it=mlItem(iid);if(!it||!vals.text.trim())return;it.lines.push({t:'note',text:vals.text.trim()});renderMeeting();save();});}
+function mlAutoVote(b,t){const m=mlState();if(!m.active)return;
+  let it=m.items[m.items.length-1];
+  if(!it){it={id:uid(),title:'Votes',lines:[]};m.items.push(it);}
+  it.lines.push({t:'vote',text:'Secret ballot: '+b.title+' - Aye '+t.yes+' / Nay '+t.no+' / Abstain '+t.abst+' - '+(b.result||'')});}
+function mlEnd(){const m=mlState();if(!m.active)return;if(!confirm('Close the meeting and generate the minutes?'))return;
+  m.closed=nowClock();m.active=false;
+  const d=new Date(m.date+'T00:00:00');const label=(d.getMonth()+1)+'/'+d.getDate()+'/'+(''+d.getFullYear()).slice(-2);
+  state.minutes.unshift({id:uid(),date:m.date,title:'ΚΔΡ Meeting Minutes '+label,url:'',summary:'Recorded live in the Mainframe — print from Chapter Meeting'});
+  renderMeeting();renderMinutes();save();sfxGavel();printMinutesSheet(m);}
+function mlFmtDate(m){const d=new Date(m.date+'T00:00:00');return (d.getMonth()+1)+'/'+d.getDate()+'/'+(''+d.getFullYear()).slice(-2);}
+function printMinutesSheet(m){m=m||mlState();
+  const absents=Object.keys(m.roll||{}).filter(n=>m.roll[n]==='Absent');
+  const firsts=absents.map(n=>n.split(' ')[0]);
+  let inner=`<div class="mn-title">ΚΔΡ Meeting Minutes ${esc(mlFmtDate(m))}</div>
+  <p class="mn-sec">I. Roll Call:</p>
+  <p class="mn-line">- Meeting called to order at ${esc(m.called||'')}</p>
+  ${m.credo?'<p class="mn-line">- Credo</p>':''}
+  <p class="mn-line">- ${absents.length?esc(firsts.join(', '))+' absent':'No absences'}</p>
+  <p class="mn-line">- Quorum ${absents.length<Object.keys(m.roll||{}).length/2?'present':'NOT present'}</p>`;
+  (m.items||[]).forEach((it,i)=>{inner+=`<p class="mn-sec">${ROMAN[i+1]||(i+2)}. ${esc(it.title)}:</p>`+
+    (it.opened?`<p class="mn-line">- Discussion Opened: ${esc(it.opened)}</p>`:'')+
+    it.lines.map(l=>`<p class="mn-line">- ${esc(l.text)}</p>`).join('')+
+    (it.closed?`<p class="mn-line">- Discussion Closed: ${esc(it.closed)}</p>`:'');});
+  inner+=`<p class="mn-sec">${ROMAN[(m.items||[]).length+1]||''}. Chapter Closing:</p>
+  ${m.precepts?'<p class="mn-line">- Precepts</p>':''}
+  <p class="mn-line">- Meeting closed at ${esc(m.closed||nowClock())}</p>
+  <p class="mn-sec" style="margin-top:26px">Appendix I: Meeting Roster</p>
+  <table class="mn-table"><tr><th>Name</th><th>Title (as of the beginning of this meeting)</th><th>Attendance</th><th>ID#</th></tr>
+  ${Object.keys(m.roll||{}).map((n,i)=>{const mem=state.members.find(x=>x.name===n)||{};
+    return `<tr><td>${esc(n)}</td><td>${esc(mem.role||'Member')}</td><td>${esc(m.roll[n])}</td><td>${i+1}</td></tr>`;}).join('')}
+  </table>`;
+  const sh=document.getElementById('regSheet');sh.innerHTML=inner;
+  document.body.classList.add('print-reg');
+  const done=()=>{document.body.classList.remove('print-reg');window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>{try{window.print();}catch(e){done();}},60);}
+function renderPraetor(){const c=document.getElementById('praetorConsole');if(!c)return;const m=mlState();
+  if(!m.active){c.innerHTML=`<div class="card pad prae-idle">
+      <div><b>&#128209; Praetor Console</b><span>Run the meeting from here — roll call, motions, points of order, votes — and the minutes write themselves in the chapter's exact format.</span></div>
+      <button class="gallery-add" onclick="mlStart()"><span>&#9997;</span> Start taking minutes</button></div>`;return;}
+  const names=Object.keys(m.roll||{});const absent=names.filter(n=>m.roll[n]==='Absent').length;
+  c.innerHTML=`<div class="card pad prae">
+    <div class="prae-top"><b>&#128209; Taking minutes — called to order ${esc(m.called)}</b>
+      <div class="prae-btns"><button class="rec-ghost" onclick="printMinutesSheet()">Preview PDF</button>
+      <button class="gallery-add" onclick="mlEnd()"><span>&#9878;</span> Close meeting &amp; make minutes</button></div></div>
+    <div class="sec-sub" style="margin-top:14px">Roll Call <span class="gallery-count">${names.length-absent} present · ${absent} absent — tap to flip</span></div>
+    <div class="prae-roll">${names.map(n=>`<button class="roll-chip ${m.roll[n]==='Absent'?'abs':''}" onclick="mlToggleRoll('${escAttr(n)}')">${esc(n.split(' ')[0])}</button>`).join('')}</div>
+    <div class="sec-sub">Agenda</div>
+    ${(m.items||[]).map((it,i)=>`<div class="prae-item">
+      <div class="pi-head"><b>${ROMAN[i+1]||i+2}. ${esc(it.title)}</b>
+        <div class="pi-btns"><span class="pi-timer ${it.openedTs&&!it.closedTs?'live':''}" id="pit-${it.id}">${it.openedTs?mlItemElapsed(it):''}</span>
+        <button class="mini-btn ${it.openedTs&&!it.closedTs?'ok':''}" onclick="mlOpenItem('${it.id}')">${!it.openedTs?'▶ Open discussion':!it.closedTs?'■ Close discussion':'↻ Reopen'}</button>
+        <button class="mini-btn" onclick="mlMotion('${it.id}')">+ Motion</button>
+        <button class="mini-btn" onclick="mlPO('${it.id}')">+ Point of order</button>
+        <button class="mini-btn" onclick="mlNote('${it.id}')">+ Note</button></div></div>
+      ${it.lines.map((l,li)=>`<div class="pi-line ${l.t}">- ${esc(l.text)}<button class="row-del" style="position:static;margin-left:8px" onclick="mlDelLine('${it.id}',${li})">×</button></div>`).join('')}
+    </div>`).join('')||'<p class="lead" style="font-size:12.5px">No agenda items yet.</p>'}
+    <button class="rec-ghost" style="margin-top:10px" onclick="mlAddItem()">+ Agenda item</button>
+    <p class="lead" style="font-size:11.5px;margin-top:10px">Secret-ballot results are appended automatically when a ballot closes. Credo and Precepts are included by default.</p>
+  </div>`;}
+
+/* ---- per-item discussion timers ---- */
+function mlOpenItem(iid){const m=mlState();m.items.forEach(it=>{if(it.openedTs&&!it.closedTs&&it.id!==iid){it.closedTs=Date.now();it.closed=nowClock();}});
+  const it=mlItem(iid);if(!it)return;if(!it.openedTs){it.openedTs=Date.now();it.opened=nowClock();}else if(!it.closedTs){it.closedTs=Date.now();it.closed=nowClock();}
+  renderMeeting();save();}
+function mlItemElapsed(it){if(!it.openedTs)return '';const end=it.closedTs||Date.now();const s=Math.floor((end-it.openedTs)/1000);
+  return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+
+/* ---- weekly topics board (resets each week; exec column isolated) ---- */
+function weekKey(){const d=new Date();const onejan=new Date(d.getFullYear(),0,1);
+  const wk=Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);return d.getFullYear()+'-W'+wk;}
+function topicsState(){if(!state.topics||!Array.isArray(state.topics.items))state.topics={week:weekKey(),items:[]};
+  if(state.topics.week!==weekKey()){state.topics={week:weekKey(),items:[]};save();}
+  return state.topics;}
+function addTopic(scope){const inp=document.getElementById(scope==='exec'?'topExecIn':'topGenIn');if(!inp||!inp.value.trim())return;
+  topicsState().items.push({id:uid(),text:inp.value.trim(),by:meName()||'A brother',scope,ts:Date.now()});
+  inp.value='';renderTopics();save();sfxTick();}
+function delTopic(id){const t=topicsState();t.items=t.items.filter(x=>x.id!==id);renderTopics();save();}
+function renderTopics(){const c=document.getElementById('topicsBoard');if(!c)return;const t=topicsState();
+  const gen=t.items.filter(x=>x.scope!=='exec'),ex=t.items.filter(x=>x.scope==='exec');
+  const execOpen=(typeof execData!=='undefined'&&execData!==null);
+  c.innerHTML=`<div class="card pad topics">
+    <div class="prae-top"><b>&#128203; This Week's Topics <span class="gallery-count">resets every week · ${esc(t.week)}</span></b>
+      <button class="rec-ghost" onclick="printAgendaSheet()">Generate agenda PDF</button></div>
+    <div class="top-cols">
+      <div class="top-col"><div class="sec-sub" style="margin-top:0">General Body</div>
+        ${gen.map(x=>`<div class="pi-line note">- ${esc(x.text)} <span class="top-by">${esc(x.by)}</span><button class="row-del" style="position:static;margin-left:6px" onclick="delTopic('${x.id}')">×</button></div>`).join('')||'<p class="lead" style="font-size:12px">Nothing yet — drop a topic below.</p>'}
+        <div class="inline-add" style="margin-top:8px"><input id="topGenIn" placeholder="Topic for this week's meeting" onkeydown="if(event.key==='Enter')addTopic('general')"><button onclick="addTopic('general')">Add</button></div></div>
+      <div class="top-col"><div class="sec-sub" style="margin-top:0">Executive <span class="conf-chip">EXEC</span></div>
+        ${execOpen?(ex.map(x=>`<div class="pi-line po">- ${esc(x.text)} <span class="top-by">${esc(x.by)}</span><button class="row-del" style="position:static;margin-left:6px" onclick="delTopic('${x.id}')">×</button></div>`).join('')||'<p class="lead" style="font-size:12px">No exec topics this week.</p>')
+          :`<p class="lead" style="font-size:12px">${ex.length?ex.length+' exec topic'+(ex.length>1?'s':'')+' — unlock the Exec Center to view.':'Unlock the Exec Center to view or add exec topics.'}</p>`}
+        ${execOpen?`<div class="inline-add" style="margin-top:8px"><input id="topExecIn" placeholder="Exec-only topic" onkeydown="if(event.key==='Enter')addTopic('exec')"><button onclick="addTopic('exec')">Add</button></div>`:''}
+      </div></div></div>`;}
+function printAgendaSheet(){const t=topicsState();const d=new Date();
+  const label=(d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear();
+  const gen=t.items.filter(x=>x.scope!=='exec');
+  const execOpen=(typeof execData!=='undefined'&&execData!==null);
+  const ex=execOpen?t.items.filter(x=>x.scope==='exec'):[];
+  const sections=['Roll Call',"Approval of Last Week's Minutes"].concat(gen.map(x=>x.text));
+  if(ex.length)sections.push('Executive Session');
+  sections.push('Open Discussion','Closing');
+  let inner=`<div class="mn-title">ΚΔΡ Chapter Meeting Agenda ${esc(label)}</div>`;
+  sections.forEach((sec,i)=>{inner+=`<p class="mn-sec">${ROMAN[i]||i+1}. ${esc(sec)}</p>`;
+    if(sec==='Executive Session')inner+=ex.map(x=>`<p class="mn-line">- ${esc(x.text)}</p>`).join('');});
+  const sh=document.getElementById('regSheet');sh.innerHTML=inner;
+  document.body.classList.add('print-reg');
+  const done=()=>{document.body.classList.remove('print-reg');window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>{try{window.print();}catch(e){done();}},60);}
 
 /* ================== DASHBOARD PERSONAL POINTS ================== */
 function renderDashStanding(){const c=document.getElementById('dashStanding');if(!c)return;const me=meName();
