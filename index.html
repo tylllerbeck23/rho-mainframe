@@ -919,6 +919,38 @@
   .mn-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:11.5px}
   .mn-table th,.mn-table td{border:1px solid #444;padding:6px 8px;text-align:left}
   .mn-table th{background:#eee}
+
+  /* doorman clicker + door banner */
+  .doorman{position:fixed;inset:0;z-index:1250;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+    background:radial-gradient(900px 600px at 50% -10%,rgba(232,119,34,.16),transparent 60%),linear-gradient(165deg,#08203f,#0A1E3F 55%,#051229)}
+  .doorman.show{display:flex}
+  .dm-head{font-family:'Cinzel';font-size:13px;letter-spacing:4px;color:var(--gold)}
+  .dm-count{font-family:'Cinzel';font-weight:900;font-size:clamp(90px,24vw,180px);line-height:1;color:var(--good);font-variant-numeric:tabular-nums;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+  .dm-cap{font-size:13px;color:var(--cream-dim);letter-spacing:.5px;min-height:18px}
+  .dm-tap{width:min(78vw,420px);height:min(34vh,300px);border-radius:8px;border:2px solid var(--orange);cursor:pointer;
+    background:rgba(232,119,34,.14);color:var(--orange-br);font-family:'Cinzel';font-weight:800;font-size:24px;letter-spacing:4px;
+    box-shadow:0 4px 0 rgba(0,0,0,.45);transition:.08s}
+  .dm-tap:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.45);background:rgba(232,119,34,.3)}
+  .dm-minus{background:rgba(224,102,79,.12);border:1.5px solid rgba(224,102,79,.5);color:var(--bad);border-radius:6px;
+    padding:14px 34px;font-family:'Cinzel';font-weight:700;font-size:14px;letter-spacing:2px;cursor:pointer}
+  .dct-door{display:flex;align-items:center;gap:20px;justify-content:center;width:100%}
+  .dct-btn{width:74px;height:74px;border-radius:8px;font-size:36px;font-weight:800;cursor:pointer;border:2px solid;transition:.1s;line-height:1}
+  .dct-btn.plus{background:rgba(95,179,122,.14);border-color:rgba(95,179,122,.55);color:var(--good)}
+  .dct-btn.minus{background:rgba(224,102,79,.12);border-color:rgba(224,102,79,.5);color:var(--bad)}
+  .dct-btn:active{transform:translateY(2px)}
+  .dct-mid{text-align:center;min-width:130px}
+  .dct-mid .dct-num{font-size:64px}
+  .dct-mid .dct-lbl{font-family:'Cinzel';font-size:10px;letter-spacing:2.5px;color:var(--cream-dim)}
+  .dct-sub{width:100%;text-align:center;font-size:12px;color:var(--cream-dim2);margin-top:4px}
+  .dc-bar:hover rect{stroke-width:3}
+
+  /* blueprint map */
+  .dc-map-wrap{border:1px solid rgba(220,233,245,.3);background:#0D2C52;padding:0;overflow:hidden}
+  .dc-rname{fill:#DCE9F5;font-family:'Montserrat';font-weight:700;font-size:11.5px;letter-spacing:2.5px;text-transform:uppercase}
+  .dc-rnum{fill:#fff;font-family:'Cinzel';font-weight:700}
+  .bp-tt{fill:#DCE9F5;font-family:'Montserrat';font-weight:800;font-size:10.5px;letter-spacing:1.5px}
+  .bp-ts{fill:rgba(220,233,245,.75);font-family:'Montserrat';font-weight:600;font-size:8.5px;letter-spacing:1.2px}
+  .dc-room:hover rect{stroke:#fff;stroke-width:2.6}
 </style>
 </head>
 <body>
@@ -1103,6 +1135,7 @@
         <div class="dc-top">
           <div class="dc-total card" id="dcTotal"></div>
           <div class="dc-actions">
+            <button class="rec-rush" onclick="openDoorman()"><span>&#128682;</span> Doorman Clicker</button>
             <button class="rec-ghost" onclick="resetDoorCount()">Reset for new function</button>
             <span class="gallery-count" id="dcSyncNote"></span>
           </div>
@@ -1164,7 +1197,10 @@
             <button class="form-tile" onclick="newFunding()"><span>&#128181;</span><b>Funding Request</b><i>Consul + Quaestor sign-off</i></button>
             <button class="form-tile" onclick="newEquipment()"><span>&#128736;</span><b>Equipment Sign-Out</b><i>Track chapter property</i></button>
             <button class="form-tile" onclick="go('register')"><span>&#128221;</span><b>Event Registration</b><i>College no-alcohol form</i></button>
+            <button class="form-tile" onclick="newLetter()"><span>&#9993;</span><b>Official Letter / Email</b><i>Auto-generated on letterhead</i></button>
           </div>
+          <div class="sec-sub">Official Correspondence</div>
+          <div id="letterList"></div>
           <div class="sec-sub">Standards Records <span class="conf-chip">CONFIDENTIAL</span></div>
           <div id="discList"></div>
           <div class="sec-sub">Funding Requests</div>
@@ -1415,6 +1451,14 @@
     </div>
   </div>
 </div>
+<div class="doorman" id="doormanMode">
+  <button class="rm-exit" onclick="closeDoorman()" aria-label="Exit doorman">&times;</button>
+  <div class="dm-head">FRONT DOOR &middot; RHO CHAPTER</div>
+  <div class="dm-count" id="dmCount">0</div>
+  <div class="dm-cap" id="dmCap"></div>
+  <button class="dm-tap" onclick="dmPlus()" aria-label="Count one in"><span>TAP&nbsp;=&nbsp;+1</span></button>
+  <button class="dm-minus" onclick="dmMinus()" aria-label="Count one out">&minus;&nbsp;one out</button>
+</div>
 <div class="meet-enter" id="meetEnter" aria-hidden="true">
   <div class="me-glow"></div>
   <div class="me-crest" id="meetCrest"></div>
@@ -1554,7 +1598,7 @@ const DEFAULTS={
   tasksSheet:"",taskDone:{},
   recruit:{pnms:[],events:[],rushCode:""},
   doorcaps:{kitchen:45,kstorage:20,board:25,rec1:45,rec3:60,bar:12,stair:10,storage:5,wc:2,boiler:0},
-  registrations:[],sponsors:[],
+  registrations:[],sponsors:[],letters:[],
   regDefaults:{org:"Kappa Delta Rho — Rho Chapter",rmo:"",rmoPhone:"",presPhone:""},
   votes:[],meeting:{active:false,started:0},minutesLive:{active:false},topics:{week:'',items:[]},
   execVault:{salt:'',blob:'',hint:''},
@@ -1817,7 +1861,7 @@ function flushPending(){
   if(pendingDoor){doorCounts=pendingDoor;pendingDoor=null;lsSaveDoor();renderDoorCount();}}
 function merge(s){const o=JSON.parse(JSON.stringify(DEFAULTS));
   if(s.chapter)Object.assign(o.chapter,s.chapter);
-  ["members","announcements","events","tasks","log","families","points","social","minutes","files","positions","chat","committees","gallery","hours","checkins","registrations","sponsors","votes","equipment","funding"].forEach(k=>{if(Array.isArray(s[k]))o[k]=s[k];});
+  ["members","announcements","events","tasks","log","families","points","social","minutes","files","positions","chat","committees","gallery","hours","checkins","registrations","sponsors","votes","equipment","funding","letters"].forEach(k=>{if(Array.isArray(s[k]))o[k]=s[k];});
   if(s.regDefaults&&typeof s.regDefaults==='object')o.regDefaults=Object.assign(o.regDefaults,s.regDefaults);
   if(s.meeting&&typeof s.meeting==='object')o.meeting=Object.assign(o.meeting,s.meeting);
   if(s.minutesLive&&typeof s.minutesLive==='object')o.minutesLive=s.minutesLive;
@@ -2132,7 +2176,8 @@ function buildHomeCharts(){const fs=famTotals();
 /* ---------- MODALS ---------- */
 let modalCtx=null;
 function modalFields(fields,title,onSave){modalCtx={fields,onSave};document.getElementById('modalTitle').textContent=title;
-  document.getElementById('modalFields').innerHTML=fields.map((f,i)=>{if(f.sel)return `<label>${esc(f.l)}</label><select id="mf_${i}">${f.sel.map(o=>`<option value="${o[0]}"${o[0]===f.v?' selected':''}>${esc(o[1])}</option>`).join('')}</select>`;return `<label>${esc(f.l)}</label><input id="mf_${i}" value="${escAttr(f.v)}">`;}).join('');
+  document.getElementById('modalFields').innerHTML=fields.map((f,i)=>{if(f.sel)return `<label>${esc(f.l)}</label><select id="mf_${i}">${f.sel.map(o=>`<option value="${o[0]}"${o[0]===f.v?' selected':''}>${esc(o[1])}</option>`).join('')}</select>`;
+    if(f.area)return `<label>${esc(f.l)}</label><textarea id="mf_${i}" rows="9" style="width:100%;background:var(--ink);border:1px solid var(--line);color:var(--cream);border-radius:4px;padding:10px 12px;font-family:'Montserrat';font-size:13px;line-height:1.55;resize:vertical">${esc(f.v||'')}</textarea>`;return `<label>${esc(f.l)}</label><input id="mf_${i}" value="${escAttr(f.v)}">`;}).join('');
   document.getElementById('modalSave').onclick=()=>{const vals={};fields.forEach((f,i)=>vals[f.k]=document.getElementById('mf_'+i).value);closeModal();onSave(vals);};
   document.getElementById('modalBg').classList.add('show');}
 function closeModal(){document.getElementById('modalBg').classList.remove('show');}
@@ -3144,6 +3189,67 @@ function printFormSheet(title,inner){const sh=document.getElementById('regSheet'
   const done=()=>{document.body.classList.remove('print-reg');window.removeEventListener('afterprint',done);};
   window.addEventListener('afterprint',done);
   setTimeout(()=>{try{window.print();}catch(e){done();}},60);}
+/* ---- Official Correspondence — auto-generated letters/emails on letterhead ---- */
+function letterTemplates(){const c=counts();const praised=state.finance.philanthropy.campaigns.reduce((a,x)=>a+(+x.amount||0),0);
+  const schol=money(+state.giving.scholarship.annual||19795);const consul=officerHolder('Consul')||'The Consul';
+  const nextEv=[...state.events].filter(e=>e.date&&new Date(e.date+'T00:00:00')>=new Date()).sort((a,b)=>a.date.localeCompare(b.date))[0];
+  return {
+    alumni:{name:'Alumni Update',subject:'Rho Chapter Update — Kappa Delta Rho at Lafayette',
+      body:'Dear Brothers of Rho Chapter,\n\nGreetings from Easton. The undergraduate chapter is proud to report that Rho stands '+(c.active+c.new)+' brothers strong this semester. Since restoration to full chapter status in 2025, we have raised '+money(praised)+' for The B+ Foundation and continue to award '+schol+' annually in scholarship through the chapter.\n\nWe would be honored to welcome you back to the chapter house — your guidance and stories are part of what makes Rho what it is.\n\nFraternally, in Honor Super Omnia,'},
+    thankyou:{name:'Sponsor / Donor Thank-You',subject:'Thank you from the Rho Chapter of Kappa Delta Rho',
+      body:'Dear Friend of Rho Chapter,\n\nOn behalf of every brother of the Rho Chapter of Kappa Delta Rho at Lafayette College, thank you for your generous support. Your contribution directly advances our philanthropy for The B+ Foundation and the chapter scholarship fund.\n\nGifts like yours are what allow a brotherhood founded on Fellowship, Leadership, Scholarship, Service, and Tradition to put those values into practice.\n\nWith sincere gratitude, in Honor Super Omnia,'},
+    invite:{name:'Event Invitation',subject:'You are cordially invited — '+(nextEv?nextEv.title:'[Event]'),
+      body:'Dear Guest,\n\nThe brothers of the Rho Chapter of Kappa Delta Rho cordially invite you to '+(nextEv?(nextEv.title+' on '+new Date(nextEv.date+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+(nextEv.loc?' at '+nextEv.loc:'')):'[event, date, and location]')+'.\n\nWe look forward to sharing an evening of fellowship with you.\n\nRespectfully,'},
+    hq:{name:'National HQ Report',subject:'Rho Chapter Report — Lafayette College',
+      body:'To the National Fraternity of Kappa Delta Rho,\n\nThe Rho Chapter submits the following report. The chapter currently numbers '+c.active+' active brothers and '+c.new+' new members in good standing. Philanthropy raised to date totals '+money(praised)+' for The B+ Foundation, and the chapter continues its '+schol+' annual scholarship.\n\nFurther detail is available upon request.\n\nFraternally submitted,'},
+    blank:{name:'Blank Letter',subject:'',body:'Dear ,\n\n\n\nFraternally, in Honor Super Omnia,'}};}
+function newLetter(){const tp=letterTemplates();
+  modalFields([
+    {k:'template',l:'Start from',v:'alumni',sel:Object.keys(tp).map(k=>[k,tp[k].name])},
+    {k:'to',l:'To (name / organization)',v:''}
+  ],'New Official Letter',vals=>{const t=tp[vals.template]||tp.blank;
+    const L={id:uid(),date:new Date().toISOString().slice(0,10),to:vals.to||'',subject:t.subject,body:t.body,
+      signer:officerHolder('Consul')||meName()||'',title:'Consul, Rho Chapter',template:vals.template};
+    state.letters.unshift(L);renderLetterList();save();editLetter(L.id);});}
+function editLetter(id){const L=state.letters.find(x=>x.id===id);if(!L)return;
+  modalFields([
+    {k:'to',l:'To (name / organization)',v:L.to},
+    {k:'subject',l:'Subject',v:L.subject},
+    {k:'body',l:'Body',v:L.body,area:true},
+    {k:'signer',l:'Signed by',v:L.signer},
+    {k:'title',l:'Signer title',v:L.title}
+  ],'Edit Letter',vals=>{Object.assign(L,vals);renderLetterList();save();});}
+function renderLetterList(){const l=document.getElementById('letterList');if(!l)return;
+  l.innerHTML=state.letters.length?state.letters.map(L=>`<div class="reg-card card">
+      <div class="rg-main"><b>${esc(L.subject||'(no subject)')}</b>
+        <span class="rg-meta">To ${esc(L.to||'—')} · ${esc(L.date)} · signed ${esc(L.signer||'—')}</span></div>
+      <div class="rg-side"><div class="rg-btns">
+        <button class="mini-btn" onclick="editLetter('${L.id}')">Edit</button>
+        <button class="mini-btn ok" onclick="printLetter('${L.id}')">PDF</button>
+        <button class="mini-btn" onclick="emailLetter('${L.id}')">Email</button>
+        <button class="mini-btn" onclick="state.letters=state.letters.filter(x=>x.id!=='${L.id}');renderLetterList();save()">Delete</button>
+      </div></div></div>`).join(''):'<div class="card pad" style="color:var(--cream-dim);font-size:13px">No letters yet — hit the Official Letter tile above; templates fill themselves with chapter numbers.</div>';}
+function printLetter(id){const L=state.letters.find(x=>x.id===id);if(!L)return;
+  const dateFmt=new Date(L.date+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  const sh=document.getElementById('regSheet');
+  sh.innerHTML=`<div class="lh-head"><div class="rs-crest">${galCrestHTML()}</div>
+      <div class="lh-org">THE RHO CHAPTER OF KAPPA DELTA RHO</div>
+      <div class="lh-sub">Lafayette College · Easton, Pennsylvania · Founded 1905</div>
+      <div class="lh-rule"></div></div>
+    <p style="margin-top:22px">${esc(dateFmt)}</p>
+    ${L.to?`<p style="margin-top:14px">${esc(L.to)}</p>`:''}
+    ${L.subject?`<p style="margin-top:14px"><b>Re: ${esc(L.subject)}</b></p>`:''}
+    <div style="margin-top:16px;white-space:pre-wrap;line-height:1.65">${esc(L.body)}</div>
+    <p style="margin-top:34px">_______________________________<br><b>${esc(L.signer||'')}</b><br>${esc(L.title||'')}<br>Kappa Delta Rho — Rho Chapter</p>
+    <div class="lh-foot">HONOR SUPER OMNIA — HONOR ABOVE ALL THINGS</div>`;
+  document.body.classList.add('print-reg');
+  const done=()=>{document.body.classList.remove('print-reg');window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>{try{window.print();}catch(e){done();}},60);}
+function emailLetter(id){const L=state.letters.find(x=>x.id===id);if(!L)return;
+  const url='mailto:?subject='+encodeURIComponent(L.subject||'')+'&body='+encodeURIComponent(L.body+'\n\n'+(L.signer||'')+'\n'+(L.title||'')+'\nKappa Delta Rho — Rho Chapter');
+  try{window.open(url,'_self');}catch(e){}}
+
 /* ---- Position Command ---- */
 const POS_TOOLS={
   'Consul':[['meeting','Run the meeting'],['register','Register events'],['exec','Standards']],
@@ -3205,10 +3311,11 @@ let doorCounts={},doorTimer=null;
 function dcCount(id){return Math.max(0,+(doorCounts[id]||0));}
 function dcCap(id){return +(state.doorcaps[id]||0);}
 function dcTotalIn(){return DOOR_ZONES.filter(z=>!z.bar&&!z.deco).reduce((a,z)=>a+dcCount(z.id),0);}
+function dcDoor(){return dcCount('door');}
 function dcTotalCap(){return DOOR_ZONES.filter(z=>!z.bar&&!z.deco).reduce((a,z)=>a+dcCap(z.id),0);}
 function dcColor(id){const cap=dcCap(id),n=dcCount(id);
-  if(cap<=0)return n>0?'#e0664f':'rgba(255,255,255,.05)';
-  const p=n/cap;return p>=1?'rgba(224,102,79,.55)':p>=.7?'rgba(201,168,76,.45)':n>0?'rgba(95,179,122,.35)':'rgba(95,179,122,.12)';}
+  if(cap<=0)return n>0?'rgba(224,102,79,.5)':'rgba(220,233,245,.03)';
+  const p=n/cap;return p>=1?'rgba(224,102,79,.5)':p>=.7?'rgba(201,168,76,.4)':n>0?'rgba(95,179,122,.3)':'rgba(220,233,245,.05)';}
 function dcBump(id,d){
   if(fbLive()&&FB.door){FB.door.child(id).transaction(n=>Math.max(0,(n||0)+d),(err)=>{if(err)syncToast('Count didn’t sync — check connection.');});return;}
   doorCounts[id]=Math.max(0,dcCount(id)+d);renderDoorCount();lsSaveDoor();}
@@ -3217,20 +3324,54 @@ function lsLoadDoor(){try{doorCounts=JSON.parse(localStorage.getItem('rho-doorco
 function resetDoorCount(){if(!confirm('Reset every room to zero for a new function?'))return;
   doorCounts={};if(fbLive()&&FB.door)FB.door.set({}).catch(()=>syncToast('Reset didn’t reach the cloud — try again.'));
   lsSaveDoor();renderDoorCount();pushLog('function','Door counts reset for a new function');}
-function renderDoorCount(){const map=document.getElementById('dcMap');if(!map)return;
-  const total=dcTotalIn(),cap=dcTotalCap();
+function openDoorman(){document.getElementById('doormanMode').classList.add('show');renderDoorman();
+  try{const fs=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();if(fs&&fs.catch)fs.catch(()=>{});}catch(e){}}
+function closeDoorman(){document.getElementById('doormanMode').classList.remove('show');
+  try{if(document.fullscreenElement){const fs=document.exitFullscreen&&document.exitFullscreen();if(fs&&fs.catch)fs.catch(()=>{});}}catch(e){}}
+function dmPlus(){dcBump('door',1);if(navigator.vibrate)try{navigator.vibrate(18);}catch(e){}sfxTick();renderDoorman();}
+function dmMinus(){dcBump('door',-1);if(navigator.vibrate)try{navigator.vibrate([12,40,12]);}catch(e){}renderDoorman();}
+function renderDoorman(){const el=document.getElementById('dmCount');if(!el)return;const door=dcDoor(),cap=dcTotalCap();
+  el.textContent=door;const p=cap?door/cap:0;
+  el.style.color=p>=1?'var(--bad)':p>=.7?'var(--gold-br)':'var(--good)';
+  const c=document.getElementById('dmCap');if(c)c.textContent=cap?(door+' / '+cap+' · '+Math.round(p*100)+'% of house capacity'):'no capacity set';}
+function renderDoorCount(){const map=document.getElementById('dcMap');if(!map)return;renderDoorman();
+  const total=dcTotalIn(),cap=dcTotalCap(),door=dcDoor();
   const tot=document.getElementById('dcTotal');
-  if(tot){const p=cap?total/cap:0;const col=p>=1?'var(--bad)':p>=.7?'var(--gold-br)':'var(--good)';
-    tot.innerHTML=`<div class="dct-num" style="color:${col}">${total}</div><div class="dct-lbl">people in the basement<br><span>${cap?('house capacity '+cap+' · '+Math.round(p*100)+'%'):'set capacities in Edit mode'}</span></div>
+  if(tot){const p=cap?door/cap:0;const col=p>=1?'var(--bad)':p>=.7?'var(--gold-br)':'var(--good)';
+    tot.innerHTML=`<div class="dct-door">
+        <button class="dct-btn minus" onclick="dcBump('door',-1)" aria-label="One out the front door">−</button>
+        <div class="dct-mid"><div class="dct-num" style="color:${col}">${door}</div><div class="dct-lbl">TOTAL AT THE DOOR</div></div>
+        <button class="dct-btn plus" onclick="dcBump('door',1)" aria-label="One in the front door">+</button></div>
       <div class="dct-bar"><div class="dct-fill" style="width:${Math.min(100,Math.round(p*100))}%;background:${col}"></div></div>
-      <div class="dct-atbar">\u{1F37A} ${dcCount('bar')} at the bar</div>`;}
+      <div class="dct-sub">${cap?('house capacity '+cap+' · '+Math.round(p*100)+'%'):'set capacities in Edit mode'} · ${total} placed in rooms · \u{1F37A} ${dcCount('bar')} at the bar</div>`;}
   const note=document.getElementById('dcSyncNote');if(note)note.textContent=fbLive()?'Synced live across every door.':'Counting on this device only — connect Firebase for multi-door live sync.';
   /* map */
-  const decor=DOOR_DECOR.map(d=>`<rect x="${d.x}" y="${d.y}" width="${d.w}" height="${d.h}" rx="4" fill="rgba(244,236,216,.07)" stroke="rgba(244,236,216,.18)" stroke-width="1.2"/>`).join('');
-  map.innerHTML=decor+DOOR_ZONES.map(z=>{const n=dcCount(z.id),cap2=dcCap(z.id);
+  const walls=`<defs><pattern id="bpGrid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="rgba(220,233,245,.08)" stroke-width="1"/></pattern><pattern id="bpGridBig" width="120" height="120" patternUnits="userSpaceOnUse"><path d="M120 0H0V120" fill="none" stroke="rgba(220,233,245,.14)" stroke-width="1"/></pattern></defs>
+    <rect x="0" y="0" width="1120" height="575" fill="#0D2C52"/>
+    <rect x="0" y="0" width="1120" height="575" fill="url(#bpGrid)"/>
+    <rect x="0" y="0" width="1120" height="575" fill="url(#bpGridBig)"/>
+    <rect x="6" y="6" width="1108" height="554" fill="none" stroke="rgba(220,233,245,.9)" stroke-width="4"/>
+    <rect x="14" y="14" width="1092" height="538" fill="none" stroke="rgba(220,233,245,.35)" stroke-width="1.2"/>
+    <g class="bp-title"><rect x="836" y="502" width="270" height="50" fill="rgba(13,44,82,.92)" stroke="rgba(220,233,245,.8)" stroke-width="1.4"/>
+      <line x1="836" y1="519" x2="1106" y2="519" stroke="rgba(220,233,245,.5)" stroke-width="1"/>
+      <line x1="988" y1="519" x2="988" y2="552" stroke="rgba(220,233,245,.5)" stroke-width="1"/>
+      <text x="843" y="514" class="bp-tt">ΚΔΡ · RHO CHAPTER HOUSE — EASTON, PA</text>
+      <text x="843" y="536" class="bp-ts">BASEMENT PLAN</text><text x="843" y="547" class="bp-ts">LIVE OCCUPANCY</text>
+      <text x="995" y="536" class="bp-ts">SCALE: N.T.S.</text><text x="995" y="547" class="bp-ts">DWG: FC-01</text></g>`;
+  const decor=DOOR_DECOR.map(d=>`<rect x="${d.x}" y="${d.y}" width="${d.w}" height="${d.h}" fill="none" stroke="rgba(220,233,245,.5)" stroke-width="1.1"/>`).join('');
+  map.innerHTML=walls+decor+DOOR_ZONES.map(z=>{const n=dcCount(z.id),cap2=dcCap(z.id);
+    if(z.bar){/* the bar is a counter, not a room: slab + stools + tap-to-count */
+      const stools=Array.from({length:6},(_,i)=>`<circle cx="${z.x+22+i*((z.w-44)/5)}" cy="${z.y+z.h+14}" r="6" fill="none" stroke="rgba(224,188,94,.7)" stroke-width="1.6"/>`).join('');
+      return `<g class="dc-room dc-bar" onclick="dcBump('${z.id}',1)" oncontextmenu="event.preventDefault();dcBump('${z.id}',-1)" role="button" aria-label="The bar: ${n} people">
+        <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="4" fill="rgba(201,168,76,.32)" stroke="var(--gold-br,#E0BC5E)" stroke-width="2.2"/>
+        <rect x="${z.x+4}" y="${z.y+4}" width="${z.w-8}" height="${z.h-8}" rx="2" fill="none" stroke="rgba(6,21,48,.5)" stroke-width="1"/>
+        ${stools}
+        <text x="${z.x+z.w/2}" y="${z.y+z.h/2+1}" text-anchor="middle" class="dc-rname" style="letter-spacing:4px">BAR</text>
+        <text x="${z.x+z.w/2}" y="${z.y+z.h/2+17}" text-anchor="middle" class="dc-rnum" style="font-size:13px">${n}${cap2>0?' / '+cap2:''}</text>
+      </g>`;}
     const fs=z.w<110?16:22;const small=z.w<110||z.h<90;
     return `<g class="dc-room${z.deco?' deco':''}" ${z.deco?'':`onclick="dcBump('${z.id}',1)" oncontextmenu="event.preventDefault();dcBump('${z.id}',-1)"`} role="button" aria-label="${escAttr(z.name)}: ${n} people">
-      <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="7" fill="${dcColor(z.id)}" stroke="${z.off?'rgba(224,102,79,.55)':'rgba(201,168,76,.4)'}" stroke-width="1.6" ${z.off?'stroke-dasharray="6 5"':''}/>
+      <rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" fill="${dcColor(z.id)}" stroke="${z.off?'rgba(224,102,79,.8)':'rgba(220,233,245,.85)'}" stroke-width="1.6" ${z.off?'stroke-dasharray="6 5"':''}/>
       <text x="${z.x+z.w/2}" y="${z.y+(small?z.h/2-6:z.h/2-14)}" text-anchor="middle" class="dc-rname">${esc(z.name)}${z.off?' ⛔':''}</text>
       ${z.deco?'':`<text x="${z.x+z.w/2}" y="${z.y+(small?z.h/2+16:z.h/2+18)}" text-anchor="middle" class="dc-rnum" style="font-size:${fs}px">${n}${cap2>0?' / '+cap2:''}</text>`}
     </g>`;}).join('');
