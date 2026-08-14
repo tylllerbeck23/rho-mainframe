@@ -1709,6 +1709,18 @@ const FIREBASE_CONFIG={
      appId:         "PASTE_HERE" */
 };
 const FB={enabled:false,db:null,meta:null,gallery:null,chat:null,bound:false};
+/* ---------- SHARED BOARD VIA THE CHAPTER CLOUD (Netlify) ----------
+   When the board is hosted, every device shares one board through the chapter's
+   own serverless store: chat flows between phones (5s poll) and board data loads
+   shared at boot — no setup needed. Firebase (FIREBASE_CONFIG above) upgrades
+   this to instant push sync when configured. */
+const CLOUD_STORE='https://kresentapp2.netlify.app/api/store';
+const BOARD_NS='rho-b7k4q9x2';
+if(typeof window!=='undefined'&&!window.storage&&(location.protocol==='http:'||location.protocol==='https:')){
+  window.storage={_netlify:true,
+    get:async function(key){try{const r=await fetch(CLOUD_STORE+'?key='+encodeURIComponent(BOARD_NS+':'+key),{cache:'no-store'});if(!r.ok)return null;const t=await r.text();return t?{key:key,value:t}:null;}catch(e){return null;}},
+    set:async function(key,value){try{const r=await fetch(CLOUD_STORE+'?key='+encodeURIComponent(BOARD_NS+':'+key),{method:'PUT',body:value});return r.ok;}catch(e){return false;}}};
+}
 const hasStore=(typeof window!=="undefined"&&window.storage&&typeof window.storage.get==="function");
 const LS_KEY="rho-mainframe-state",LS_CHAT="rho-mainframe-chat",KEY_LS="rho-board-key";
 /* The chapter PASSKEY is never stored in this file. A brother types it once; it's
@@ -1732,6 +1744,7 @@ function setSync(mode){const p=document.getElementById('syncPill'),l=document.ge
   if(mode==='live'){p.classList.add('live');l.textContent='Live sync';p.title='Connected — changes sync to every device live. Click to switch passkey.';p.style.cursor='pointer';p.onclick=lockBoard;}
   else if(mode==='offline'){p.classList.add('offline');l.textContent='Offline';p.title='Offline — changes save on this device and sync when you reconnect.';p.style.cursor='default';p.onclick=null;}
   else if(mode==='locked'){p.classList.add('offline');l.textContent='Locked';p.title='Enter the chapter passkey to sync.';p.style.cursor='pointer';p.onclick=showKeyGate;}
+  else if(mode==='cloud'){p.classList.add('live');l.textContent='Synced';p.title='Shared chapter cloud — chat is live across devices; board data syncs each time the app opens.';p.style.cursor='default';p.onclick=null;}
   else{l.textContent='Local';p.title='Saved on this device. Add a Firebase config (DEPLOY.txt) to sync across devices.';p.style.cursor='default';p.onclick=null;}}
 /* meta holds only LOW-concurrency board data. High-concurrency records (photos, chat,
    points ledger, check-ins, hours, PNMs, door counts, votes) each live in their own
@@ -1887,7 +1900,10 @@ async function save(){if(applyingRemote)return;flash();lsSave();
        while our own write is pending (it would revert the unwritten change). */
     metaRev=uid()+Date.now();
     clearTimeout(saveTimer);saveTimer=setTimeout(()=>{saveTimer=null;doMetaWrite();},350);return;}
-  if(!hasStore)return;clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{saveTimer=null;try{await window.storage.set(STORE_KEY,JSON.stringify(state));}catch(e){}},300);}
+  if(!hasStore)return;clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{saveTimer=null;try{
+    let str=JSON.stringify(state);
+    if(str.length>4200000){const slim=Object.assign({},state,{gallery:[]});str=JSON.stringify(slim);} /* keep under the store's request cap */
+    await window.storage.set(STORE_KEY,str);}catch(e){}},300);}
 function doMetaWrite(){if(!fbLive()||!FB.meta)return;lastMetaWriteTs=Date.now();
   FB.meta.set({rev:metaRev,ts:lastMetaWriteTs,data:stripState()}).catch(()=>{syncToast('Board changes haven’t reached the cloud — check your connection.');});}
 /* flush a pending debounced write immediately (lock/reload/tab-close) */
@@ -2222,7 +2238,7 @@ function setChatName(v){try{localStorage.setItem('rho-chat-name',v);}catch(e){}}
 function sendChat(){const inp=document.getElementById('chatInput');if(!inp)return;const t=inp.value.trim();if(!t)return;const name=chatNick()||'Anonymous';inp.value='';pushChat({id:uid(),name,text:t,ts:Date.now()});}
 function renderChat(){const c=document.getElementById('chatMsgs');if(!c)return;const me=chatNick();
   c.innerHTML=chatCache.length?chatCache.map(m=>`<div class="cmsg${me&&m.name===me?' me':''}"><div class="cm-name">${esc(m.name)}</div><div class="cm-text">${esc(m.text)}</div><div class="cm-time">${new Date(m.ts).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})}</div></div>`).join(''):'<p style="color:var(--cream-dim);font-size:13px;margin:auto">No messages yet. Say something, brothers.</p>';
-  if(renderChat._n!==chatCache.length){renderChat._n=chatCache.length;c.scrollTop=c.scrollHeight;}const sc=document.getElementById('chatScope');if(sc)sc.textContent=fbLive()?'Live — shared with every brother on every device.':hasStore?'Live and shared with everyone viewing this board in Claude.':'Saved on this device. Add a Firebase config (see DEPLOY.txt) for live cross-device chat.';}
+  if(renderChat._n!==chatCache.length){renderChat._n=chatCache.length;c.scrollTop=c.scrollHeight;}const sc=document.getElementById('chatScope');if(sc)sc.textContent=fbLive()?'Live — shared with every brother on every device.':hasStore?'Live — shared chapter chat across every device.':'Saved on this device. Add a Firebase config (see DEPLOY.txt) for live cross-device chat.';}
 
 /* ---------- ALUMNI CONFERENCE + STARTUP ---------- */
 let recapMode='weekly',lastAlumni=null,weekOffset=0;
@@ -3439,7 +3455,7 @@ async function init(){
   if(window.speechSynthesis){try{window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){};}catch(e){}}
   const cn=document.getElementById('chatName');if(cn)cn.value=chatNick();loadChat();setInterval(()=>{if(!fbLive())loadChat();},5000);startIdle();fetchDonations();setInterval(fetchDonations,30000);wirePhotoInput();
   fetchTasks();if(taskTimer)clearInterval(taskTimer);taskTimer=setInterval(function(){if(tasksCsvUrl())fetchTasks();},45000);
-  setSync(fbLive()?'live':(fbConfigured()?(BOARD_KEY?'offline':'locked'):'local'));
+  setSync(fbLive()?'live':(window.storage&&window.storage._netlify?'cloud':(fbConfigured()?(BOARD_KEY?'offline':'locked'):'local')));
   if(fbLive()&&state.recruit.rushCode)bindRushInbox();
   if(!fbLive())lsLoadDoor();
   const sb=document.getElementById('sfxBtn');if(sb&&!SFX.on)sb.innerHTML='\u{1F507}';

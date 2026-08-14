@@ -27,9 +27,9 @@ export default async (req) => {
 
   if (req.method === "GET") {
     const r = await fetch(api, { headers: { Authorization: `Bearer ${token}` } });
-    if (r.status === 404) return new Response("", { status: 204, headers: cors });
+    if (!r.ok) return new Response("", { status: 204, headers: cors }); /* absent key = empty */
     const t = await r.text();
-    return new Response(t, { status: r.ok ? 200 : 502, headers: { ...cors, "content-type": "application/json", "cache-control": "no-store" } });
+    return new Response(t, { status: 200, headers: { ...cors, "content-type": "application/json", "cache-control": "no-store" } });
   }
   if (req.method === "PUT" || req.method === "POST") {
     const body = await req.text();
