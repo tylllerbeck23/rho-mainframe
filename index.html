@@ -1730,11 +1730,11 @@ const DEFAULTS={
   giving:{scholarship:{annual:19795,rows:[{year:"2022",amount:14500},{year:"2023",amount:16200},{year:"2024",amount:18100},{year:"2025",amount:19795}]},
     alumni:{rows:[{name:"Alumni Annual Fund",year:"2024",amount:4200},{name:"Homecoming Gifts",year:"2024",amount:1850},{name:"Alumni Annual Fund",year:"2025",amount:5100}]}},
   positions:[
-    {roman:"Consul",role:"President",holder:"Tyler Beck",url:URLS.work},{roman:"Senior Tribune",role:"Vice President",holder:"",url:URLS.work},
-    {roman:"Quaestor",role:"Treasurer",holder:"Tsogt Otgonsuren",url:URLS.work},{roman:"Praetor",role:"Secretary",holder:"",url:URLS.work},
-    {roman:"Custodian",role:"House Manager",holder:"",url:URLS.work},{roman:"Centurion",role:"New Member Educator",holder:"",url:URLS.work},
-    {roman:"Quartermaster",role:"Recruitment Chair",holder:"",url:URLS.work},{roman:"Pontifex",role:"Philanthropy Chair",holder:"",url:URLS.work},
-    {roman:"Aedile",role:"Social Chair",holder:"",url:URLS.work},{roman:"Censor",role:"Risk Management",holder:"",url:URLS.work}]
+    {roman:"Consul",role:"President",holder:"Tyler Beck",url:URLS.work},{roman:"Senior Tribune",role:"Vice President · Recruitment Chair",holder:"",url:URLS.work},
+    {roman:"Junior Tribune",role:"New Member Education",holder:"Nicholas Pignolo",url:URLS.work},{roman:"Quaestor",role:"Treasurer",holder:"Tsogt Otgonsuren",url:URLS.work},
+    {roman:"Praetor",role:"Secretary · Event Proposals",holder:"",url:URLS.work},{roman:"Aedile",role:"Risk Management",holder:"James Pfaff",url:URLS.work},
+    {roman:"Pontifex",role:"Philanthropy Chair",holder:"",url:URLS.work},{roman:"Social Chair",role:"Social",holder:"",url:URLS.work},
+    {roman:"Public Relations Chair",role:"Alumni Relations & Social Media",holder:"",url:URLS.work},{roman:"Member at Large",role:"Voice of the Brotherhood",holder:"",url:URLS.work}]
 };
 let state=JSON.parse(JSON.stringify(DEFAULTS));
 let editing=false,rFilter='all',ptsP='month',cur='dash';
@@ -2762,7 +2762,7 @@ function openRegModal(r){const pick=document.getElementById('rgEventPick');
   v('rgSpin',r.spin||'No');v('rgAlarm',r.alarm||'No');
   v('rgMon1',r.mon1);v('rgMon2',r.mon2);v('rgMon3',r.mon3);v('rgMon4',r.mon4);
   v('rgPres',r.pres||officerHolder('Consul'));v('rgPresPhone',r.presPhone||state.regDefaults.presPhone);
-  v('rgRmo',r.rmo||officerHolder('Censor')||state.regDefaults.rmo);v('rgRmoPhone',r.rmoPhone||state.regDefaults.rmoPhone);
+  v('rgRmo',r.rmo||officerHolder('Aedile')||state.regDefaults.rmo);v('rgRmoPhone',r.rmoPhone||state.regDefaults.rmoPhone);
   v('rgGoal',r.goal);v('rgTicket',r.ticket);v('rgRaised',r.raised);
   document.getElementById('regModalTitle').textContent=editingRegId?'Edit Registration':'New Event Registration';
   document.getElementById('regModal').classList.add('show');}
@@ -2773,7 +2773,7 @@ function autofillReg(){const pick=document.getElementById('rgEventPick');
     if(o.loc)document.getElementById('rgLoc').value=o.loc;document.getElementById('rgType').value=o.type;}
   if(!document.getElementById('rgOrg').value)document.getElementById('rgOrg').value=state.regDefaults.org;
   if(!document.getElementById('rgPres').value)document.getElementById('rgPres').value=officerHolder('Consul');
-  if(!document.getElementById('rgRmo').value)document.getElementById('rgRmo').value=officerHolder('Censor')||state.regDefaults.rmo;
+  if(!document.getElementById('rgRmo').value)document.getElementById('rgRmo').value=officerHolder('Aedile')||state.regDefaults.rmo;
   /* monitors: first four active brothers who aren't the signatories */
   const sig=[document.getElementById('rgPres').value,document.getElementById('rgRmo').value];
   const pool=state.members.filter(m=>m.status==='active'&&m.name&&!sig.includes(m.name)).map(m=>m.name);
@@ -3287,7 +3287,7 @@ function newDiscipline(){if(!execData){return;}
     {k:'fine',l:'Fine amount ($, if any)',v:''},
     {k:'follow',l:'Follow-up date (YYYY-MM-DD)',v:''}
   ],'Standards / Disciplinary Report',async vals=>{
-    execData.records.unshift(Object.assign({id:uid(),ts:Date.now(),by:meName()||officerHolder('Censor')||'Officer',date:new Date().toISOString().slice(0,10),status:'open'},vals));
+    execData.records.unshift(Object.assign({id:uid(),ts:Date.now(),by:meName()||officerHolder('Aedile')||'Officer',date:new Date().toISOString().slice(0,10),status:'open'},vals));
     await execSave();renderDiscList();});}
 function renderDiscList(){const l=document.getElementById('discList');if(!l)return;
   const rs=(execData&&execData.records)||[];
@@ -3310,7 +3310,7 @@ function printDiscipline(id){const r=(execData.records||[]).find(x=>x.id===id);i
     <p>Category: ${fillLine(r.category,180)} &nbsp; Action taken: ${fillLine(r.action,200)} ${r.fine?'&nbsp; Fine: '+fillLine('$'+r.fine,90):''}</p>
     <p class="rs-sec">Description</p><p>${esc(r.desc||'')}</p>
     ${r.follow?`<p>Follow-up date: ${fillLine(r.follow,140)}</p>`:''}
-    <p style="margin-top:30px">Censor signature ______________________________ &nbsp; Date ______________</p>
+    <p style="margin-top:30px">Risk Management (Aedile) signature ______________________________ &nbsp; Date ______________</p>
     <p style="margin-top:14px">Consul signature ______________________________ &nbsp; Date ______________</p>`);}
 /* ---- Funding requests (plain) ---- */
 function newFunding(){modalFields([
@@ -3431,16 +3431,16 @@ function emailLetter(id){const L=state.letters.find(x=>x.id===id);if(!L)return;
 
 /* ---- Position Command ---- */
 const POS_TOOLS={
-  'Consul':[['meeting','Run the meeting'],['register','Register events'],['exec','Standards']],
-  'Senior Tribune':[['officers','Tasks board'],['committees','Committees']],
+  'Consul':[['meeting','Run the meeting'],['register','Register events'],['exec','Exec center']],
+  'Senior Tribune':[['recruit','Recruitment Command'],['officers','Tasks board']],
+  'Junior Tribune':[['standing','Accountability'],['points','Points']],
   'Quaestor':[['finance','Finance center'],['exec','Funding requests'],['giving','Giving']],
-  'Praetor':[['minutes','Minutes'],['roster','Roster']],
-  'Custodian':[['doorcount','Function Control'],['exec','Equipment log']],
-  'Centurion':[['standing','Accountability'],['points','Points']],
-  'Quartermaster':[['recruit','Recruitment'],['gallery','Gallery']],
+  'Praetor':[['meeting','Minutes console'],['minutes','Minutes archive'],['register','Event proposals']],
+  'Aedile':[['register','Register events'],['doorcount','Function Control'],['exec','Standards reports']],
   'Pontifex':[['giving','Philanthropy'],['donate','Donate hub']],
-  'Aedile':[['social','Social calendar'],['register','Register events'],['doorcount','Function Control']],
-  'Censor':[['exec','Standards reports'],['standing','Compliance']]};
+  'Social Chair':[['social','Social calendar'],['doorcount','Function Control']],
+  'Public Relations Chair':[['gallery','Gallery'],['committees','Committees']],
+  'Member at Large':[['chat','Chapter chat'],['officers','Tasks board']]};
 function renderPosCommand(){const g=document.getElementById('posCommand');if(!g)return;
   g.innerHTML=(state.positions||[]).map(p=>{const tools=POS_TOOLS[p.roman]||[];
     return `<div class="linkcard pos-cmd"><div class="lc-top"><div class="badge">&#9878;</div><h4>${esc(p.roman)}</h4></div>
