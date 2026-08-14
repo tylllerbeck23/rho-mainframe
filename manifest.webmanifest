@@ -1,0 +1,28 @@
+{
+  "name": "Rho Chapter Mainframe",
+  "short_name": "Rho Mainframe",
+  "description": "Kappa Delta Rho — Rho Chapter command board: roster, points, finance, giving, calendar, chat, and brotherhood gallery.",
+  "id": "/",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "fullscreen"],
+  "orientation": "any",
+  "background_color": "#081A35",
+  "theme_color": "#0A1E3F",
+  "categories": ["productivity", "social", "education"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Dashboard", "short_name": "Dashboard", "url": "./?source=pwa#dash", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Chapter Chat", "short_name": "Chat", "url": "./?source=pwa#chat", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Gallery", "short_name": "Gallery", "url": "./?source=pwa#gallery", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] },
+    { "name": "Donate", "short_name": "Donate", "url": "./?source=pwa#donate", "icons": [{ "src": "icon-192.png", "sizes": "192x192" }] }
+  ]
+}

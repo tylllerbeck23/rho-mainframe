@@ -1,0 +1,247 @@
+================================================================
+ RHO CHAPTER MAINFRAME — INSTALL & DEPLOY GUIDE
+ Kappa Delta Rho · Rho Chapter · Lafayette College
+ Honor Super Omnia
+================================================================
+
+WHAT YOU HAVE
+-------------
+This folder is the whole app. Keep these files TOGETHER:
+
+   index.html .............. the Mainframe itself
+   sw.js ................... service worker (offline + auto-update)
+   manifest.webmanifest .... makes it installable as an app
+   icon-192.png ............ app icon (crest)
+   icon-512.png ............ app icon (crest, large)
+   DEPLOY.txt .............. this guide
+
+You can open index.html straight off your computer by double-clicking
+it, and it works. BUT to install it on PHONES and SMARTBOARDS, it needs
+a web link (a URL). Putting it online takes about 2 minutes and is free.
+
+
+================================================================
+ STEP 1 — PUT IT ONLINE (pick ONE, do it once)
+================================================================
+
+OPTION A · NETLIFY DROP  (fastest, free, no account needed)
+-----------------------------------------------------------
+1. Go to:  https://app.netlify.com/drop
+2. Drag this ENTIRE FOLDER (not just index.html) onto the page.
+3. Wait ~20 seconds. Netlify gives you a link like
+      https://rho-mainframe-xyz.netlify.app
+4. (Optional) Make a free account to rename it to something clean
+   like  rho-mainframe.netlify.app  and keep it forever.
+5. Share that link with the chapter. THAT link is the app.
+
+   To update later: change index.html, then drag the folder onto
+   netlify.com/drop again (or into your site's "Deploys" tab).
+
+
+OPTION B · GITHUB PAGES  (free, permanent, good if you use GitHub)
+-----------------------------------------------------------------
+1. Make a new repository (e.g. "rho-mainframe").
+2. Upload all the files in this folder to the repo root.
+3. Repo  ->  Settings  ->  Pages  ->  Branch: main / root  ->  Save.
+4. In a minute you get a link like
+      https://YOURNAME.github.io/rho-mainframe/
+5. Share that link.
+
+
+OPTION C · LAFAYETTE / CHAPTER WEB SPACE
+----------------------------------------
+Upload all files to any folder on a web host that serves over HTTPS.
+The service worker (offline mode) and "Install app" only work over
+https:// (or on http://localhost while testing) — a plain file:// or
+http:// link will still RUN, it just won't install or cache offline.
+
+
+================================================================
+ STEP 2 — INSTALL ON EACH DEVICE
+================================================================
+Open the link from Step 1, then:
+
+iPHONE / iPAD  (must be Safari)
+   Share button  ->  Add to Home Screen  ->  Add.
+   The crest becomes the icon; opens full-screen like an app.
+
+ANDROID  (Chrome)
+   Tap the  ⋮  menu  ->  Add to Home screen / Install app  ->  Install.
+
+COMPUTER  (Chrome or Edge)
+   Click the install icon (monitor + down-arrow) at the right end of
+   the address bar  ->  Install. It pins to the taskbar / dock.
+
+SMARTBOARD / TV / CHAPTER ROOM DISPLAY
+   Open the link in the board's browser and Install, or just leave it
+   open full-screen. Use the ⛶ button (top bar) to go full-screen.
+
+TIP: The "Save App" button inside the Mainframe (top-right) shows these
+same steps, and when it's hosted it shows a QR CODE — put a smartboard
+on the install screen and brothers scan it to install on their phones.
+
+
+================================================================
+ LIVE SYNC SETUP  (so every device sees the same board)  ** IMPORTANT **
+================================================================
+Without this step, each device keeps its OWN copy — changes on one phone
+do NOT show up on another. To make the whole chapter share one live board
+(roster, points, finance, GALLERY, and CHAT all update within ~1 second),
+connect a free Firebase database. You do this ONCE.
+
+1. Go to  https://console.firebase.google.com  and sign in with a Google
+   account (use a chapter account if you have one).
+2. Click "Add project". Name it e.g. "rho-mainframe". You can turn OFF
+   Google Analytics. Click through to "Create project".
+3. In the left menu pick  Build -> Realtime Database -> Create Database.
+     - Pick a location (United States is fine).
+     - Choose "Start in TEST MODE" for now, then Enable.
+       (Test mode lets anyone read/write for 30 days — fine to get going.
+        See "Locking it down" below before that runs out.)
+4. Click the gear icon (top-left) -> "Project settings".
+   Scroll to "Your apps" -> click the  </>  (Web) icon.
+     - Nickname: "Rho Mainframe". Click "Register app".
+     - It shows a block like:
+           const firebaseConfig = {
+             apiKey: "AIza......",
+             authDomain: "rho-mainframe.firebaseapp.com",
+             databaseURL: "https://rho-mainframe-default-rtdb.firebaseio.com",
+             projectId: "rho-mainframe",
+             storageBucket: "rho-mainframe.appspot.com",
+             appId: "1:....:web:...."
+           };
+5. COPY those values. Open index.html in a text editor, find:
+           const FIREBASE_CONFIG={
+   near the top of the <script>, and paste your values inside the braces
+   (uncomment the lines / remove the /* */). It should read like:
+           const FIREBASE_CONFIG={
+             apiKey:"AIza......",
+             authDomain:"rho-mainframe.firebaseapp.com",
+             databaseURL:"https://rho-mainframe-default-rtdb.firebaseio.com",
+             projectId:"rho-mainframe",
+             storageBucket:"rho-mainframe.appspot.com",
+             appId:"1:....:web:...."
+           };
+   The ONE that truly matters is  databaseURL.
+6. Re-deploy (drag the folder onto Netlify again, or re-upload). Open the
+   board — the pill in the top bar turns green and says "Live sync".
+   Now every device that opens the link shares the same board in real time.
+
+   (Tip: if you don't want to edit code, send me the firebaseConfig block
+    and I'll paste it in for you.)
+
+LOCK IT DOWN WITH THE CHAPTER PASSKEY  (do this before test mode's 30 days end)
+   The board is already wired for a passkey. The CURRENT passkey is:  1928
+   How it works: a brother types the passkey once; it's saved on his device
+   and used as the private database "room" (board/1928). The passkey is NOT
+   written anywhere in index.html, so the hosted file is safe to share —
+   only someone who knows 1928 can read or write the board.
+
+   To turn the lock ON:
+   1. In Firebase: Realtime Database -> "Rules" tab.
+   2. Open the file  firebase-rules.json  (it's in your Downloads folder,
+      kept OUT of the web folder on purpose because it contains the passkey),
+      copy ALL of it, paste it over what's in the Rules box, click "Publish".
+      ** Never upload firebase-rules.json to your web host. **
+   3. Done. Now every device is prompted for the passkey on first open.
+      Test mode is no longer needed.
+
+   To CHANGE the passkey later (recommended — pick something longer and less
+   guessable than 4 digits, e.g. RhoBrothers1928):
+   1. In firebase-rules.json, replace BOTH the two places that say  '1928'
+      with your new passkey, and Publish the rules again.
+   2. Tell the brothers the new passkey. (No change to index.html needed —
+      they just re-enter it; each device's old saved passkey stops working.)
+   3. On any device, tap the green "Live sync" pill in the top bar to switch
+      the passkey on that device.
+
+   Note: a short numeric passkey is convenient but can be guessed. For a
+   members-only board holding finances, use a longer passphrase. Send me one
+   and I'll set it for you.
+
+================================================================
+ HOW DATA & PHOTOS WORK
+================================================================
+* WITH Firebase set up (above): the whole board + chat + gallery are shared
+  live across every device, and saved in the cloud. The top-bar pill shows
+  "Live sync" (green) or "Offline" if the device loses internet (it re-syncs
+  when it reconnects).
+* WITHOUT Firebase: each device keeps its own copy in that browser and it
+  persists after closing. Use EDIT -> Backup to export a JSON copy and the
+  import (file) button to move it to another device.
+* Inside Claude, the board is shared live with everyone viewing it.
+* GALLERY photos are auto-shrunk to ~1600px on upload so the board stays
+  fast, and they sync in their own cloud bucket so adding a photo doesn't
+  re-upload everything else. Add photos with the "Add photos" button on the
+  Gallery page — Composite, Philanthropy, Formal, Initiation, Graduation,
+  Service, Brotherhood.
+
+
+================================================================
+ TASKS FROM GOOGLE DRIVE  (the Officers & Tasks page)
+================================================================
+The Tasks area can pull every task straight from a Google Sheet in your
+Drive and refresh itself automatically — no connector or login needed.
+
+1. In Google Drive, make a Sheet (e.g. "KDR Tasks"). Use a header row:
+        Task | Assignee | Due | Status | Priority | Category
+   (Only "Task" is required. "Due" can be any date. Put Done / Complete /
+    ✓ / x / Yes in "Status" to check a task off. Priority "High" flags it.)
+2. Share it so the app can read it: File -> Share -> General access ->
+   "Anyone with the link" = Viewer. (Or File -> Share -> Publish to web.)
+3. In the Mainframe, open "Officers & Tasks", click Edit, and paste the
+   sheet link into the "Google Drive tasks sheet" box -> Connect & pull.
+4. Done. Every device now shows the same tasks, auto-updating every ~45s.
+   - The green "Synced from Google Drive" line confirms it's connected.
+   - Brothers can still add quick LOCAL tasks at the bottom (these sync
+     across devices through Firebase, separate from the sheet).
+   - "Reset" clears local tasks + completion marks and re-pulls the sheet.
+
+The sheet link is saved with the board, so you only set it once.
+
+
+================================================================
+ WHAT'S NEW IN 3.0  (the "Kresentapp 3.0" build)
+================================================================
+* OPERATING CENTERS — the sidebar is reorganized into Command /
+  Brotherhood / Recruitment / Operations / Finance centers.
+* MY STANDING — every brother picks his name once and sees his own
+  five-pillar accountability dashboard (Fellowship, Leadership,
+  Scholarship, Service, Tradition): progress rings, streaks, badges,
+  attendance %, plus hour logging with officer approval and 4-digit
+  event check-in codes that award pillar points automatically.
+* RECRUITMENT COMMAND — full PNM pipeline (Prospect -> Accepted),
+  star ratings, notes, rush events with attendance, funnel metrics.
+* RUSH MODE — a fullscreen kiosk showcase with a live QR code; PNMs
+  scan it on their phones, sign in, and land in your pipeline inbox.
+* FUNCTION CONTROL — the basement map with a live people counter per
+  room (tap a room to +1, right-click/long-press to -1), capacity
+  color coding, a bar counter, and multi-door live sync.
+* EVENT REGISTRATION CENTER — fill the college "Event Registration
+  w/out Alcohol" form in 60 seconds: pick the event, tap Autofill
+  (president, RMO, monitors, attendance fill themselves), then
+  Print/PDF a clean official copy. Tracks status + the 7-day rule.
+* SPONSORSHIP & FUNDRAISING DESK — track sponsors, pledges received,
+  event fundraising goals and projected ticket revenue.
+* CHAPTER MEETING MODE — a gavel-drop entrance, session timer, and
+  SECRET BALLOTS: anonymous aye/nay/abstain from every phone, results
+  sealed until the officer closes the vote. Survives refresh; syncs.
+* PHOTO SYNC REBUILT — each photo syncs on its own; failures show a
+  "Retry sync" badge instead of silently vanishing. KDR brand font
+  (Montserrat) throughout. 30+ sync/logic bugs fixed after an
+  adversarial audit.
+
+NOTE: re-publish firebase-rules.json (Rules tab) when you set up or
+update Firebase — it now includes the photos, and rushInbox nodes.
+The QR sign-in inbox uses an unguessable code in the QR link itself;
+regenerate it anytime by clearing recruit.rushCode in a backup/edit.
+
+================================================================
+ UPDATING TO A NEW VERSION
+================================================================
+Replace index.html (and any changed files) on your host. The service
+worker notices the new version and shows a small "Refresh" toast at the
+bottom of the board — click it and everyone gets the update. If you want
+to force the cache to rebuild, bump the CACHE name at the top of sw.js.
+
+Honor Super Omnia.
