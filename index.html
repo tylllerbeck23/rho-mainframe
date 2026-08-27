@@ -34,7 +34,7 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{font-family:'Montserrat',sans-serif;color:var(--cream);background:var(--navy);-webkit-font-smoothing:antialiased;overflow:hidden;font-size:14.5px}
-  .app{display:flex;height:100vh;overflow:hidden}
+  .app{display:flex;height:100vh;height:100dvh;overflow:hidden}
   aside{width:248px;flex:none;background:linear-gradient(185deg,var(--navy-1),var(--ink));border-right:1px solid var(--line);display:flex;flex-direction:column;overflow-y:auto;z-index:20}
   aside::-webkit-scrollbar{width:0}
   .side-crest{padding:24px 22px 16px;text-align:center;border-bottom:1px solid var(--line-soft)}
@@ -55,6 +55,7 @@
   nav.side button.nav-action:hover{background:rgba(232,119,34,.12)}
   .nav-live{margin-left:auto;font-size:8.5px;font-weight:800;letter-spacing:1.5px;background:rgba(232,119,34,.18);border:1px solid rgba(232,119,34,.5);
     color:var(--orange-br);padding:2px 7px;border-radius:999px;display:flex;flex-direction:column;overflow:hidden;position:relative;background:radial-gradient(1100px 640px at 82% -8%,rgba(232,119,34,.13),transparent 60%),radial-gradient(900px 720px at -8% 108%,rgba(22,56,108,.5),transparent 55%),linear-gradient(165deg,#08203f 0%,#0A1E3F 50%,#061530 100%)}
+  .main-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;min-width:0;background:radial-gradient(1100px 640px at 82% -8%,rgba(231,117,0,.11),transparent 60%),radial-gradient(900px 720px at -8% 108%,rgba(13,57,95,.45),transparent 55%),linear-gradient(165deg,#0A1F38 0%,#071628 50%,#050F1E 100%)}
   .main-wrap::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
   header.bar{display:flex;align-items:center;gap:14px;padding:10px 22px;border-bottom:1px solid var(--line);background:rgba(5,13,28,.6);backdrop-filter:blur(10px);z-index:10;min-height:58px}
   header.bar .crumb{font-family:'Cinzel';letter-spacing:3px;font-size:14px;font-weight:700;color:var(--cream);text-transform:uppercase;text-shadow:0 1px 0 rgba(0,0,0,.6)}
@@ -66,7 +67,7 @@
   .tool{background:transparent;border:1px solid var(--line);color:var(--gold);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:12.5px;font-weight:600;font-family:'Montserrat';transition:.16s;display:flex;align-items:center;gap:6px}
   .tool:hover{border-color:var(--gold);color:var(--gold-br)}
   .tool.on{background:var(--gold);color:var(--navy);border-color:var(--gold)}
-  .scroll{flex:1;overflow-y:auto;padding:30px 30px 80px}
+  .scroll{flex:1;overflow-y:auto;padding:30px 30px 80px;touch-action:pan-y;-webkit-overflow-scrolling:touch}
   .scroll::-webkit-scrollbar{width:9px}.scroll::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:6px}
   .edit-bar{display:none;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:22px;background:rgba(201,168,76,.07);border:1px solid var(--line-soft);border-radius:12px;padding:12px 16px}
   body.editing .edit-bar{display:flex}
@@ -1112,14 +1113,14 @@
   @media(max-width:980px){.masthead{gap:12px}.mast-name{font-size:12px;letter-spacing:2px}.mast-note{display:none}}
 
   /* ===== iPhone layout pass ===== */
-  .view{max-width:100%;overflow-x:hidden}
+  .view{max-width:100%;overflow-x:hidden;overflow-x:clip;overflow-y:visible}
   .cmd-deck,.deck-keys,.masthead,.dash-pair,.rail-figs{min-width:0;max-width:100%}
   .cmd-deck>*{min-width:0}
   @media(max-width:760px){
     header.bar{flex-wrap:wrap;row-gap:8px;padding:9px 12px}
     header.bar .clock{display:none}
     header.bar .crumb{font-size:12px;letter-spacing:2px;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    header.bar .tools{flex:0 0 100%;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+    header.bar .tools{flex:0 0 100%;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px;touch-action:pan-x pan-y}
     header.bar .tools::-webkit-scrollbar{display:none}
     header.bar .tools .tool,.sync-pill{flex:none;min-height:30px;padding:0 10px;font-size:11px}
     .cmd-trigger{flex:none}
