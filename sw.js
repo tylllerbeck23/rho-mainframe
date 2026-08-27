@@ -1,7 +1,7 @@
 /* Rho Chapter Mainframe — Service Worker
    Gives the app true offline support + installability on iPhone, Android,
    desktop (Chrome/Edge), and smartboards. Bump CACHE on every release. */
-const CACHE = 'rho-mainframe-v50';
+const CACHE = 'rho-mainframe-v51';
 
 /* App shell + the two CDN libraries the board needs to render charts / QR codes.
    Everything else (Google Calendar/Forms iframes) is network-only by nature. */
@@ -12,7 +12,8 @@ const SHELL = [
   './icon-192.png',
   './icon-512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js',
-  'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'
+  'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
 ];
 
 self.addEventListener('install', (e) => {

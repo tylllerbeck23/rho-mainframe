@@ -19,6 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <style>
@@ -1082,12 +1083,12 @@
   .mast-motto{font-family:'Cinzel';font-size:10px;letter-spacing:4px;color:var(--gold);margin-top:3px}
   .mast-note{margin-left:auto;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--cream-dim2);text-align:right}
   .cmd-deck{display:grid;grid-template-columns:1.2fr 1fr;gap:10px;margin-bottom:16px}
-  .deck-input{display:flex;align-items:center;gap:11px;min-height:46px;padding:0 16px;text-align:left;
+  .deck-input{display:flex;align-items:center;gap:11px;min-height:46px;padding:0 16px;text-align:left;min-width:0;max-width:100%;
     background:rgba(0,0,0,.32);border:1px solid var(--line);border-radius:3px;color:var(--cream-dim);
     font-family:'Montserrat';font-size:13px;cursor:pointer;box-shadow:inset 0 2px 6px rgba(0,0,0,.4)}
   .deck-input:hover{border-color:var(--gold);color:var(--cream)}
   .deck-input svg{width:16px;height:16px;flex:none;color:var(--gold)}
-  .deck-input span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .deck-input span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .deck-input kbd{font-family:'Montserrat';font-size:10px;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:3px;padding:2px 6px;color:var(--cream-dim2)}
   .deck-keys{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
   @media(max-width:980px){.cmd-deck{grid-template-columns:1fr}.deck-keys{grid-template-columns:repeat(3,1fr)}}
@@ -1109,6 +1110,35 @@
   #recapCard.rc-open .recap-body{display:block}
   #recapCard.rc-open .creed-edit{display:block}
   @media(max-width:980px){.masthead{gap:12px}.mast-name{font-size:12px;letter-spacing:2px}.mast-note{display:none}}
+
+  /* ===== iPhone layout pass ===== */
+  .view{max-width:100%;overflow-x:hidden}
+  .cmd-deck,.deck-keys,.masthead,.dash-pair,.rail-figs{min-width:0;max-width:100%}
+  .cmd-deck>*{min-width:0}
+  @media(max-width:760px){
+    header.bar{flex-wrap:wrap;row-gap:8px;padding:9px 12px}
+    header.bar .clock{display:none}
+    header.bar .crumb{font-size:12px;letter-spacing:2px;flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    header.bar .tools{flex:0 0 100%;display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
+    header.bar .tools::-webkit-scrollbar{display:none}
+    header.bar .tools .tool,.sync-pill{flex:none;min-height:30px;padding:0 10px;font-size:11px}
+    .cmd-trigger{flex:none}
+    .deck-input span{font-size:12px}
+    .deck-input kbd{display:none}
+    .masthead{gap:10px;padding-bottom:11px}
+    .mast-crest img,.mast-crest svg{height:40px}
+    .mast-name{font-size:10.5px;letter-spacing:1.6px}
+    .mast-motto{font-size:8.5px;letter-spacing:3px}
+    .deck-keys{grid-template-columns:repeat(3,1fr);gap:6px}
+    .cmd-key{min-height:52px;font-size:8.5px;letter-spacing:.6px}
+    .grid.g2{grid-template-columns:1fr}
+    .dash-standing{padding:13px 14px;gap:12px}
+    .ds-ring svg{width:64px;height:64px}
+    .rail-figs .metric{padding:11px 12px}
+    .rail-figs .mv{font-size:22px}
+    .prae-top,.dc-top{flex-direction:column;align-items:flex-start}
+    .modal{max-width:94vw}
+  }
 </style>
 </head>
 <body>
@@ -3688,7 +3718,8 @@ function newFunding(){modalFields([
     {k:'reimb',l:'Reimbursement?',v:'Y',sel:[['Y','Yes — money already spent'],['N','No — funds needed up front']]},
     {k:'explain',l:'Explanation for need of funds',v:''}
   ],'KDR Funding Request',vals=>{state.funding.unshift(Object.assign({id:uid(),ts:Date.now(),date:new Date().toISOString().slice(0,10),status:'Pending'},vals));renderFundingList();save();
-    syncToast('Filed. Print the official form from Finance → Reimbursements.');});}
+    const rec=state.funding[0];setTimeout(()=>fundingPDF(rec.id),350);
+    syncToast('Filed — your PDF is downloading. Approvals happen in the Exec Center.');});}
 function renderFundingList(){renderFundingPublic();const l=document.getElementById('fundingList');if(!l)return;
   l.innerHTML=state.funding.length?state.funding.map(r=>`<div class="reg-card card">
       <div class="rg-main"><b>${money(+r.amount||0)} — ${esc(r.purpose||'')}${r.reimb==='Y'?' <span class=\'conf-chip\' style=\'border-color:rgba(95,179,122,.5);color:var(--good)\'>REIMBURSE</span>':''}</b>
@@ -3709,6 +3740,42 @@ function printFunding(id){const r=state.funding.find(x=>x.id===id);if(!r)return;
     <p style="margin-top:26px">Quester Approval&nbsp; ${r.status==='Approved'?'<b>Y</b> / N':'Y / N'} &nbsp;&nbsp;&nbsp; Consul Approval&nbsp; ${r.status==='Approved'?'<b>Y</b> / N':'Y / N'}</p>
     <p style="margin-top:26px">Consul Signature ________________________________</p>
     <p style="margin-top:16px">Quester Signature ________________________________</p>`);}
+/* Real downloadable PDF of the chapter's funding form (works on iPhone/standalone
+   where window.print is unreliable). */
+function fundingPDF(id){const r=state.funding.find(x=>x.id===id);if(!r)return;
+  try{
+    const {jsPDF}=window.jspdf;const d=new jsPDF({unit:'pt',format:'letter'});
+    const W=612,M=64;let y=84;
+    d.setFont('times','bold');d.setFontSize(16);
+    d.text('Kappa Delta Rho - Rho Formal Funding Request Form',W/2,y,{align:'center'});y+=14;
+    d.setDrawColor(201,168,76);d.setLineWidth(2);d.line(M,y,W-M,y);y+=4;
+    d.setLineWidth(0.7);d.line(M,y,W-M,y);y+=36;
+    d.setFont('times','normal');d.setFontSize(12);
+    const line=(label,val)=>{d.setFont('times','bold');d.text(label,M,y);
+      const lw=d.getTextWidth(label)+8;d.setFont('times','normal');
+      d.text(String(val||''),M+lw,y);d.setDrawColor(120);d.setLineWidth(.5);
+      d.line(M+lw-2,y+3,W-M,y+3);y+=30;};
+    line('Event Name:',r.purpose);
+    line('Event Coordinator:',r.who);
+    line('Co-Hosting Organizations:',r.cohost||'None');
+    d.setFont('times','bold');d.text('Amount Requested:',M,y);
+    d.setFont('times','normal');d.text('$'+(+r.amount||0).toFixed(2),M+118,y);
+    d.setFont('times','bold');d.text('Reimbursement?',M+250,y);
+    d.setFont('times','normal');d.text(r.reimb==='Y'?'Y / n':'y / N',M+352,y);y+=34;
+    d.setFont('times','bold');d.text('Explanation for need of funds',M,y);y+=20;
+    d.setFont('times','normal');
+    const expl=d.splitTextToSize(String(r.explain||''),W-2*M);
+    d.text(expl,M,y);y+=expl.length*15+30;
+    d.setFont('times','bold');
+    d.text('Quester Approval  Y / N',M,y);d.text('Consul Approval  Y / N',M+250,y);y+=48;
+    d.setFont('times','normal');
+    d.text('Consul Signature',M,y);d.setDrawColor(60);d.line(M+96,y+3,M+330,y+3);y+=36;
+    d.text('Quester Signature',M,y);d.line(M+100,y+3,M+334,y+3);y+=50;
+    d.setFontSize(9);d.setTextColor(130);
+    d.text('Filed through the Rho Chapter Mainframe - '+(r.date||''),M,y);
+    d.save('KDR-Funding-Request-'+(r.purpose||'form').replace(/[^a-z0-9]+/gi,'-').slice(0,40)+'.pdf');
+    sfxTick();return true;
+  }catch(e){syncToast('PDF engine unavailable - using the print sheet instead.');printFunding(id);return false;}}
 function renderFundingPublic(){const l=document.getElementById('fundingListPublic');if(!l)return;
   const ex=(typeof execData!=='undefined'&&execData!==null);
   l.innerHTML=state.funding.length?state.funding.map(r=>`<div class="reg-card card">
@@ -3717,7 +3784,7 @@ function renderFundingPublic(){const l=document.getElementById('fundingListPubli
       <div class="rg-side">${ex?`<select class="rg-status ${r.status==='Approved'?'s-approved':r.status==='Denied'?'':'s-submitted'}" onchange="const f=state.funding.find(x=>x.id==='${r.id}');f.status=this.value;renderFundingList();save()">
           ${['Pending','Approved','Denied'].map(x=>`<option ${r.status===x?'selected':''}>${x}</option>`).join('')}</select>`
         :`<span class="sp-status ${r.status==='Approved'?'received':'pledged'}">${esc(r.status)}</span>`}
-        <div class="rg-btns"><button class="mini-btn ok" onclick="printFunding('${r.id}')">Print</button></div></div>
+        <div class="rg-btns"><button class="mini-btn ok" onclick="fundingPDF('${r.id}')">PDF</button><button class="mini-btn" onclick="printFunding('${r.id}')">Print</button></div></div>
     </div>`).join(''):'<p class="lead" style="font-size:12.5px">No reimbursement requests yet.</p>';}
 /* ---- Equipment sign-out (plain) ---- */
 function newEquipment(){modalFields([
