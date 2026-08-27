@@ -62,7 +62,6 @@
   header.bar .clock{margin-left:auto;font-size:12px;color:var(--cream-dim);letter-spacing:.6px;font-variant-numeric:tabular-nums;
     background:rgba(0,0,0,.28);border:1px solid var(--line-soft);border-radius:4px;padding:7px 13px;white-space:nowrap}
   header.bar .clock b{color:var(--gold-br)}
-  header.bar .clock b{color:var(--cream)}
   .tools{display:flex;gap:8px}
   .tool{background:transparent;border:1px solid var(--line);color:var(--gold);padding:8px 12px;border-radius:9px;cursor:pointer;font-size:12.5px;font-weight:600;font-family:'Montserrat';transition:.16s;display:flex;align-items:center;gap:6px}
   .tool:hover{border-color:var(--gold);color:var(--gold-br)}
@@ -1140,6 +1139,32 @@
     .prae-top,.dc-top{flex-direction:column;align-items:flex-start}
     .modal{max-width:94vw}
   }
+
+  /* audit wave v5.3 */
+  :root{--dim:#a9a698;--panel:#0F2A4C}
+  .lh-head{display:flex;align-items:center;gap:16px;border-bottom:none;margin-bottom:8px}
+  .lh-org{font-family:'Cinzel';font-weight:800;font-size:19px;letter-spacing:2.5px;color:#0A1E3F}
+  .lh-sub{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:#6b6b60;margin-top:3px}
+  .lh-rule{height:3px;background:linear-gradient(90deg,#0D395F,#C9A84C 45%,#E77500);margin:10px 0 18px;border-radius:2px}
+  .lh-foot{margin-top:34px;padding-top:12px;border-top:1px solid #999;text-align:center;font-family:'Cinzel';font-size:10.5px;letter-spacing:3px;color:#555}
+  .me-glow{position:absolute;inset:0;background:radial-gradient(620px 420px at 50% 42%,rgba(201,168,76,.18),transparent 65%);pointer-events:none}
+  .rm-bg{position:absolute;inset:0;z-index:1;pointer-events:none;background:
+    radial-gradient(900px 500px at 80% -10%,rgba(231,117,0,.14),transparent 60%),
+    radial-gradient(700px 600px at -10% 110%,rgba(13,57,95,.5),transparent 55%)}
+  .mast-id{flex:1;min-width:0}
+  .row-del,.del-btn{width:34px;height:34px;font-size:15px;display:inline-flex;align-items:center;justify-content:center}
+  .mini-btn{min-height:36px}
+  .rc-mode{font-size:11px;padding:10px 15px}
+  @media(max-width:880px){
+    .save-flash{bottom:calc(96px + env(safe-area-inset-bottom))}
+    .update-toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+    aside{z-index:70;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+    .scroll{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important}
+    .mtab button{font-size:10px;letter-spacing:.4px}
+    header.bar .tools .tool,.sync-pill{min-height:40px}
+    .pn-move{display:flex}
+    .pn-move button{width:34px;height:34px}
+  }
 </style>
 </head>
 <body>
@@ -1267,29 +1292,23 @@
         </div>
         
         <details class="dash-fold" ontoggle="if(this.open)buildHomeCharts()"><summary>Chapter Points</summary>
-        <div class="card pad" style="margin-bottom:22px">
-          <h3 style="font-family:'Cinzel';letter-spacing:1.2px;font-size:14px;color:var(--cream);text-transform:uppercase;margin-bottom:10px"><span style="color:var(--orange)">&#10084;</span>&nbsp; Alumni Donations &mdash; Live</h3>
+        <div class="card pad" style="margin-bottom:0">
+          <div style="color:var(--cream-dim);font-size:12px;margin-bottom:16px">Family standings and top brothers, by total points.</div>
+          <div class="two-col">
+            <div class="chart-box" style="height:260px"><canvas id="famHomeChart"></canvas></div>
+            <div class="chart-box" style="height:260px"><canvas id="brotherHomeChart"></canvas></div>
+          </div>
+        </div>
+        </details>
+        <details class="dash-fold" ontoggle="if(this.open)renderDonate()"><summary>Alumni Donations</summary>
+        <div class="card pad" style="margin-bottom:0">
           <div id="dashTracker"></div>
           <div class="grid g2" style="margin-top:18px">
             <div style="text-align:center"><div id="dashDonateQR"></div><div style="margin-top:12px"><a class="openb" id="dashDonateBtn" target="_blank" rel="noopener">Open Donation Form &#8599;</a></div><div style="margin-top:8px"><button class="mini-btn" onclick="openDonateScreen()">&#9658;&nbsp; Donation Mode</button></div></div>
             <div class="form-embed"><iframe id="dashDonateForm" loading="lazy"></iframe></div>
           </div>
         </div>
-        <div class="card pad" style="margin-bottom:22px">
-          <h3 style="font-family:'Cinzel';letter-spacing:1.2px;font-size:14px;color:var(--cream);text-transform:uppercase;margin-bottom:6px">Chapter Points</h3>
-          <div style="color:var(--cream-dim);font-size:12px;margin-bottom:16px">Family standings and top brothers, by total points.</div>
-          <div class="two-col">
-            <div class="chart-box" style="height:260px"><canvas id="famHomeChart"></canvas></div>
-            <div class="chart-box" style="height:260px"><canvas id="brotherHomeChart"></canvas></div>
-          </div>
         </details>
-        <details class="dash-fold" ontoggle="if(this.open)renderDonate()"><summary>Alumni Donations</summary>
-        <div class="card pad" style="margin-bottom:22px">
-          <h3 style="font-family:'Cinzel';letter-spacing:1.2px;font-size:14px;color:var(--cream);text-transform:uppercase;margin-bottom:10px"><span style="color:var(--orange)">&#10084;</span>&nbsp; Alumni Donations &mdash; Live</h3>
-          <div id="dashTracker"></div>
-          <div class="grid g2" style="margin-top:18px">
-            <div style="text-align:center"><div id="dashDonateQR"></div><div style="margin-top:12px"><a class="openb" id="dashDonateBtn" target="_blank" rel="noopener">Open Donation Form &#8599;</a></div><div style="margin-top:8px"><button class="mini-btn" onclick="openDonateScreen()">&#9658;&nbsp; Donation Mode</button></div></div>
-            </details>
         <details class="dash-fold" ontoggle="if(this.open)renderDashGallery()"><summary>Brotherhood Gallery</summary>
         <div class="dash-gallery" id="dashGallery" style="display:none">
           <div class="dg-head"><h3><span class="ic">&#128247;</span> Brotherhood</h3><button class="dg-all" onclick="go('gallery')">Open gallery &#8599;</button></div>
@@ -1323,7 +1342,7 @@
             <div id="ciEvents"></div></div>
         </div>
         <div class="sec-sub">My Recent Activity</div>
-        <div class="card" style="overflow:hidden"><table class="lead-table" id="myLedger"></table></div>
+        <div class="card" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="lead-table" id="myLedger"></table></div>
         <div id="standAdmin"></div>
       </section>
 
@@ -1471,7 +1490,7 @@
         <div class="sec">Brother Leaderboard</div>
         <div class="pts-tabs"><button class="active" data-p="month" onclick="ptsTab('month')">This Month</button>
           <button data-p="year" onclick="ptsTab('year')">This Year</button><button data-p="life" onclick="ptsTab('life')">Lifetime</button></div>
-        <div class="card" style="overflow:hidden"><table class="lead-table" id="leadTable"></table></div>
+        <div class="card" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="lead-table" id="leadTable"></table></div>
         <div class="inline-add" style="margin-top:18px"><input id="ptName" placeholder="Brother" list="memberNames">
           <select id="ptFam"></select><select id="ptCat" title="Pillar"><option value="fellowship">Fellowship</option><option value="leadership">Leadership</option><option value="scholarship">Scholarship</option><option value="service">Service</option><option value="tradition">Tradition</option></select><input id="ptPts" type="number" placeholder="Points"><input id="ptReason" placeholder="Reason (optional)"><button onclick="addPoints()">Award</button></div>
         <p class="lead" style="margin-top:14px;font-size:12.5px">Awards are dated automatically, so Month / Year / Lifetime tallies update on their own. Add or rename families in Edit mode below.</p>
@@ -1481,7 +1500,7 @@
       <section class="view" id="v-social">
         <div class="sec">Social Calendar &mdash; Functions</div>
         <p class="lead">Mixers, date parties, and joint functions with our sorority partners. Add the theme and the chapter we are pairing with.</p>
-        <div class="card" style="overflow:hidden"><table class="lead-table" id="socialTable"></table></div>
+        <div class="card" style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table class="lead-table" id="socialTable"></table></div>
         <div class="inline-add" style="margin-top:18px"><input id="soDate" type="date" style="max-width:150px"><input id="soTitle" placeholder="Function"><input id="soSorority" placeholder="Sorority"><input id="soTheme" placeholder="Theme"><button onclick="addSocial()">Add</button></div>
       </section>
 
@@ -1902,7 +1921,6 @@ const FAMICON={
 };
 const ICON_KEYS=Object.keys(FAMICON);
 
-function seedMembers(){const a=[];for(let i=0;i<12;i++)a.push({id:uid(),name:"",year:"",role:"",status:"active"});for(let i=0;i<3;i++)a.push({id:uid(),name:"",year:"",role:"",status:"alumni"});return a;}
 function isoDaysAgo(n){const d=new Date();d.setDate(d.getDate()-n);return d.toISOString().slice(0,10);}
 const DEFAULTS={
   chapter:{crest:null},
@@ -2667,6 +2685,10 @@ const US_VOICES=['Microsoft Guy Online (Natural) - English (United States)','Mic
 var MALE_RE=/male|guy|christopher|eric|ryan|daniel|aaron|fred|reed|eddy|junior|rocko|arthur|oliver|george|james|david|mark/i;function pickVoice(re,prefs){const vs=(window.speechSynthesis.getVoices&&window.speechSynthesis.getVoices())||[];for(const p of prefs){const v=vs.find(x=>x.name===p);if(v)return v;}const lang=vs.filter(x=>new RegExp(re,'i').test(x.lang));const nat=lang.filter(x=>/natural|online|enhanced|premium|google/i.test(x.name));return nat.find(x=>MALE_RE.test(x.name))||nat[0]||lang.find(x=>MALE_RE.test(x.name))||lang[0]||vs.find(x=>/^en/i.test(x.lang)&&/natural|online|google/i.test(x.name))||vs.find(x=>/^en/i.test(x.lang))||null;}
 function speakCreed(){if(bootDone||!('speechSynthesis'in window))return;const text='Honor Super Omnia. Honor Above All Things. '+(state.creed||'');const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';const v=pickBritishVoice();if(v)u.voice=v;u.rate=1.0;u.pitch=1.0;u.onend=()=>{if(!bootDone)setTimeout(()=>bootEnter(false),800);};window.speechSynthesis.speak(u);}
 function bootStart(){const b=document.getElementById('bootScreen');if(!b)return;b.classList.add('booting');bootDone=false;playStartupMusic();
+  /* boot status readout (restored) */
+  try{const st=document.getElementById('bootStatus');if(st){st.innerHTML='';
+    const lines=['INITIALIZING RHO CHAPTER MAINFRAME','SEALING CHAPTER CLOUD LINK','LOADING BROTHERHOOD ROSTER','SYNCING POINTS & STANDING','OPENING THE CHAPTER ROOM','HONOR SUPER OMNIA'];
+    lines.forEach((t,i)=>{setTimeout(()=>{const d=document.createElement('div');d.className='bstat-line';d.textContent='› '+t;st.appendChild(d);},420*i+300);});}}catch(e){}
   const cd=document.getElementById('bootCreed');if(cd)cd.textContent='\u201CHonor Super Omnia \u2014 Honor Above All Things.\u201D  '+(state.creed||'');
   const a=document.getElementById('bootAudio');
   if(a&&typeof RECORDED_VOICE!=='undefined'&&RECORDED_VOICE){try{if(!a.src)a.src=RECORDED_VOICE;a.currentTime=0;a.volume=1;a.onended=function(){if(!bootDone)bootEnter(false);};var pr=a.play();if(pr&&pr.catch)pr.catch(function(){setTimeout(speakCreed,300);});}catch(e){setTimeout(speakCreed,300);}}
