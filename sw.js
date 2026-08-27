@@ -1,7 +1,7 @@
 /* Rho Chapter Mainframe — Service Worker
    Gives the app true offline support + installability on iPhone, Android,
    desktop (Chrome/Edge), and smartboards. Bump CACHE on every release. */
-const CACHE = 'rho-mainframe-v43';
+const CACHE = 'rho-mainframe-v50';
 
 /* App shell + the two CDN libraries the board needs to render charts / QR codes.
    Everything else (Google Calendar/Forms iframes) is network-only by nature. */

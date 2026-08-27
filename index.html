@@ -53,8 +53,7 @@
   nav.side button.nav-action svg{color:var(--orange-br);opacity:1}
   nav.side button.nav-action:hover{background:rgba(232,119,34,.12)}
   .nav-live{margin-left:auto;font-size:8.5px;font-weight:800;letter-spacing:1.5px;background:rgba(232,119,34,.18);border:1px solid rgba(232,119,34,.5);
-    color:var(--orange-br);padding:2px 7px;border-radius:999px;animation:syncPulse 2.2s infinite}
-  .main-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;background:radial-gradient(1100px 640px at 82% -8%,rgba(232,119,34,.13),transparent 60%),radial-gradient(900px 720px at -8% 108%,rgba(22,56,108,.5),transparent 55%),linear-gradient(165deg,#08203f 0%,#0A1E3F 50%,#061530 100%)}
+    color:var(--orange-br);padding:2px 7px;border-radius:999px;display:flex;flex-direction:column;overflow:hidden;position:relative;background:radial-gradient(1100px 640px at 82% -8%,rgba(232,119,34,.13),transparent 60%),radial-gradient(900px 720px at -8% 108%,rgba(22,56,108,.5),transparent 55%),linear-gradient(165deg,#08203f 0%,#0A1E3F 50%,#061530 100%)}
   .main-wrap::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
   header.bar{display:flex;align-items:center;gap:14px;padding:10px 22px;border-bottom:1px solid var(--line);background:rgba(5,13,28,.6);backdrop-filter:blur(10px);z-index:10;min-height:58px}
   header.bar .crumb{font-family:'Cinzel';letter-spacing:3px;font-size:14px;font-weight:700;color:var(--cream);text-transform:uppercase;text-shadow:0 1px 0 rgba(0,0,0,.6)}
@@ -442,7 +441,7 @@
     color:var(--cream-dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:6px 11px;border-radius:999px;cursor:default}
   .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--cream-dim2);box-shadow:0 0 0 0 rgba(95,179,122,.5)}
   .sync-pill.live{color:var(--good);border-color:rgba(95,179,122,.4)}
-  .sync-pill.live .sync-dot{background:var(--good);animation:syncPulse 2.2s infinite}
+  .sync-pill.live .sync-dot{background:var(--good)}
   .sync-pill.offline{color:var(--bad);border-color:rgba(224,102,79,.4)}
   .sync-pill.offline .sync-dot{background:var(--bad)}
   @keyframes syncPulse{0%{box-shadow:0 0 0 0 rgba(95,179,122,.5)}70%{box-shadow:0 0 0 6px rgba(95,179,122,0)}100%{box-shadow:0 0 0 0 rgba(95,179,122,0)}}
@@ -482,15 +481,15 @@
     background:rgba(4,9,20,.74);backdrop-filter:blur(7px)}
   .cmd-bg.show{display:flex}
   .cmd-box{width:100%;max-width:600px;background:linear-gradient(165deg,var(--navy-2),var(--navy-1));border:1px solid var(--line);
-    border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+    border-radius:4px;border-top:3px double var(--line);box-shadow:var(--shadow);overflow:hidden}
   .cmd-top{display:flex;align-items:center;gap:11px;padding:15px 17px;border-bottom:1px solid var(--line-soft)}
   .cmd-top svg{width:19px;height:19px;color:var(--gold);flex:none}
   .cmd-top input{flex:1;background:none;border:none;outline:none;color:var(--cream);font-family:'Montserrat';font-size:16px}
   .cmd-top kbd{font-size:10.5px;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:5px;padding:2px 7px;color:var(--cream-dim2)}
   .cmd-results{max-height:52vh;overflow-y:auto;padding:8px}
   .cmd-row{width:100%;display:flex;align-items:center;gap:13px;background:none;border:none;text-align:left;cursor:pointer;
-    padding:11px 13px;border-radius:11px;color:var(--cream)}
-  .cmd-row.sel{background:linear-gradient(90deg,rgba(232,119,34,.16),rgba(44,107,179,.12))}
+    padding:11px 13px;border-radius:3px;color:var(--cream)}
+  .cmd-row.sel{box-shadow:inset 2px 0 0 var(--orange);background:rgba(201,168,76,.06)}
   .cmd-ic{font-size:18px;width:24px;text-align:center;flex:none}
   .cmd-tx{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
   .cmd-tx b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -825,7 +824,7 @@
     .lb-prev{left:8px}.lb-next{right:8px}.gallery-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:11px}}
   /* smartboard / very large displays */
   @media(min-width:1700px){.app{max-width:1860px;margin:0 auto}.gallery-grid{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}}
-  @media print{#bootScreen,aside,.bar,.quick-actions,.gallery-add,.pc-edit,.dg-all,.lightbox,.update-toast{display:none!important}
+  @media print{#bootScreen,aside,.bar,#cmdDeck,.masthead,.gallery-add,.pc-edit,.dg-all,.lightbox,.update-toast{display:none!important}
     body{overflow:visible;background:#fff;color:#111}.main-wrap{background:#fff}}
 
   /* ================= HERITAGE OVERRIDE — engraved chapter-house identity =================
@@ -844,11 +843,7 @@
   .card,.recap-card,.linkcard,.pillar-card,.reg-card,.ballot,.dc-zone,.modal,.kg-card,.pg-card{
     box-shadow:inset 0 0 0 1px rgba(201,168,76,.10),0 2px 0 rgba(0,0,0,.4),0 14px 26px -20px rgba(0,0,0,.8)}
   .card,.recap-card,.reg-card,.ballot{border-top:2px solid rgba(201,168,76,.4)}
-  .quick-actions button,.tool,.mini-btn,.openb,.btn-save,.btn-cancel,.gallery-add,.rec-rush,.rec-ghost,.kg-btn,
-  .boot-enter,.dz-btns button,.bl-btns button,.dg-all,.task-reset,.rg-status,.rf input,.rf select,#meSelect,
-  .inline-add input,.inline-add select,.inline-add button,.tse-row input,.tse-row button{border-radius:4px!important}
-  .gallery-add,.kg-btn,.boot-enter,.btn-save{box-shadow:0 3px 0 rgba(0,0,0,.45)!important;transition:.12s}
-  .gallery-add:active,.kg-btn:active,.boot-enter:active,.btn-save:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.45)!important}
+  .rf input,.rf select,#meSelect,.inline-add input,.inline-add select,.tse-row input,.rg-status{border-radius:3px!important}
   nav.side button{border-radius:4px}
   nav.side button.active{background:rgba(232,119,34,.1);box-shadow:inset 0 0 0 1px rgba(232,119,34,.25)}
   .sec{position:relative}
@@ -966,7 +961,7 @@
   .motion-banner{background:linear-gradient(160deg,var(--panel,#102C54),var(--navy-1));border:1px solid var(--orange);border-left:5px solid var(--orange);
     border-radius:6px;padding:16px 18px;margin-bottom:10px;box-shadow:0 2px 0 rgba(0,0,0,.4);animation:mbIn .35s cubic-bezier(.2,.7,.3,1)}
   @keyframes mbIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-  .mb-tag{font-family:'Cinzel';font-size:10.5px;font-weight:800;letter-spacing:2.5px;color:var(--orange-br);animation:syncPulse 2.2s infinite}
+  .mb-tag{font-family:'Cinzel';font-size:10.5px;font-weight:800;letter-spacing:2.5px;color:var(--orange-br);}
   .mb-body{font-size:15px;color:var(--cream);margin:8px 0 10px;line-height:1.5}
   .mb-btns{display:flex;gap:8px}
   .guest-top{display:flex;gap:16px;align-items:center;margin-top:6px}
@@ -1017,6 +1012,103 @@
   @media(max-width:880px){.install-banner{bottom:88px}}
 
   .drive-frame{width:100%;height:340px;border:1px solid var(--line);border-radius:4px;background:#fff;margin-top:12px}
+
+  /* ================= BUTTON SYSTEM v5 — single source of truth ================= */
+  :root{--btn-r:3px;--ledge:0 2px 0 rgba(0,0,0,.5);--rim:inset 0 1px 0 rgba(255,255,255,.24)}
+  .gallery-add,.btn-save,.btn-cancel,.kg-btn,.rc-play,.rc-stop,.ib-go,.ib-later,
+  .chat-input button,.inline-add button,.tse-row button,
+  .rec-ghost,.rec-rush,.openb,.dg-all,.tool,.task-reset,.raise-btn,
+  .mini-btn,.rc-weeknav button,.kg-skip,
+  .pc-del,.row-del,.del-btn,
+  .quick-actions button,.cmd-key{
+    font-family:'Montserrat',sans-serif;border-radius:var(--btn-r)!important;
+    background-image:none!important;animation:none!important;transform:none;
+    transition:background .12s,border-color .12s,color .12s;cursor:pointer}
+  :is(.gallery-add,.btn-save,.kg-btn,.rc-play,.rec-ghost,.rec-rush,.tool,.openb,.mini-btn,.quick-actions button,.cmd-key):hover{transform:none}
+  :is(.gallery-add,.btn-save,.kg-btn,.rc-play,.chat-input button,.inline-add button,.tse-row button,.ib-go,.cmd-key):active{transform:translateY(1px);box-shadow:none!important}
+  :is(.gallery-add,.btn-save,.kg-btn,.rc-play,.rec-ghost,.rec-rush,.tool,.openb,.mini-btn,.deck-input,.cmd-key):focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .gallery-add,.btn-save,.kg-btn,.rc-play,.ib-go,
+  .chat-input button,.inline-add button,.tse-row button{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:38px;padding:0 18px;
+    background:var(--orange);color:#14100a;border:1px solid #8a4a06;
+    font-weight:700;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;
+    box-shadow:var(--ledge),var(--rim)}
+  :is(.gallery-add,.btn-save,.kg-btn,.rc-play,.ib-go,.chat-input button):hover{background:var(--orange-br)}
+  .rec-ghost,.openb,.openb.ghost,.dg-all,.tool,.task-reset,.ib-later,.btn-cancel,.raise-btn{
+    display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 14px;
+    background:transparent;border:1px solid var(--line)!important;color:var(--cream);
+    font-weight:600;font-size:12px;letter-spacing:.4px;text-transform:none;box-shadow:none;text-decoration:none}
+  :is(.rec-ghost,.openb,.dg-all,.tool,.raise-btn):hover{border-color:var(--gold)!important;background:rgba(201,168,76,.07);color:var(--cream)}
+  .rec-rush{display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:0 14px;
+    background:transparent;border:1px solid var(--line);border-top:2px solid var(--orange);
+    color:var(--orange-br);font-weight:700;font-size:11px;letter-spacing:1.2px;text-transform:uppercase}
+  .rec-rush:hover{background:rgba(232,119,34,.08)}
+  .tool.on{background:transparent;color:var(--gold-br);border-color:var(--gold)!important;box-shadow:inset 0 0 0 1px var(--gold)}
+  .mini-btn,.rc-weeknav button,.kg-skip{background:none;border:none;color:var(--gold);
+    font-size:12.5px;font-weight:600;padding:5px 8px;box-shadow:none}
+  :is(.mini-btn,.rc-weeknav button,.kg-skip):hover{color:var(--gold-br);text-decoration:underline;text-underline-offset:3px}
+  .mini-btn.ok{color:var(--good)}
+  .pc-del,.row-del,.del-btn,.rc-stop{background:transparent;border:1px solid rgba(224,102,79,.45);color:var(--bad);box-shadow:none}
+  :is(.pc-del,.row-del,.del-btn,.rc-stop):hover{background:rgba(224,102,79,.14)}
+  .filters button,.gallery-filters button,.task-filters button,
+  .pts-tabs button,.fin-tabs button,.give-tabs button{
+    border-radius:var(--btn-r)!important;background:transparent;border:1px solid var(--line-soft);
+    color:var(--cream-dim);font-family:'Montserrat';font-size:11px;font-weight:600;
+    letter-spacing:.3px;text-transform:none;padding:7px 13px}
+  :is(.filters,.gallery-filters,.task-filters,.pts-tabs,.fin-tabs,.give-tabs) button.active{
+    background:rgba(232,119,34,.07);color:var(--cream);border-color:var(--line);border-bottom:2px solid var(--orange)}
+  .cmd-key,.quick-actions button{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    min-height:46px;background:var(--navy-1);border:1px solid var(--line);
+    border-top:2px solid rgba(201,168,76,.35);
+    color:var(--cream);font-family:'Cinzel';font-size:9.5px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;box-shadow:var(--ledge)}
+  :is(.cmd-key,.quick-actions button) svg{width:15px;height:15px;opacity:.85}
+  :is(.cmd-key,.quick-actions button):hover{border-color:var(--gold);color:var(--gold-br)}
+  .cmd-key.armed{border-top-color:var(--orange)}
+  .cmd-key.quiet{border-top-color:transparent;color:var(--cream-dim)}
+
+  /* nav drawers */
+  .grp-toggle{width:100%;text-align:left;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+  .grp-toggle::after{content:"›";font-size:13px;color:var(--cream-dim2);transition:transform .18s;transform:rotate(0)}
+  .grp-toggle.open::after{transform:rotate(90deg)}
+  .grp-body{max-height:0;overflow:hidden;transition:max-height .22s ease}
+  .grp-body.open{max-height:620px}
+
+  /* ===== v5 command deck layout ===== */
+  .masthead{display:flex;align-items:center;gap:18px;padding:6px 2px 14px;margin-bottom:16px;border-bottom:3px double var(--line)}
+  .mast-crest img,.mast-crest svg{height:52px;width:auto;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))}
+  .mast-name{font-family:'Cinzel';font-weight:800;font-size:15px;letter-spacing:3px;color:var(--cream);text-shadow:0 1px 0 rgba(0,0,0,.6)}
+  .mast-motto{font-family:'Cinzel';font-size:10px;letter-spacing:4px;color:var(--gold);margin-top:3px}
+  .mast-note{margin-left:auto;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--cream-dim2);text-align:right}
+  .cmd-deck{display:grid;grid-template-columns:1.2fr 1fr;gap:10px;margin-bottom:16px}
+  .deck-input{display:flex;align-items:center;gap:11px;min-height:46px;padding:0 16px;text-align:left;
+    background:rgba(0,0,0,.32);border:1px solid var(--line);border-radius:3px;color:var(--cream-dim);
+    font-family:'Montserrat';font-size:13px;cursor:pointer;box-shadow:inset 0 2px 6px rgba(0,0,0,.4)}
+  .deck-input:hover{border-color:var(--gold);color:var(--cream)}
+  .deck-input svg{width:16px;height:16px;flex:none;color:var(--gold)}
+  .deck-input span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .deck-input kbd{font-family:'Montserrat';font-size:10px;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:3px;padding:2px 6px;color:var(--cream-dim2)}
+  .deck-keys{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+  @media(max-width:980px){.cmd-deck{grid-template-columns:1fr}.deck-keys{grid-template-columns:repeat(3,1fr)}}
+  .rail-figs{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);border-top:2px solid rgba(201,168,76,.4);
+    border-radius:6px;background:var(--navy-1);margin-bottom:16px;overflow:hidden}
+  .rail-figs .metric{background:none;border:none;border-right:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 16px}
+  .rail-figs .metric:last-child{border-right:none}
+  .rail-figs .mv{font-variant-numeric:tabular-nums;text-shadow:none}
+  @media(max-width:760px){.rail-figs{grid-template-columns:1fr 1fr}.rail-figs .metric:nth-child(2n){border-right:none}}
+  .dash-fold{margin-bottom:12px;border:1px solid var(--line);border-radius:6px;background:var(--navy-1)}
+  .dash-fold>summary{list-style:none;cursor:pointer;padding:13px 16px;font-family:'Cinzel';font-weight:700;font-size:11.5px;
+    letter-spacing:2px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px}
+  .dash-fold>summary::before{content:"›";font-size:14px;color:var(--cream-dim2);transition:transform .15s}
+  .dash-fold[open]>summary::before{transform:rotate(90deg)}
+  .dash-fold>summary::-webkit-details-marker{display:none}
+  .dash-fold>.card{border:none;box-shadow:none;margin-bottom:0!important;border-radius:0}
+  .dash-fold .dash-gallery{border:none;box-shadow:none;margin-bottom:0}
+  #recapCard .recap-body,#recapCard .creed-edit{display:none}
+  #recapCard.rc-open .recap-body{display:block}
+  #recapCard.rc-open .creed-edit{display:block}
+  @media(max-width:980px){.masthead{gap:12px}.mast-name{font-size:12px;letter-spacing:2px}.mast-note{display:none}}
 </style>
 </head>
 <body>
@@ -1038,33 +1130,37 @@
     <div class="side-crest"><div id="sideCrest"></div><div class="ch">RHO CHAPTER<span>&#922;&#916;&#929; &middot; LAFAYETTE</span></div></div>
     <nav class="side" id="sidenav">
       <div class="grp">Command</div>
-      <button data-v="dash" class="active" onclick="go('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5a8 8 0 10-16 0"/><path d="M12 14.5L15.8 11"/><circle cx="12" cy="14.5" r="1.2" fill="currentColor" stroke="none"/><path d="M4 19h16"/></svg>Dashboard</button>
-      <button data-v="standing" onclick="go('standing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.6"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg>My Standing</button>
+      <button data-v="dash" class="active" onclick="go('dash')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg>Command Deck</button>
+      <button data-v="standing" onclick="go('standing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></svg>My Standing</button>
+      <button data-v="chat" onclick="go('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H9l-5 4z"/></svg>Chat</button>
+      <button data-v="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Calendar</button>
+      <div class="grp">Live Ops</div>
       <button class="nav-action gavel" onclick="enterMeetingMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13.5 4.5l6 6M11 7l6 6M14.5 3.5l6 6-2 2-6-6zM9 9l6 6-2 2-6-6z"/><path d="M3 21h9M5.5 18.5L11 13"/></svg>Chapter Meeting</button>
-      <button data-v="exec" onclick="go('exec')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/><circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg>Exec Center</button>
-      <div class="grp">Brotherhood Center</div>
-      <button data-v="newmember" onclick="go('newmember')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="7" r="3.4"/><path d="M5 21a7 7 0 0114 0"/><path d="M12 12v3M10.5 13.5h3" stroke-linecap="round"/></svg>New Members</button>
-      <button data-v="roster" onclick="go('roster')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.6 2.4-6 5.5-6s5.5 2.4 5.5 6"/><circle cx="16.5" cy="9" r="2.6"/><path d="M16.2 14.3c2.7.4 4.3 2.6 4.3 5.7"/></svg>Roster</button>
-      <button data-v="points" onclick="go('points')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4h8v5a4 4 0 01-8 0z"/><path d="M8 5H5a3 3 0 003 4M16 5h3a3 3 0 01-3 4"/><path d="M12 13v3M8.5 20h7M10 20v-2h4v2"/></svg>Points &amp; Families</button>
-      <button data-v="gallery" onclick="go('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><circle cx="8.8" cy="10" r="1.7"/><path d="M20.5 15.5L15.5 11 6 19"/></svg>Gallery</button>
-      <button data-v="chat" onclick="go('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h12v9H8l-4 3.5z"/><path d="M20 9v10.5L16.5 17H10"/></svg>Chat</button>
-      <div class="grp">Recruitment Command</div>
-      <button data-v="recruit" onclick="go('recruit')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="8.5" r="3.4"/><path d="M4 20c0-3.8 2.7-6.3 6-6.3s6 2.5 6 6.3"/><path d="M18.5 6.5v6M15.5 9.5h6"/></svg>Recruitment</button>
-      <button class="nav-action" onclick="openRushMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M13 7l-4 6h3l-1 4 4-6h-3z"/></svg>Rush Mode <span class="nav-live">LIVE</span></button>
-      <div class="grp">Operations Center</div>
-      <button data-v="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><circle cx="12" cy="14.5" r="1.1" fill="currentColor" stroke="none"/></svg>Calendar</button>
+      <button class="nav-action rushlive" onclick="openRushMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>Rush Mode<span class="nav-live">LIVE</span></button>
+      <button data-v="doorcount" onclick="go('doorcount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 12h7v9M10 3v9"/></svg>Function Control</button>
+      <button data-v="guests" onclick="go('guests')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 12h8M8 15h5"/></svg>Guest Lists</button>
+      <div class="grp">Brotherhood</div>
+      <button data-v="roster" onclick="go('roster')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 6a3 3 0 010 6M21 20a5 5 0 00-5-5"/></svg>Roster</button>
+      <button data-v="points" onclick="go('points')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0z"/></svg>Points & Families</button>
+      <button data-v="gallery" onclick="go('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5L5 19"/></svg>Gallery</button>
+      <button class="grp grp-toggle" data-drawer="admin" onclick="toggleDrawer('admin')">Administration</button>
+      <div class="grp-body" id="drawer-admin">
+      <button data-v="exec" onclick="go('exec')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>Exec Center</button>
+      <button data-v="recruit" onclick="go('recruit')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M17 8h5M19.5 5.5v5"/></svg>Recruitment</button>
+      <button data-v="newmember" onclick="go('newmember')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="7" r="3.4"/><path d="M5 21a7 7 0 0114 0M12 12v3"/></svg>New Members</button>
+      <button data-v="register" onclick="go('register')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6"/></svg>Event Registration</button>
+      <button data-v="officers" onclick="go('officers')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l3 5 5 1-4 4 1 5-5-3-5 3 1-5-4-4 5-1z"/></svg>Officers & Tasks</button>
+      <button data-v="committees" onclick="go('committees')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h6l2 2h10v10H3zM3 7V5h5l2 2"/></svg>Committees</button>
+      <button data-v="minutes" onclick="go('minutes')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6zM14 3v5h5"/></svg>Meeting Minutes</button>
       <button data-v="social" onclick="go('social')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14l-7 8z"/><path d="M12 12v7M8.5 21h7"/></svg>Social</button>
-      <button data-v="guests" onclick="go('guests')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 12h8M8 15h5" stroke-linecap="round"/><path d="M15.5 14.5l2 2 3-3.5" stroke-width="2"/></svg>Guest Lists</button>
-      <button data-v="doorcount" onclick="go('doorcount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h7v9M10 3v9M16 8v0M16 12v0M16 16v0" stroke-linecap="round"/><circle cx="6.5" cy="7.5" r="1.6"/></svg>Function Control</button>
-      <button data-v="register" onclick="go('register')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M9 3v3h6V3"/><path d="M9 12l2 2 4-4.5"/></svg>Event Registration</button>
-      <button data-v="officers" onclick="go('officers')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 2.5V12c0 4.4-3 7.4-7 9-4-1.6-7-4.6-7-9V5.5z"/><path d="M9 12l2 2 4-4.5"/></svg>Officers &amp; Tasks</button>
-      <button data-v="committees" onclick="go('committees')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Committees</button>
-      <button data-v="minutes" onclick="go('minutes')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 17h6"/></svg>Meeting Minutes</button>
-      <button data-v="files" onclick="go('files')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3.5 7.5V19a1.5 1.5 0 001.5 1.5h14a1.5 1.5 0 001.5-1.5V9.5A1.5 1.5 0 0019 8h-8L9 5.5H5A1.5 1.5 0 003.5 7z"/></svg>Files</button>
-      <div class="grp">Finance Center</div>
-      <button data-v="finance" onclick="go('finance')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16"/><path d="M8 15v-4M12 15V8M16 15v-6M19.5 6.5L16 9"/></svg>Finance</button>
-      <button data-v="giving" onclick="go('giving')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/></svg>Giving &amp; Scholarship</button>
-      <button data-v="donate" onclick="go('donate')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="9" width="16" height="11" rx="1.5"/><path d="M4 13.5h16M12 9v11"/><path d="M12 9C10.5 6 6 6.5 7 9c.8 2 5 0 5 0zM12 9c1.5-3 6-2.5 5 0-.8 2-5 0-5 0z"/></svg>Donate</button>
+      <button data-v="files" onclick="go('files')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h6l2 2h10v10H3z"/></svg>Files</button>
+      </div>
+      <button class="grp grp-toggle" data-drawer="treasury" onclick="toggleDrawer('treasury')">Treasury</button>
+      <div class="grp-body" id="drawer-treasury">
+      <button data-v="finance" onclick="go('finance')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-3"/></svg>Finance</button>
+      <button data-v="giving" onclick="go('giving')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/></svg>Giving & Scholarship</button>
+      <button data-v="donate" onclick="go('donate')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 8c-2-3-7-2-7 2 0 3 4 6 7 9 3-3 7-6 7-9 0-4-5-5-7-2z"/></svg>Donate</button>
+      </div>
     </nav>
   </aside>
   <div class="main-wrap">
@@ -1088,37 +1184,49 @@
         <input type="file" id="importFile" accept="application/json" hidden></div>
 
       <section class="view active" id="v-dash">
-        <div class="quick-actions">
-          <button onclick="go('standing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>Standing</button>
-          <button onclick="enterMeetingMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13.5 4.5l6 6M11 7l6 6M14.5 3.5l6 6-2 2-6-6zM9 9l6 6-2 2-6-6z"/><path d="M3 21h9M5.5 18.5L11 13"/></svg>Meeting</button>
-          <button onclick="go('recruit')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 6a3 3 0 010 6M21 20a5 5 0 00-5-5"/></svg>Recruit</button>
-          <button onclick="go('doorcount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 12h7v9M10 3v9"/></svg>Function</button>
-          <button onclick="go('points')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0zM7 6H4a3 3 0 003 5M17 6h3a3 3 0 01-3 5"/></svg>Points</button>
-          <button onclick="go('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v11H9l-5 4z"/></svg>Chat</button>
-          <button onclick="go('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5L5 19"/></svg>Gallery</button>
-          <button onclick="newFunding()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.5" y="6" width="19" height="12" rx="1.5"/><circle cx="12" cy="12" r="2.8"/></svg>Reimburse</button>
+        <div class="masthead">
+          <div class="mast-crest" id="dashCrest"></div>
+          <div class="mast-id">
+            <div class="mast-name">RHO CHAPTER &middot; &Kappa;&Delta;&Rho; &middot; LAFAYETTE COLLEGE</div>
+            <div class="mast-motto">HONOR SUPER OMNIA</div>
+          </div>
+          <div class="mast-note">Restored to Full Chapter &middot; 2025<img class="wm" id="wordmark" alt="KDR" style="display:none"></div>
         </div>
-        <div class="dash-pair">
+
+        <div class="cmd-deck" id="cmdDeck">
+          <button class="deck-input" onclick="openCmd()" aria-label="Open command palette">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+            <span>Command the board &mdash; search brothers, views, actions&hellip;</span>
+            <kbd>&#8984;K</kbd><kbd>/</kbd>
+          </button>
+          <div class="deck-keys">
+            <button class="cmd-key" onclick="go('standing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></svg><span>Check In</span></button>
+            <button class="cmd-key" onclick="go('standing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 3"/></svg><span>Log Hours</span></button>
+            <button class="cmd-key armed" onclick="enterMeetingMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13.5 4.5l6 6M11 7l6 6M14.5 3.5l6 6-2 2-6-6zM9 9l6 6-2 2-6-6z"/><path d="M3 21h9"/></svg><span>Meeting</span></button>
+            <button class="cmd-key" onclick="go('doorcount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 12h7v9M10 3v9"/></svg><span>Function</span></button>
+            <button class="cmd-key" onclick="newFunding()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="6" width="19" height="12" rx="1.5"/><circle cx="12" cy="12" r="2.8"/></svg><span>Reimburse</span></button>
+            <button class="cmd-key quiet" onclick="openCmd()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><span>More &#8984;K</span></button>
+          </div>
+        </div>
+<div class="dash-pair">
           <div class="dash-standing card" id="dashStanding"></div>
           <div class="dash-live card" id="dashLive" style="display:none"></div>
         </div>
-        <div class="hero">
-          <div class="welcome-card"><div id="dashCrest"></div><img class="wm" id="wordmark" alt="Kappa Delta Rho">
-            <div class="wel">Welcome, Brothers, to <b>The Rho Chapter Mainframe</b></div>
-            <div class="motto">HONOR SUPER OMNIA</div>
-            <div class="milestone">&#9876;&#65039; Restored to <b>Full Chapter</b> in 2025 &mdash; after more than a decade</div></div>
-          <div class="metrics" id="dashMetrics"></div>
+        <div class="metrics rail-figs" id="dashMetrics"></div>
+<div class="grid g2">
+          <div class="card pad panel ann">
+            <h3><span class="ic">&#128227;</span> Announcements</h3><div id="annList"></div>
+            <div class="inline-add"><input id="annText" placeholder="New announcement..."><button onclick="addAnn()">Post</button></div></div>
+          <div class="card pad panel">
+            <h3><span class="ic">&#128197;</span> This Week's Events</h3><div id="evList"></div>
+            <div class="inline-add"><input id="evTitle" placeholder="Event"><input id="evDate" type="date" style="max-width:150px"><input id="evLoc" placeholder="Location"><button onclick="addEv()">Add</button></div></div>
         </div>
-        <div class="dash-gallery" id="dashGallery" style="display:none">
-          <div class="dg-head"><h3><span class="ic">&#128247;</span> Brotherhood</h3><button class="dg-all" onclick="go('gallery')">Open gallery &#8599;</button></div>
-          <div class="dg-strip" id="dashGalleryStrip"></div>
-        </div>
-        <div class="recap-card" id="recapCard">
+      <div class="recap-card" id="recapCard">
           <div class="recap-head">
             <div><div class="rc-tag" id="recapTag">Weekly Board Briefing</div><div class="rc-date" id="recapIssued"></div>
               <div class="rc-modes"><button class="rc-mode active" data-m="weekly" onclick="setRecapMode('weekly')">Weekly Briefing</button><button class="rc-mode" data-m="alumni" onclick="setRecapMode('alumni')">Alumni Conference</button></div><div class="rc-weeknav" id="weekNav"><button onclick="prevWeek()">&#9664; Prev</button><button onclick="thisWeek()">This week</button><button onclick="nextWeek()">Next &#9654;</button></div></div>
             <div class="rc-controls">
-              <button class="rc-play" id="playBtn" onclick="playRecap()">&#9658;&nbsp; Play briefing</button>
+              <button class="rec-ghost" onclick="document.getElementById('recapCard').classList.toggle('rc-open')">Details</button><button class="rc-play" id="playBtn" onclick="playRecap()">&#9658;&nbsp; Play briefing</button>
               <button class="rc-stop" id="stopBtn" onclick="stopRecap()" style="display:none">&#9632;&nbsp; Stop</button>
               <button class="mini-btn regen" onclick="regenRecap()">&#8635; Regenerate</button>
             </div>
@@ -1126,6 +1234,8 @@
           <div class="recap-body" id="recapBody"></div>
           <div class="creed-edit"><label>Startup recitation (spoken over the music at launch — opens with "Honor Super Omnia")</label><textarea id="creedBox" oninput="state.creed=this.value;save()"></textarea></div>
         </div>
+        
+        <details class="dash-fold" ontoggle="if(this.open)buildHomeCharts()"><summary>Chapter Points</summary>
         <div class="card pad" style="margin-bottom:22px">
           <h3 style="font-family:'Cinzel';letter-spacing:1.2px;font-size:14px;color:var(--cream);text-transform:uppercase;margin-bottom:10px"><span style="color:var(--orange)">&#10084;</span>&nbsp; Alumni Donations &mdash; Live</h3>
           <div id="dashTracker"></div>
@@ -1141,22 +1251,21 @@
             <div class="chart-box" style="height:260px"><canvas id="famHomeChart"></canvas></div>
             <div class="chart-box" style="height:260px"><canvas id="brotherHomeChart"></canvas></div>
           </div>
-        </div>
+        </details>
+        <details class="dash-fold" ontoggle="if(this.open)renderDonate()"><summary>Alumni Donations</summary>
         <div class="card pad" style="margin-bottom:22px">
-          <h3 style="font-family:'Cinzel';letter-spacing:1.2px;font-size:14px;color:var(--cream);text-transform:uppercase;margin-bottom:6px">Chapter Calendar</h3>
-          <div style="color:var(--cream-dim);font-size:12px;margin-bottom:14px">The live Google Calendar. The spoken briefing reads the <b>This Week's Events</b> list below — keep them in step with the calendar so the briefing stays accurate.</div>
-          <div class="cal-wrap"><iframe id="calFrameHome" loading="lazy"></iframe></div>
-          <div style="margin-top:14px"><a class="openb" id="calOpenHome" target="_blank" rel="noopener">Open in Google Calendar &#8599;</a></div>
+          <h3 style="font-family:'Cinzel';letter-spacing:1.2px;font-size:14px;color:var(--cream);text-transform:uppercase;margin-bottom:10px"><span style="color:var(--orange)">&#10084;</span>&nbsp; Alumni Donations &mdash; Live</h3>
+          <div id="dashTracker"></div>
+          <div class="grid g2" style="margin-top:18px">
+            <div style="text-align:center"><div id="dashDonateQR"></div><div style="margin-top:12px"><a class="openb" id="dashDonateBtn" target="_blank" rel="noopener">Open Donation Form &#8599;</a></div><div style="margin-top:8px"><button class="mini-btn" onclick="openDonateScreen()">&#9658;&nbsp; Donation Mode</button></div></div>
+            </details>
+        <details class="dash-fold" ontoggle="if(this.open)renderDashGallery()"><summary>Brotherhood Gallery</summary>
+        <div class="dash-gallery" id="dashGallery" style="display:none">
+          <div class="dg-head"><h3><span class="ic">&#128247;</span> Brotherhood</h3><button class="dg-all" onclick="go('gallery')">Open gallery &#8599;</button></div>
+          <div class="dg-strip" id="dashGalleryStrip"></div>
         </div>
-        <div class="grid g2">
-          <div class="card pad panel ann">
-            <h3><span class="ic">&#128227;</span> Announcements</h3><div id="annList"></div>
-            <div class="inline-add"><input id="annText" placeholder="New announcement..."><button onclick="addAnn()">Post</button></div></div>
-          <div class="card pad panel">
-            <h3><span class="ic">&#128197;</span> This Week's Events</h3><div id="evList"></div>
-            <div class="inline-add"><input id="evTitle" placeholder="Event"><input id="evDate" type="date" style="max-width:150px"><input id="evLoc" placeholder="Location"><button onclick="addEv()">Add</button></div></div>
-        </div>
-      </section>
+        </details>
+</section>
 
       <section class="view" id="v-standing">
         <div class="sec">My Standing &mdash; Personal Accountability</div>
@@ -2153,9 +2262,10 @@ function pushLog(kind,text){state.log.unshift({date:new Date().toISOString().sli
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download="rho-mainframe-backup.json";a.click();URL.revokeObjectURL(a.href);}
 function esc(s){return (s==null?'':''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
-const CRUMB={dash:'Dashboard',standing:'My Standing',meeting:'Chapter Meeting',recruit:'Recruitment Command',doorcount:'Function Control',guests:'Guest Lists',newmember:'New Member Workstation',register:'Event Registration',exec:'Exec Center',roster:'Roster',points:'Points & Families',social:'Social',calendar:'Calendar',giving:'Giving & Scholarship',finance:'Finance',minutes:'Meeting Minutes',officers:'Officers & Tasks',files:'Files',chat:'Chapter Chat',gallery:'Brotherhood Gallery',donate:'Support the Chapter',committees:'Committees & Workflow'};
-function go(t){const changed=cur!==t;cur=t;document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active','anim');});const el=document.getElementById('v-'+t);if(el){el.classList.add('active');if(changed){void el.offsetWidth;el.classList.add('anim');sfxTick();}}document.querySelectorAll('#sidenav button').forEach(b=>b.classList.toggle('active',b.dataset.v===t));document.querySelectorAll('#mtab button').forEach(b=>b.classList.toggle('active',b.dataset.mt===t));document.getElementById('crumb').textContent=CRUMB[t]||'';document.body.classList.remove('nav-open');const sc=document.querySelector('.scroll');if(sc)sc.scrollTop=0;
-  setTimeout(()=>{if(t==='finance')buildCharts();if(t==='giving')buildGiveCharts();if(t==='dash'){buildHomeCharts();renderDonate();renderDashGallery();}if(t==='donate')renderDonate();if(t==='committees')renderCommittees();if(t==='gallery')renderGallery();if(t==='standing')renderStanding();if(t==='recruit')renderRecruit();if(t==='doorcount')renderDoorCount();if(t==='guests')renderGuestCenter();if(t==='newmember')renderNM();if(t==='register')renderRegister();if(t==='meeting')renderMeeting();if(t==='exec')renderExec();if(t==='dash'){renderDashStanding();renderPresence();}},40);}
+const CRUMB={dash:'Command Deck',standing:'My Standing',meeting:'Chapter Meeting',recruit:'Recruitment Command',doorcount:'Function Control',guests:'Guest Lists',newmember:'New Member Workstation',register:'Event Registration',exec:'Exec Center',roster:'Roster',points:'Points & Families',social:'Social',calendar:'Calendar',giving:'Giving & Scholarship',finance:'Finance',minutes:'Meeting Minutes',officers:'Officers & Tasks',files:'Files',chat:'Chapter Chat',gallery:'Brotherhood Gallery',donate:'Support the Chapter',committees:'Committees & Workflow'};
+function go(t){const changed=cur!==t;cur=t;document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active','anim');});const el=document.getElementById('v-'+t);if(el){el.classList.add('active');if(changed){void el.offsetWidth;el.classList.add('anim');sfxTick();}}const _tgt=document.querySelector('#sidenav button[data-v="'+t+'"]');if(_tgt){const _body=_tgt.closest('.grp-body');if(_body&&!_body.classList.contains('open'))toggleDrawer(_body.id.replace('drawer-',''),true);}
+  document.querySelectorAll('#sidenav button').forEach(b=>b.classList.toggle('active',b.dataset.v===t));document.querySelectorAll('#mtab button').forEach(b=>b.classList.toggle('active',b.dataset.mt===t));document.getElementById('crumb').textContent=CRUMB[t]||'';document.body.classList.remove('nav-open');const sc=document.querySelector('.scroll');if(sc)sc.scrollTop=0;
+  setTimeout(()=>{if(t==='finance')buildCharts();if(t==='giving')buildGiveCharts();if(t==='dash'){buildHomeCharts();renderDonate();renderDashGallery();}if(t==='donate')renderDonate();if(t==='committees')renderCommittees();if(t==='gallery')renderGallery();if(t==='standing')renderStanding();if(t==='recruit')renderRecruit();if(t==='doorcount')renderDoorCount();if(t==='guests')renderGuestCenter();if(t==='newmember')renderNM();if(t==='register')renderRegister();if(t==='meeting')renderMeeting();if(t==='exec')renderExec();if(t==='dash'){renderDashStanding();renderPresence();if(innerWidth>=1700)document.querySelectorAll('.dash-fold').forEach(d=>d.open=true);}},40);}
 function toggleEdit(){editing=!editing;document.body.classList.toggle('editing',editing);const b=document.getElementById('editBtn');b.classList.toggle('on',editing);b.innerHTML=editing?'\u2713 Done':'\u270E Edit';if(!editing)flushPending();renderAll();}
 function toggleFs(){if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
 function tickClock(){const n=new Date();const c=document.getElementById('clock');if(c)c.innerHTML=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+' &middot; <b>'+n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</b>';}
@@ -2371,7 +2481,7 @@ function renderBalanceTable(){const t=document.getElementById('balanceTable');t.
 function addBalanceRow(){state.finance.balance.rows.push({label:'New',value:0});renderBalanceTable();refreshFin();}
 
 /* ---------- CALENDAR ---------- */
-function wireCalendar(){['calFrame','calFrameHome'].forEach(id=>{const fr=document.getElementById(id);if(fr&&!fr.src)fr.src=CAL_EMBED;});['calOpenBtn','calOpenHome'].forEach(id=>{const o=document.getElementById(id);if(o)o.href=CAL_OPEN;});}
+try{function wireCalendar(){['calFrame','calFrameHome'].forEach(id=>{const fr=document.getElementById(id);if(fr&&!fr.src)fr.src=CAL_EMBED;});['calOpenBtn','calOpenHome'].forEach(id=>{const o=document.getElementById(id);if(o)o.href=CAL_OPEN;});}}catch(e){}
 
 /* ---------- WEEKLY RECAP (AUDIO) ---------- */
 function lastSunday7(){const n=new Date();const d=new Date(n);d.setHours(7,0,0,0);d.setDate(d.getDate()-d.getDay());if(d>n)d.setDate(d.getDate()-7);return d;}
@@ -2412,7 +2522,7 @@ function speakTTS(){if(!('speechSynthesis'in window)){alert('This browser cannot
   window.speechSynthesis.speak(u);toggleRecapBtns(true);}
 function playRecap(){speakTTS();}
 function stopRecap(){if('speechSynthesis'in window){try{window.speechSynthesis.cancel()}catch(e){}}if(briefingAudio){try{briefingAudio.pause()}catch(e){}}toggleRecapBtns(false);}
-function buildHomeCharts(){const fs=famTotals();
+function buildHomeCharts(){const cnv=document.getElementById('famHomeChart');const fold=cnv&&cnv.closest('details');if(fold&&!fold.open)return;const fs=famTotals();
   mk('famHomeChart','famHome',{type:'bar',data:{labels:fs.map(f=>f.name),datasets:[{label:'Family Points',data:fs.map(f=>f.points),backgroundColor:[C.orange,C.gold,C.blue,C.good,'#9b6dd6',C.cream],borderRadius:6}]},options:Object.assign(baseOpts(),{plugins:{legend:{display:false},title:{display:true,text:'Family Points',color:'#C9A84C',font:{family:'Cinzel',size:12}}}})});
   const bro=memberTotals('life').slice(0,6);
   mk('brotherHomeChart','broHome',{type:'bar',data:{labels:bro.map(b=>b.who),datasets:[{label:'Points',data:bro.map(b=>b.points),backgroundColor:C.gold,borderRadius:6}]},options:Object.assign({indexAxis:'y'},baseOpts(),{plugins:{legend:{display:false},title:{display:true,text:'Top Brothers',color:'#C9A84C',font:{family:'Cinzel',size:12}}}})});}
@@ -3571,16 +3681,17 @@ function printDiscipline(id){const r=(execData.records||[]).find(x=>x.id===id);i
     <p style="margin-top:14px">Consul signature ______________________________ &nbsp; Date ______________</p>`);}
 /* ---- Funding requests (plain) ---- */
 function newFunding(){modalFields([
-    {k:'who',l:'Requested by',v:meName()||''},
-    {k:'position',l:'Position / committee',v:''},
-    {k:'amount',l:'Amount ($)',v:''},
-    {k:'purpose',l:'Purpose',v:''},
-    {k:'account',l:'Budget line (e.g. Social, Philanthropy)',v:''},
-    {k:'needed',l:'Needed by (YYYY-MM-DD)',v:''}
-  ],'Funding Request',vals=>{state.funding.unshift(Object.assign({id:uid(),ts:Date.now(),date:new Date().toISOString().slice(0,10),status:'Pending'},vals));renderFundingList();save();});}
+    {k:'purpose',l:'Event name',v:''},
+    {k:'who',l:'Event coordinator',v:meName()||''},
+    {k:'cohost',l:'Co-hosting organizations',v:'None'},
+    {k:'amount',l:'Amount requested ($)',v:''},
+    {k:'reimb',l:'Reimbursement?',v:'Y',sel:[['Y','Yes — money already spent'],['N','No — funds needed up front']]},
+    {k:'explain',l:'Explanation for need of funds',v:''}
+  ],'KDR Funding Request',vals=>{state.funding.unshift(Object.assign({id:uid(),ts:Date.now(),date:new Date().toISOString().slice(0,10),status:'Pending'},vals));renderFundingList();save();
+    syncToast('Filed. Print the official form from Finance → Reimbursements.');});}
 function renderFundingList(){renderFundingPublic();const l=document.getElementById('fundingList');if(!l)return;
   l.innerHTML=state.funding.length?state.funding.map(r=>`<div class="reg-card card">
-      <div class="rg-main"><b>${money(+r.amount||0)} — ${esc(r.purpose||'')}</b>
+      <div class="rg-main"><b>${money(+r.amount||0)} — ${esc(r.purpose||'')}${r.reimb==='Y'?' <span class=\'conf-chip\' style=\'border-color:rgba(95,179,122,.5);color:var(--good)\'>REIMBURSE</span>':''}</b>
         <span class="rg-meta">${esc(r.who)}${r.position?' ('+esc(r.position)+')':''} · ${esc(r.account||'')} · filed ${esc(r.date)}${r.needed?' · needed '+esc(r.needed):''}</span></div>
       <div class="rg-side"><select class="rg-status ${r.status==='Approved'?'s-approved':r.status==='Denied'?'':'s-submitted'}" onchange="const f=state.funding.find(x=>x.id==='${r.id}');f.status=this.value;renderFundingList();save()">
           ${['Pending','Approved','Denied'].map(x=>`<option ${r.status===x?'selected':''}>${x}</option>`).join('')}</select>
@@ -3588,18 +3699,21 @@ function renderFundingList(){renderFundingPublic();const l=document.getElementBy
         <button class="mini-btn" onclick="state.funding=state.funding.filter(x=>x.id!=='${r.id}');renderFundingList();save()">Delete</button></div></div>
     </div>`).join(''):'<div class="card pad" style="color:var(--cream-dim);font-size:13px">No funding requests.</div>';}
 function printFunding(id){const r=state.funding.find(x=>x.id===id);if(!r)return;
-  printFormSheet('Funding Request Form',`
-    <p>Date: ${fillLine(r.date,140)} &nbsp; Requested by: ${fillLine(r.who,220)} &nbsp; Position: ${fillLine(r.position,180)}</p>
-    <p>Amount requested: ${fillLine(money(+r.amount||0),140)} &nbsp; Budget line: ${fillLine(r.account,200)}</p>
-    <p class="rs-sec">Purpose</p><p>${esc(r.purpose||'')}</p>
-    ${r.needed?`<p>Funds needed by: ${fillLine(r.needed,140)}</p>`:''}
-    <p style="margin-top:30px">Quaestor approval ______________________________ &nbsp; Date ______________</p>
-    <p style="margin-top:14px">Consul approval ______________________________ &nbsp; Date ______________</p>`);}
+  printFormSheet('Kappa Delta Rho - Rho Formal Funding Request Form',`
+    <p style="margin-top:14px">Event Name: ${fillLine(r.purpose,320)}</p>
+    <p>Event Coordinator: ${fillLine(r.who,300)}</p>
+    <p>Co-Hosting Organizations: ${fillLine(r.cohost||'None',260)}</p>
+    <p>Amount Requested: ${fillLine(money(+r.amount||0),180)} &nbsp;&nbsp; Reimbursement?&nbsp; ${r.reimb==='Y'?'<b>Y</b> / N':'Y / <b>N</b>'}</p>
+    <p class="rs-sec">Explanation for need of funds</p>
+    <p>${esc(r.explain||r.account||'')}</p>
+    <p style="margin-top:26px">Quester Approval&nbsp; ${r.status==='Approved'?'<b>Y</b> / N':'Y / N'} &nbsp;&nbsp;&nbsp; Consul Approval&nbsp; ${r.status==='Approved'?'<b>Y</b> / N':'Y / N'}</p>
+    <p style="margin-top:26px">Consul Signature ________________________________</p>
+    <p style="margin-top:16px">Quester Signature ________________________________</p>`);}
 function renderFundingPublic(){const l=document.getElementById('fundingListPublic');if(!l)return;
   const ex=(typeof execData!=='undefined'&&execData!==null);
   l.innerHTML=state.funding.length?state.funding.map(r=>`<div class="reg-card card">
-      <div class="rg-main"><b>${money(+r.amount||0)} — ${esc(r.purpose||'')}</b>
-        <span class="rg-meta">${esc(r.who)}${r.position?' ('+esc(r.position)+')':''} · ${esc(r.account||'')} · filed ${esc(r.date)}</span></div>
+      <div class="rg-main"><b>${money(+r.amount||0)} — ${esc(r.purpose||'')}${r.reimb==='Y'?' <span class="conf-chip" style="border-color:rgba(95,179,122,.5);color:var(--good)">REIMBURSE</span>':''}</b>
+        <span class="rg-meta">${esc(r.who)}${r.cohost&&r.cohost!=='None'?' · with '+esc(r.cohost):''} · filed ${esc(r.date)}</span></div>
       <div class="rg-side">${ex?`<select class="rg-status ${r.status==='Approved'?'s-approved':r.status==='Denied'?'':'s-submitted'}" onchange="const f=state.funding.find(x=>x.id==='${r.id}');f.status=this.value;renderFundingList();save()">
           ${['Pending','Approved','Denied'].map(x=>`<option ${r.status===x?'selected':''}>${x}</option>`).join('')}</select>`
         :`<span class="sp-status ${r.status==='Approved'?'received':'pledged'}">${esc(r.status)}</span>`}
@@ -3843,10 +3957,23 @@ function renderDoorCount(){const map=document.getElementById('dcMap');if(!map)re
       ${editing?`<label class="dz-cap">cap <input type="number" min="0" value="${cap2}" onchange="state.doorcaps['${z.id}']=Math.max(0,+this.value||0);renderDoorCount();save()"></label>`:''}
     </div>`;}).join('');}
 
+
+/* ---- nav drawers ---- */
+function drawerState(){try{return JSON.parse(localStorage.getItem('navDrawers')||'{}');}catch(e){return {};}}
+function toggleDrawer(id,force){const b=document.getElementById('drawer-'+id);const t=document.querySelector('[data-drawer="'+id+'"]');if(!b)return;
+  const open=force!==undefined?force:!b.classList.contains('open');
+  b.classList.toggle('open',open);if(t)t.classList.toggle('open',open);
+  const st=drawerState();st[id]=open;try{localStorage.setItem('navDrawers',JSON.stringify(st));}catch(e){}}
+function initDrawers(){const st=drawerState();['admin','treasury'].forEach(id=>{if(st[id])toggleDrawer(id,true);});}
 /* ---------- COMMAND PALETTE / GLOBAL SEARCH (Ctrl/Cmd+K) ---------- */
 let cmdItems=[],cmdSel=0;
 function cmdIndex(){const out=[];
-  const navs=[['dash','Dashboard','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['guests','Guest Lists','&#128203;'],['newmember','New Member Workstation','&#127891;'],['register','Event Registration','&#128221;'],['exec','Exec Center','&#128274;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
+  out.push({label:'Log service hours',sub:'Action',icon:'&#9201;',view:'standing'});
+  out.push({label:'Check in with code',sub:'Action',icon:'&#10003;',view:'standing'});
+  out.push({label:'New reimbursement',sub:'Action',icon:'&#36;',view:'finance'});
+  out.push({label:'Raise a motion',sub:'Action',icon:'&#9995;',view:'meeting'});
+  out.push({label:'Post announcement',sub:'Action',icon:'&#128227;',view:'dash'});
+  const navs=[['dash','Command Deck','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['guests','Guest Lists','&#128203;'],['newmember','New Member Workstation','&#127891;'],['register','Event Registration','&#128221;'],['exec','Exec Center','&#128274;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
   navs.forEach(n=>out.push({label:n[1],sub:'Section',icon:n[2],view:n[0]}));
   (state.members||[]).forEach(m=>{if(m.name)out.push({label:m.name,sub:(m.role?m.role+' · ':'')+(m.status==='alumni'?'Alumnus':m.status==='new'?'New Member':'Active Brother')+(m.year?" · '"+(''+m.year).slice(-2):''),icon:'&#128100;',view:'roster',url:m.email?('mailto:'+m.email):null});});
   (state.positions||[]).forEach(p=>{if(p.holder)out.push({label:p.holder,sub:p.roman+' · '+p.role,icon:'&#11088;',view:'officers'});});
@@ -3870,7 +3997,9 @@ function cmdRender(q){q=(q||'').trim().toLowerCase();const r=document.getElement
 function cmdHi(){document.querySelectorAll('#cmdResults .cmd-row').forEach((el,i)=>el.classList.toggle('sel',i===cmdSel));}
 function cmdGo(i){const list=cmdItems._f||[];const it=list[i];if(!it)return;closeCmd();if(it.view)go(it.view);if(it.url){setTimeout(()=>{try{window.open(it.url,it.url.indexOf('mailto:')===0?'_self':'_blank');}catch(e){}},60);}}
 function cmdKey(e){const list=cmdItems._f||[];if(e.key==='ArrowDown'){e.preventDefault();cmdSel=Math.min(cmdSel+1,list.length-1);cmdHi();}else if(e.key==='ArrowUp'){e.preventDefault();cmdSel=Math.max(cmdSel-1,0);cmdHi();}else if(e.key==='Enter'){e.preventDefault();cmdGo(cmdSel);}else if(e.key==='Escape'){closeCmd();}}
-window.addEventListener('keydown',function(e){if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();const p=document.getElementById('cmdPalette');if(p&&p.classList.contains('show'))closeCmd();else openCmd();}});
+window.addEventListener('keydown',function(e){
+  if(e.key==='/'&&!e.metaKey&&!e.ctrlKey){const t=e.target;if(!(t&&t.matches&&t.matches('input,textarea,select,[contenteditable]'))){e.preventDefault();openCmd();return;}}
+  if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();const p=document.getElementById('cmdPalette');if(p&&p.classList.contains('show'))closeCmd();else openCmd();}});
 function renderDashGallery(){const wrap=document.getElementById('dashGallery');const strip=document.getElementById('dashGalleryStrip');if(!wrap||!strip)return;
   const list=state.gallery.slice(0,8);if(!list.length){wrap.style.display='none';return;}
   wrap.style.display='';strip.innerHTML=list.map(p=>{const i=state.gallery.indexOf(p);return `<button class="dg-thumb" onclick="go('gallery');setTimeout(()=>openLightbox(${i}),60)"><img loading="lazy" src="${p.src}" alt="${escAttr(p.cap||'Chapter photo')}"></button>`;}).join('');}
@@ -3897,7 +4026,7 @@ async function init(){
   if(window.speechSynthesis){try{window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){};}catch(e){}}
   const cn=document.getElementById('chatName');if(cn)cn.value=chatNick();loadChat();setInterval(()=>{if(!fbLive())loadChat();},5000);startIdle();fetchDonations();setInterval(fetchDonations,30000);wirePhotoInput();
   fetchTasks();if(taskTimer)clearInterval(taskTimer);taskTimer=setInterval(function(){if(tasksCsvUrl())fetchTasks();},45000);
-  cloudLoadGallery();setTimeout(maybeInstallBanner,2500);setTimeout(weeklySnapshot,8000);setInterval(cloudRefreshBoard,30000);setInterval(cloudRefreshGallery,25000);setInterval(pollMotions,4000);
+  initDrawers();cloudLoadGallery();setTimeout(maybeInstallBanner,2500);setTimeout(weeklySnapshot,8000);setInterval(cloudRefreshBoard,30000);setInterval(cloudRefreshGallery,25000);setInterval(pollMotions,4000);
   setSync(fbLive()?'live':(window.storage&&window.storage._netlify?'cloud':(fbConfigured()?(BOARD_KEY?'offline':'locked'):'local')));
   if(fbLive()&&state.recruit.rushCode)bindRushInbox();
   if(!fbLive())lsLoadDoor();
