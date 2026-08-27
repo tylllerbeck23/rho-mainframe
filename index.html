@@ -349,6 +349,7 @@
   .quick-actions button{display:flex;flex-direction:column;align-items:center;gap:5px;background:linear-gradient(160deg,var(--navy-2),var(--navy-1));border:1px solid var(--line);border-top:2px solid rgba(201,168,76,.35);border-radius:4px;padding:11px 6px;color:var(--cream);font-family:'Cinzel';font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:.14s;box-shadow:0 2px 0 rgba(0,0,0,.35)}
   .quick-actions button:hover{border-color:var(--gold);transform:translateY(-2px);color:var(--gold)}
   .quick-actions button span{font-size:19px;line-height:1}
+  .quick-actions button svg{width:20px;height:20px;opacity:.85}
 
   /* ===== v19 — Brotherhood Gallery, lightbox, dashboard strip, PWA polish ===== */
   .gallery-hero{position:relative;display:flex;gap:22px;align-items:center;background:
@@ -1004,6 +1005,16 @@
     padding:6px 8px;border-radius:4px;cursor:pointer;transition:.12s;border-bottom:1px dashed var(--line-soft)}
   .nm-item:hover{background:rgba(255,255,255,.04);color:var(--cream)}
   .nm-item.done{color:var(--good);text-decoration:line-through;text-decoration-color:rgba(95,179,122,.5)}
+
+  .install-banner{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:90;display:flex;align-items:center;gap:18px;
+    max-width:min(560px,92vw);background:linear-gradient(160deg,var(--navy-2),var(--navy-1));border:1px solid var(--gold);
+    border-radius:6px;box-shadow:0 3px 0 rgba(0,0,0,.45),0 22px 44px -18px rgba(0,0,0,.8);padding:15px 18px;animation:mbIn .4s cubic-bezier(.2,.7,.3,1)}
+  .install-banner b{display:block;font-family:'Cinzel';font-size:13px;color:var(--cream);letter-spacing:.5px}
+  .install-banner span{font-size:12px;color:var(--cream-dim)}
+  .ib-btns{display:flex;gap:8px;flex:none}
+  .ib-go{background:var(--orange);color:#1a0e02;border:none;border-radius:4px;padding:10px 18px;font-weight:700;font-size:12.5px;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.4)}
+  .ib-later{background:none;border:1px solid var(--line);color:var(--cream-dim);border-radius:4px;padding:10px 14px;font-size:12px;cursor:pointer}
+  @media(max-width:880px){.install-banner{bottom:88px}}
 </style>
 </head>
 <body>
@@ -1062,7 +1073,7 @@
       <div class="tools">
         <button class="cmd-trigger" onclick="openCmd()" title="Search the board (Ctrl/Cmd + K)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><span>Search</span><kbd>&#8984;K</kbd></button>
         <span class="sync-pill" id="syncPill" title="Sync status"><span class="sync-dot"></span><span id="syncLabel">Local</span></span>
-        <button class="tool share-btn" onclick="openShare()" title="Share the Mainframe with brothers">&#128228; Share</button>
+        <button class="tool share-btn" onclick="openShare()" title="Share the Mainframe with brothers">Share</button>
         <button class="tool" id="installBtn" onclick="installApp()" title="Install / Save as App">&#11015; Save App</button>
         <button class="tool" id="sfxBtn" onclick="toggleSfx()" title="Interface sounds on/off">&#128266;</button>
         <button class="tool" onclick="toggleFs()" title="Fullscreen">&#9974;</button>
@@ -1076,14 +1087,14 @@
 
       <section class="view active" id="v-dash">
         <div class="quick-actions">
-          <button onclick="go('standing')"><span>&#127919;</span>Standing</button>
-          <button onclick="enterMeetingMode()"><span>&#9878;</span>Meeting</button>
-          <button onclick="go('recruit')"><span>&#129309;</span>Recruit</button>
-          <button onclick="go('doorcount')"><span>&#128682;</span>Function</button>
-          <button onclick="go('points')"><span>&#127942;</span>Points</button>
-          <button onclick="go('chat')"><span>&#128172;</span>Chat</button>
-          <button onclick="go('gallery')"><span>&#128247;</span>Gallery</button>
-          <button onclick="newFunding()"><span>&#128181;</span>Reimburse</button>
+          <button onclick="go('standing')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>Standing</button>
+          <button onclick="enterMeetingMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M13.5 4.5l6 6M11 7l6 6M14.5 3.5l6 6-2 2-6-6zM9 9l6 6-2 2-6-6z"/><path d="M3 21h9M5.5 18.5L11 13"/></svg>Meeting</button>
+          <button onclick="go('recruit')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 6a3 3 0 010 6M21 20a5 5 0 00-5-5"/></svg>Recruit</button>
+          <button onclick="go('doorcount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 12h7v9M10 3v9"/></svg>Function</button>
+          <button onclick="go('points')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0zM7 6H4a3 3 0 003 5M17 6h3a3 3 0 01-3 5"/></svg>Points</button>
+          <button onclick="go('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h16v11H9l-5 4z"/></svg>Chat</button>
+          <button onclick="go('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5L5 19"/></svg>Gallery</button>
+          <button onclick="newFunding()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.5" y="6" width="19" height="12" rx="1.5"/><circle cx="12" cy="12" r="2.8"/></svg>Reimburse</button>
         </div>
         <div class="dash-pair">
           <div class="dash-standing card" id="dashStanding"></div>
@@ -1214,7 +1225,7 @@
       <section class="view" id="v-guests">
         <div class="sec">Guest Lists</div>
         <div class="card pad" style="margin-bottom:18px">
-          <div class="prae-top"><b>&#128203; Door lists for every function</b>
+          <div class="prae-top"><b>Door Lists for Every Function</b>
             <span class="gallery-count">Tap a name at the door to cross it off. Lists share live across every phone.</span></div>
           <div class="inline-add" style="margin-top:12px"><input id="glNewName" placeholder="New list (e.g. Formal 2026, Country Night)" onkeydown="if(event.key==='Enter')createGuestList()"><button onclick="createGuestList()">Create list</button></div>
         </div>
@@ -1300,11 +1311,11 @@
       <section class="view" id="v-newmember">
         <div class="sec">New Member Workstation</div>
         <div class="card pad" style="margin-bottom:18px">
-          <div class="prae-top"><b>&#127891; The path to brotherhood</b>
+          <div class="prae-top"><b>The Path to Brotherhood</b>
             <div class="prae-btns">
               <a class="rec-ghost" style="text-decoration:none" href="https://docs.google.com/document/d/1c9oOse0jHfgR5cCZgEz7y9uYTRbqDMgW34geX3vcIjE/edit" target="_blank" rel="noopener">Syllabus ↗</a>
               <a class="rec-ghost" style="text-decoration:none" href="https://docs.google.com/document/d/1gV2NzN25TYXkjyipnnExTU-KhOw9aKWv9G1rUjCPwGA/edit" target="_blank" rel="noopener">Bid acceptance ↗</a>
-              <button class="gallery-add" onclick="addNewMember()"><span>&#127881;</span> Add new member</button></div></div>
+              <button class="gallery-add" onclick="addNewMember()">Add New Member</button></div></div>
           <p class="lead" style="font-size:12.5px;margin-top:8px">Run by the <b>Junior Tribune</b> — <span id="nmJt">Nicholas Pignolo</span>. Track every new member's milestones — tap a box to check it off. Progress syncs to every device.</p>
         </div>
         <div id="nmGrid"></div>
@@ -1395,8 +1406,8 @@
       <section class="view" id="v-finance">
         <div class="sec">Chapter Finance</div>
         <div class="card pad" style="margin-bottom:20px">
-          <div class="prae-top"><b>&#128181; Reimbursements &amp; Funding Requests</b>
-            <button class="gallery-add" onclick="newFunding()"><span>&#128181;</span> Request reimbursement</button></div>
+          <div class="prae-top"><b>Reimbursements &amp; Funding Requests</b>
+            <button class="gallery-add" onclick="newFunding()">Request Reimbursement</button></div>
           <p class="lead" style="font-size:12px;margin:8px 0 12px">Any brother can file one — what you bought and why. The Quaestor and Consul approve from the Exec Center.</p>
           <div id="fundingListPublic"></div>
         </div>
@@ -1506,7 +1517,7 @@
   </div>
 </div>
 <div class="modal-bg" id="shareModal" onclick="if(event.target.id==='shareModal')document.getElementById('shareModal').classList.remove('show')"><div class="modal" style="max-width:430px;text-align:center">
-  <h3>&#128228;&nbsp; Share the Mainframe</h3>
+  <h3>Share the Mainframe</h3>
   <p style="color:var(--cream-dim);font-size:13px;margin:6px 0 14px">One link. Every brother. Phones, laptops, the smartboard.</p>
   <div class="share-link" id="shareLink" onclick="copyShare()" role="button" title="Tap to copy">kresentapp2.netlify.app</div>
   <div class="iq-code" id="shareQr" style="margin:16px auto 6px"></div>
@@ -1515,6 +1526,7 @@
     <button class="btn-save" onclick="copyShare()">Copy link</button>
     <button class="btn-save" id="nativeShareBtn" onclick="nativeShare()">Share&hellip;</button>
     <button class="btn-cancel" onclick="document.getElementById('shareModal').classList.remove('show')">Close</button></div>
+  <p style="margin-top:12px"><button class="mini-btn" onclick="document.getElementById('shareModal').classList.remove('show');installApp()">How to install it as an app &rarr;</button></p>
 </div></div>
 <div class="modal-bg" id="memberProfile" onclick="if(event.target.id==='memberProfile')closeMemberProfile()"><div class="modal mp-modal"><div id="mpBody"></div></div></div>
 <div class="modal-bg" id="pnmProfile" onclick="if(event.target.id==='pnmProfile')closePnm()"><div class="modal pnm-modal"><div id="pnmBody"></div></div></div>
@@ -3166,13 +3178,13 @@ function printMinutesSheet(m){m=m||mlState();
   setTimeout(()=>{try{window.print();}catch(e){done();}},60);}
 function renderPraetor(){const c=document.getElementById('praetorConsole');if(!c)return;const m=mlState();
   if(!m.active){c.innerHTML=`<div class="card pad prae-idle">
-      <div><b>&#128209; Praetor Console</b><span>Run the meeting from here — roll call, motions, points of order, votes — and the minutes write themselves in the chapter's exact format.</span></div>
-      <button class="gallery-add" onclick="mlStart()"><span>&#9997;</span> Start taking minutes</button></div>`;return;}
+      <div><b>Praetor Console</b><span>Run the meeting from here — roll call, motions, points of order, votes — and the minutes write themselves in the chapter's exact format.</span></div>
+      <button class="gallery-add" onclick="mlStart()">Start Taking Minutes</button></div>`;return;}
   const names=Object.keys(m.roll||{});const absent=names.filter(n=>m.roll[n]==='Absent').length;
   c.innerHTML=`<div class="card pad prae">
-    <div class="prae-top"><b>&#128209; Taking minutes — called to order ${esc(m.called)}</b>
+    <div class="prae-top"><b>Taking minutes — called to order ${esc(m.called)}</b>
       <div class="prae-btns"><button class="rec-ghost" onclick="printMinutesSheet()">Preview PDF</button>
-      <button class="gallery-add" onclick="mlEnd()"><span>&#9878;</span> Close meeting &amp; make minutes</button></div></div>
+      <button class="gallery-add" onclick="mlEnd()">Close Meeting &amp; Generate Minutes</button></div></div>
     <div class="sec-sub" style="margin-top:14px">Roll Call <span class="gallery-count">${names.length-absent} present · ${absent} absent — tap to flip</span></div>
     <div class="prae-roll">${names.map(n=>`<button class="roll-chip ${m.roll[n]==='Absent'?'abs':''}" onclick="mlToggleRoll('${escAttr(n)}')">${esc(n.split(' ')[0])}</button>`).join('')}</div>
     <div class="sec-sub">Agenda</div>
@@ -3256,7 +3268,7 @@ async function cloudSaveGallery(){if(!cloudMode())return;
   try{const str=JSON.stringify(state.gallery);if(str.length>4400000){syncToast('Album is getting big — oldest photos may need pruning to keep syncing.');return;}
     await window.storage.set('rho-gallery',str);lastCloudGal=str;}catch(e){}}
 /* ---- motions from the floor (any brother's phone -> the main screen) ---- */
-function raiseMotion(){modalFields([{k:'by',l:'Your name',v:meName()||chatNick()||''},{k:'text',l:'Your motion',v:''}],'✋ Raise a Motion from the Floor',async vals=>{
+function raiseMotion(){modalFields([{k:'by',l:'Your name',v:meName()||chatNick()||''},{k:'text',l:'Your motion',v:''}],'Raise a Motion from the Floor',async vals=>{
   if(!vals.text.trim())return;
   const m={id:uid(),by:vals.by.trim()||'A brother',text:vals.text.trim(),ts:Date.now(),status:'pending'};
   if(cloudMode()){try{const r=await window.storage.get('rho-motions');let arr=r&&r.value?JSON.parse(r.value):[];arr.push(m);if(arr.length>40)arr=arr.slice(-40);
@@ -3284,10 +3296,10 @@ function recordFloorMotion(id){const m=motionsLive.find(x=>x.id===id);if(!m)retu
 function renderMotionQueue(){const c=document.getElementById('motionBoard');if(!c)return;
   const pending=motionsLive.filter(m=>m.status==='pending');
   c.innerHTML=`<div class="motion-bar">
-    <button class="raise-btn" onclick="raiseMotion()">✋ Raise a motion</button>
+    <button class="raise-btn" onclick="raiseMotion()">Raise a Motion</button>
     <span class="gallery-count">${cloudMode()?'Motions appear on every screen within seconds.':'Motions appear on this screen.'}</span></div>`+
     pending.map(m=>`<div class="motion-banner">
-      <div class="mb-tag">✋ MOTION FROM THE FLOOR</div>
+      <div class="mb-tag">MOTION FROM THE FLOOR</div>
       <div class="mb-body"><b>${esc(m.by)}</b> moves: ${esc(m.text)}</div>
       <div class="mb-btns"><button class="mini-btn ok" onclick="recordFloorMotion('${m.id}')">Second &amp; record</button>
       <button class="mini-btn" onclick="setMotionStatus('${m.id}','dismissed')">Dismiss</button></div>
@@ -3397,6 +3409,23 @@ function renderNM(){const g=document.getElementById('nmGrid');if(!g)return;
   const pb=document.getElementById('nmProgramBox');if(pb){pb.innerHTML=state.nmProgram.map((ms,i)=>editing?
     `<div class="inline-add" style="margin-bottom:6px"><input value="${escAttr(ms.title)}" onchange="state.nmProgram[${i}].title=this.value;renderNM();save()"><button onclick="state.nmProgram.splice(${i},1);renderNM();save()">×</button></div>`:
     `<div class="pi-line note">- ${esc(ms.title)}</div>`).join('')+(editing?'<button class="mini-btn ok" style="margin-top:8px" onclick="state.nmProgram.push({id:uid(),title:\'New milestone\'});renderNM();save()">+ Add milestone</button>':'');}}
+
+/* ================== INSTALL BANNER (one-time) + WEEKLY SNAPSHOT ================== */
+function maybeInstallBanner(){try{
+  if(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)return;   /* already installed */
+  if(navigator.standalone)return;
+  if(localStorage.getItem('rho-install-seen'))return;
+  if(!(location.protocol==='https:'))return;
+  const b=document.createElement('div');b.className='install-banner';b.innerHTML=
+    `<div><b>Put the Mainframe on your home screen.</b><span>One tap — it installs like a real app and works offline.</span></div>
+     <div class="ib-btns"><button class="ib-go" onclick="localStorage.setItem('rho-install-seen','1');this.closest('.install-banner').remove();installApp()">Install</button>
+     <button class="ib-later" onclick="localStorage.setItem('rho-install-seen','1');this.closest('.install-banner').remove()">Later</button></div>`;
+  document.body.appendChild(b);}catch(e){}}
+function weeklySnapshot(){try{
+  if(!cloudMode())return;
+  const wk=weekKey();if(localStorage.getItem('rho-snap-week')===wk)return;
+  const str=JSON.stringify(Object.assign({},state,{gallery:[]}));
+  window.storage.set('rho-backup:'+wk,str).then(ok=>{if(ok)try{localStorage.setItem('rho-snap-week',wk);}catch(e){}});}catch(e){}}
 
 /* ================== SHARE ================== */
 const SHARE_URL='https://kresentapp2.netlify.app/';
@@ -3843,7 +3872,7 @@ async function init(){
   if(window.speechSynthesis){try{window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){};}catch(e){}}
   const cn=document.getElementById('chatName');if(cn)cn.value=chatNick();loadChat();setInterval(()=>{if(!fbLive())loadChat();},5000);startIdle();fetchDonations();setInterval(fetchDonations,30000);wirePhotoInput();
   fetchTasks();if(taskTimer)clearInterval(taskTimer);taskTimer=setInterval(function(){if(tasksCsvUrl())fetchTasks();},45000);
-  cloudLoadGallery();setInterval(cloudRefreshBoard,30000);setInterval(cloudRefreshGallery,25000);setInterval(pollMotions,4000);
+  cloudLoadGallery();setTimeout(maybeInstallBanner,2500);setTimeout(weeklySnapshot,8000);setInterval(cloudRefreshBoard,30000);setInterval(cloudRefreshGallery,25000);setInterval(pollMotions,4000);
   setSync(fbLive()?'live':(window.storage&&window.storage._netlify?'cloud':(fbConfigured()?(BOARD_KEY?'offline':'locked'):'local')));
   if(fbLive()&&state.recruit.rushCode)bindRushInbox();
   if(!fbLive())lsLoadDoor();
