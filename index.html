@@ -91,7 +91,7 @@
   @media(max-width:900px){.hero{grid-template-columns:1fr}}
   .welcome-card{position:relative;overflow:hidden;text-align:center;padding:20px 22px;background:linear-gradient(160deg,var(--navy-2),var(--navy-1));border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
   .welcome-card .wm{width:clamp(130px,30%,170px);margin:0 auto 6px;display:block;filter:drop-shadow(0 6px 16px rgba(0,0,0,.45))}
-  .welcome-card .crest{max-height:104px;margin-bottom:4px;filter:drop-shadow(0 12px 26px rgba(0,0,0,.5))}
+  .welcome-card .crest{max-height:128px;margin-bottom:4px;filter:drop-shadow(0 12px 26px rgba(0,0,0,.5))}
   .welcome-card .wel{font-family:'Cormorant Garamond';font-style:italic;font-size:clamp(20px,2.6vw,27px);color:var(--cream);margin-top:8px}
   .welcome-card .wel b{font-style:normal;color:var(--gold)}
   .welcome-card .motto{margin-top:14px;display:inline-block;font-family:'Cinzel';letter-spacing:3px;font-size:11.5px;color:var(--gold);border:1px solid var(--line);padding:7px 18px;border-radius:30px}
@@ -344,7 +344,7 @@
   .rc-weeknav{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
   .rc-weeknav button{font-family:'Montserrat';font-size:11px;background:rgba(255,255,255,.05);color:var(--cream-dim);border:1px solid var(--line);padding:6px 12px;border-radius:8px;cursor:pointer}
   .rc-weeknav button:hover{border-color:var(--gold);color:var(--cream)}
-  .quick-actions{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-bottom:18px}
+  .quick-actions{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;margin-bottom:18px}
   @media(max-width:980px){.quick-actions{grid-template-columns:repeat(4,1fr)}}
   .quick-actions button{display:flex;flex-direction:column;align-items:center;gap:5px;background:linear-gradient(160deg,var(--navy-2),var(--navy-1));border:1px solid var(--line);border-top:2px solid rgba(201,168,76,.35);border-radius:4px;padding:11px 6px;color:var(--cream);font-family:'Cinzel';font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:.14s;box-shadow:0 2px 0 rgba(0,0,0,.35)}
   .quick-actions button:hover{border-color:var(--gold);transform:translateY(-2px);color:var(--gold)}
@@ -832,7 +832,7 @@
      Replaces the generic soft-glow dark-app look. */
   :root{--r:5px;--shadow:0 2px 0 rgba(0,0,0,.4),0 14px 26px -20px rgba(0,0,0,.8);--shadow-sm:0 2px 0 rgba(0,0,0,.35)}
   body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;
-    background-image:repeating-linear-gradient(45deg,transparent 0 5px,rgba(244,236,216,.5) 5px 6px),repeating-linear-gradient(-45deg,transparent 0 5px,rgba(244,236,216,.3) 5px 6px)}
+    background-image:repeating-linear-gradient(45deg,transparent 0 5px,rgba(244,236,216,.35) 5px 6px),repeating-linear-gradient(-45deg,transparent 0 5px,rgba(244,236,216,.2) 5px 6px)}
   .app{position:relative;z-index:1}
   aside{border-right:3px double var(--line)}
   .side-crest{border-bottom:3px double var(--line-soft)}
@@ -986,6 +986,24 @@
     .mtab button.active span{filter:drop-shadow(0 0 6px rgba(224,188,94,.5))}
     .scroll{padding-bottom:84px!important}
   }
+
+  .guest-row{cursor:pointer;transition:.12s}
+  .guest-row:hover{background:rgba(255,255,255,.04)}
+  .guest-row.crossed .gr-name{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--orange);color:var(--cream-dim2)}
+  .guest-row.crossed{opacity:.75}
+
+  .share-btn{color:var(--gold-br);border-color:rgba(224,188,94,.4)}
+  .share-link{font-family:'Cinzel';font-weight:700;font-size:17px;letter-spacing:1px;color:var(--gold-br);background:rgba(0,0,0,.3);
+    border:1.5px dashed var(--gold);border-radius:4px;padding:13px;cursor:pointer;user-select:all}
+  .share-link:hover{background:rgba(201,168,76,.08)}
+  .nm-head{display:flex;align-items:center;gap:12px}
+  .nm-head b{display:block;font-family:'Cinzel';font-size:14px}
+  .nm-pct{margin-left:auto;font-family:'Cinzel';font-weight:800;font-size:20px}
+  .nm-list{display:flex;flex-direction:column;gap:4px}
+  .nm-item{text-align:left;background:none;border:none;color:var(--cream-dim);font-family:'Montserrat';font-size:12.5px;
+    padding:6px 8px;border-radius:4px;cursor:pointer;transition:.12s;border-bottom:1px dashed var(--line-soft)}
+  .nm-item:hover{background:rgba(255,255,255,.04);color:var(--cream)}
+  .nm-item.done{color:var(--good);text-decoration:line-through;text-decoration-color:rgba(95,179,122,.5)}
 </style>
 </head>
 <body>
@@ -1012,6 +1030,7 @@
       <button class="nav-action gavel" onclick="enterMeetingMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13.5 4.5l6 6M11 7l6 6M14.5 3.5l6 6-2 2-6-6zM9 9l6 6-2 2-6-6z"/><path d="M3 21h9M5.5 18.5L11 13"/></svg>Chapter Meeting</button>
       <button data-v="exec" onclick="go('exec')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/><circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg>Exec Center</button>
       <div class="grp">Brotherhood Center</div>
+      <button data-v="newmember" onclick="go('newmember')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="7" r="3.4"/><path d="M5 21a7 7 0 0114 0"/><path d="M12 12v3M10.5 13.5h3" stroke-linecap="round"/></svg>New Members</button>
       <button data-v="roster" onclick="go('roster')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.6 2.4-6 5.5-6s5.5 2.4 5.5 6"/><circle cx="16.5" cy="9" r="2.6"/><path d="M16.2 14.3c2.7.4 4.3 2.6 4.3 5.7"/></svg>Roster</button>
       <button data-v="points" onclick="go('points')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 4h8v5a4 4 0 01-8 0z"/><path d="M8 5H5a3 3 0 003 4M16 5h3a3 3 0 01-3 4"/><path d="M12 13v3M8.5 20h7M10 20v-2h4v2"/></svg>Points &amp; Families</button>
       <button data-v="gallery" onclick="go('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><circle cx="8.8" cy="10" r="1.7"/><path d="M20.5 15.5L15.5 11 6 19"/></svg>Gallery</button>
@@ -1022,6 +1041,7 @@
       <div class="grp">Operations Center</div>
       <button data-v="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/><circle cx="12" cy="14.5" r="1.1" fill="currentColor" stroke="none"/></svg>Calendar</button>
       <button data-v="social" onclick="go('social')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14l-7 8z"/><path d="M12 12v7M8.5 21h7"/></svg>Social</button>
+      <button data-v="guests" onclick="go('guests')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 12h8M8 15h5" stroke-linecap="round"/><path d="M15.5 14.5l2 2 3-3.5" stroke-width="2"/></svg>Guest Lists</button>
       <button data-v="doorcount" onclick="go('doorcount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h7v9M10 3v9M16 8v0M16 12v0M16 16v0" stroke-linecap="round"/><circle cx="6.5" cy="7.5" r="1.6"/></svg>Function Control</button>
       <button data-v="register" onclick="go('register')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M9 3v3h6V3"/><path d="M9 12l2 2 4-4.5"/></svg>Event Registration</button>
       <button data-v="officers" onclick="go('officers')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 2.5V12c0 4.4-3 7.4-7 9-4-1.6-7-4.6-7-9V5.5z"/><path d="M9 12l2 2 4-4.5"/></svg>Officers &amp; Tasks</button>
@@ -1042,6 +1062,7 @@
       <div class="tools">
         <button class="cmd-trigger" onclick="openCmd()" title="Search the board (Ctrl/Cmd + K)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><span>Search</span><kbd>&#8984;K</kbd></button>
         <span class="sync-pill" id="syncPill" title="Sync status"><span class="sync-dot"></span><span id="syncLabel">Local</span></span>
+        <button class="tool share-btn" onclick="openShare()" title="Share the Mainframe with brothers">&#128228; Share</button>
         <button class="tool" id="installBtn" onclick="installApp()" title="Install / Save as App">&#11015; Save App</button>
         <button class="tool" id="sfxBtn" onclick="toggleSfx()" title="Interface sounds on/off">&#128266;</button>
         <button class="tool" onclick="toggleFs()" title="Fullscreen">&#9974;</button>
@@ -1062,7 +1083,7 @@
           <button onclick="go('points')"><span>&#127942;</span>Points</button>
           <button onclick="go('chat')"><span>&#128172;</span>Chat</button>
           <button onclick="go('gallery')"><span>&#128247;</span>Gallery</button>
-          <button onclick="go('donate')"><span>&#10084;</span>Donate</button>
+          <button onclick="newFunding()"><span>&#128181;</span>Reimburse</button>
         </div>
         <div class="dash-pair">
           <div class="dash-standing card" id="dashStanding"></div>
@@ -1158,6 +1179,9 @@
         <div class="rec-toolbar">
           <button class="gallery-add" onclick="addPnm()"><span>&#10133;</span> Add PNM</button>
           <button class="rec-rush" onclick="openRushMode()"><span>&#9889;</span> Launch Rush Mode</button>
+          <a class="rec-ghost" href="https://docs.google.com/forms/d/1jh9jQWzRyr0fzqiE325EKzHgzJ3nbrx42XydsuI2960/viewform" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">Interest form ↗</a>
+          <a class="rec-ghost" href="https://docs.google.com/spreadsheets/d/1lkVMNEaD643MtbnwwNVf_22QkW34hnWq2LGKTWsupLU/edit" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">Schedule sheet ↗</a>
+          <a class="rec-ghost" href="https://sites.lafayette.edu/greeks/appendices/appendix-xi/" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center">Rush rules ↗</a>
           <button class="rec-ghost" onclick="addRushEvent()">+ Rush event</button>
           <span class="gallery-count" id="recCount"></span>
         </div>
@@ -1185,6 +1209,16 @@
           <div class="dc-map-wrap"><svg id="dcMap" viewBox="0 0 1120 575" role="img" aria-label="Basement occupancy map"></svg></div>
         </div>
         <div class="dc-zones" id="dcZones"></div>
+      </section>
+
+      <section class="view" id="v-guests">
+        <div class="sec">Guest Lists</div>
+        <div class="card pad" style="margin-bottom:18px">
+          <div class="prae-top"><b>&#128203; Door lists for every function</b>
+            <span class="gallery-count">Tap a name at the door to cross it off. Lists share live across every phone.</span></div>
+          <div class="inline-add" style="margin-top:12px"><input id="glNewName" placeholder="New list (e.g. Formal 2026, Country Night)" onkeydown="if(event.key==='Enter')createGuestList()"><button onclick="createGuestList()">Create list</button></div>
+        </div>
+        <div class="grid gauto" id="guestListsGrid"></div>
       </section>
 
       <section class="view" id="v-register">
@@ -1261,6 +1295,21 @@
           <button data-f="alumni" onclick="rosterFilter('alumni')">Alumni</button>
           <span class="tally" id="rosterTally"></span></div>
         <div class="grid gauto" id="memberGrid"></div>
+      </section>
+
+      <section class="view" id="v-newmember">
+        <div class="sec">New Member Workstation</div>
+        <div class="card pad" style="margin-bottom:18px">
+          <div class="prae-top"><b>&#127891; The path to brotherhood</b>
+            <div class="prae-btns">
+              <a class="rec-ghost" style="text-decoration:none" href="https://docs.google.com/document/d/1c9oOse0jHfgR5cCZgEz7y9uYTRbqDMgW34geX3vcIjE/edit" target="_blank" rel="noopener">Syllabus ↗</a>
+              <a class="rec-ghost" style="text-decoration:none" href="https://docs.google.com/document/d/1gV2NzN25TYXkjyipnnExTU-KhOw9aKWv9G1rUjCPwGA/edit" target="_blank" rel="noopener">Bid acceptance ↗</a>
+              <button class="gallery-add" onclick="addNewMember()"><span>&#127881;</span> Add new member</button></div></div>
+          <p class="lead" style="font-size:12.5px;margin-top:8px">Run by the <b>Junior Tribune</b> — <span id="nmJt">Nicholas Pignolo</span>. Track every new member's milestones — tap a box to check it off. Progress syncs to every device.</p>
+        </div>
+        <div id="nmGrid"></div>
+        <div class="sec-sub">Program Milestones <span class="gallery-count">edit in Edit mode</span></div>
+        <div class="card pad" id="nmProgramBox"></div>
       </section>
 
       <section class="view" id="v-points">
@@ -1345,6 +1394,12 @@
 
       <section class="view" id="v-finance">
         <div class="sec">Chapter Finance</div>
+        <div class="card pad" style="margin-bottom:20px">
+          <div class="prae-top"><b>&#128181; Reimbursements &amp; Funding Requests</b>
+            <button class="gallery-add" onclick="newFunding()"><span>&#128181;</span> Request reimbursement</button></div>
+          <p class="lead" style="font-size:12px;margin:8px 0 12px">Any brother can file one — what you bought and why. The Quaestor and Consul approve from the Exec Center.</p>
+          <div id="fundingListPublic"></div>
+        </div>
         <div class="fin-tabs"><button class="active" data-fin="overview" onclick="finTab('overview')">Overview</button>
           <button data-fin="budget" onclick="finTab('budget')">Budget</button><button data-fin="dues" onclick="finTab('dues')">Dues</button>
           <button data-fin="balance" onclick="finTab('balance')">Balance</button><button data-fin="sources" onclick="finTab('sources')">Source Files</button></div>
@@ -1450,6 +1505,17 @@
     <div class="kg-note">Ask a brother for the passkey. It's saved on this device so you only enter it once. <span style="color:var(--gold)">Honor Super Omnia.</span></div>
   </div>
 </div>
+<div class="modal-bg" id="shareModal" onclick="if(event.target.id==='shareModal')document.getElementById('shareModal').classList.remove('show')"><div class="modal" style="max-width:430px;text-align:center">
+  <h3>&#128228;&nbsp; Share the Mainframe</h3>
+  <p style="color:var(--cream-dim);font-size:13px;margin:6px 0 14px">One link. Every brother. Phones, laptops, the smartboard.</p>
+  <div class="share-link" id="shareLink" onclick="copyShare()" role="button" title="Tap to copy">kresentapp2.netlify.app</div>
+  <div class="iq-code" id="shareQr" style="margin:16px auto 6px"></div>
+  <p style="color:var(--cream-dim2);font-size:11.5px">Scan &rarr; open &rarr; Add to Home Screen</p>
+  <div class="row" style="margin-top:14px">
+    <button class="btn-save" onclick="copyShare()">Copy link</button>
+    <button class="btn-save" id="nativeShareBtn" onclick="nativeShare()">Share&hellip;</button>
+    <button class="btn-cancel" onclick="document.getElementById('shareModal').classList.remove('show')">Close</button></div>
+</div></div>
 <div class="modal-bg" id="memberProfile" onclick="if(event.target.id==='memberProfile')closeMemberProfile()"><div class="modal mp-modal"><div id="mpBody"></div></div></div>
 <div class="modal-bg" id="pnmProfile" onclick="if(event.target.id==='pnmProfile')closePnm()"><div class="modal pnm-modal"><div id="pnmBody"></div></div></div>
 <div class="rush-mode" id="rushMode">
@@ -1501,6 +1567,9 @@
   </div>
   <div id="guestRows" style="max-height:40vh;overflow-y:auto;margin-top:12px"></div>
   <div class="inline-add" style="margin-top:10px"><input id="guestAddName" placeholder="Walk-up guest name" onkeydown="if(event.key==='Enter')addGuestManual()"><button onclick="addGuestManual()">Check in</button></div>
+  <details style="margin-top:8px"><summary style="font-size:12px;color:var(--cream-dim);cursor:pointer">Paste a whole list (one name per line)</summary>
+    <textarea id="guestBulk" rows="4" style="width:100%;margin-top:8px;background:var(--ink);border:1px solid var(--line);color:var(--cream);border-radius:4px;padding:9px;font-family:'Montserrat';font-size:13px" placeholder="Jordan Smith&#10;Casey Lee&#10;..."></textarea>
+    <button class="mini-btn ok" style="margin-top:8px" onclick="bulkAddGuests()">Add all</button></details>
   <div class="row"><button class="btn-save" onclick="closeGuestList()">Done</button></div>
 </div></div>
 <div class="pnm-gate" id="guestGate">
@@ -1674,7 +1743,34 @@ const DEFAULTS={
   chat:[],chatName:"",
   gallery:[],
   tasksSheet:"",taskDone:{},
-  recruit:{pnms:[],events:[],rushCode:""},
+  recruit:{pnms:[],events:[
+    {id:uid(),title:"🤠 Country Night · 8–10 PM",date:"2026-08-26",loc:"635 High Street"},
+    {id:uid(),title:"🍝 Roman Feast · 7–9 PM",date:"2026-08-27",loc:"635 High Street"},
+    {id:uid(),title:"⚽️ Sports Day · 4–7 PM",date:"2026-08-28",loc:"Court Yard, 635 High St"},
+    {id:uid(),title:"⚽ EPL Watch: Fulham v Chelsea · 3–6 PM",date:"2026-08-31",loc:"635 High Street"},
+    {id:uid(),title:"♠️ Poker Night · 8–10 PM",date:"2026-08-31",loc:"635 High Street"},
+    {id:uid(),title:"⚽ La Liga Watch: Elche v Barça · 3:30–6:30",date:"2026-09-01",loc:"635 High Street"},
+    {id:uid(),title:"🏃 Night Manhunt · 8–10 PM",date:"2026-09-01",loc:"Court Yard, 635 High St"},
+    {id:uid(),title:"PNM Interviews · 12–5 PM",date:"2026-09-01",loc:"635 High Street"},
+    {id:uid(),title:"Involvement Fair · 4–6 PM",date:"2026-09-02",loc:"The Quad"},
+    {id:uid(),title:"Voting Day · 7–9 PM",date:"2026-09-02",loc:"635 High Street"},
+    {id:uid(),title:"Pre-Bid Dinner · 6–9 PM",date:"2026-09-03",loc:"TBD"},
+    {id:uid(),title:"🎉 BID DAY",date:"2026-09-04",loc:"635 High Street"}
+  ],rushCode:"",interestForm:"https://docs.google.com/forms/d/1jh9jQWzRyr0fzqiE325EKzHgzJ3nbrx42XydsuI2960/viewform",
+    scheduleSheet:"https://docs.google.com/spreadsheets/d/1lkVMNEaD643MtbnwwNVf_22QkW34hnWq2LGKTWsupLU/edit",
+    rushRules:"https://sites.lafayette.edu/greeks/appendices/appendix-xi/"},
+  nmProgram:[
+    {id:"nm1",title:"Bid accepted & paperwork signed"},
+    {id:"nm2",title:"Meet every active brother (signatures)"},
+    {id:"nm3",title:"KDR history & founding (1905, Middlebury)"},
+    {id:"nm4",title:"Learn the Precepts & Honor Super Omnia"},
+    {id:"nm5",title:"Officer structure & chapter operations"},
+    {id:"nm6",title:"Philanthropy event with The B+ Foundation"},
+    {id:"nm7",title:"Community service hours complete"},
+    {id:"nm8",title:"Academic check-in with Junior Tribune"},
+    {id:"nm9",title:"Brotherhood event attendance"},
+    {id:"nm10",title:"Final review & initiation readiness"}],
+  nmChecks:{},
   doorcaps:{kitchen:45,kstorage:20,board:25,rec1:45,rec3:60,bar:12,stair:10,storage:5,wc:2,boiler:0},
   registrations:[],sponsors:[],letters:[],
   regDefaults:{org:"Kappa Delta Rho — Rho Chapter",rmo:"",rmoPhone:"",presPhone:""},
@@ -1684,10 +1780,10 @@ const DEFAULTS={
   hours:[],checkins:[],
   reqs:{fellowship:20,leadership:10,scholarship:15,service:15,tradition:10},
   committees:[
-    {id:uid(),name:"Committee Document 1",owner:"Open Edit to rename / assign",url:"https://docs.google.com/document/d/1osQRFy2arsLiT89J1RJ48lH6wIr7zENAEDiykLpe_Gk/edit"},
-    {id:uid(),name:"Committee Document 2",owner:"",url:"https://docs.google.com/document/d/1WjwV92yMovKjyWPNqVwiWMIfiXVHNjM8Ia0aIiLEPBQ/edit"},
-    {id:uid(),name:"Committee Form 1",owner:"",url:"https://docs.google.com/forms/d/e/1FAIpQLSe4Ra-0447bN1fkFMC6vx-ev88obOPTbMW7enItIP9CRXA1wg/viewform"},
-    {id:uid(),name:"Committee Form 2",owner:"",url:"https://docs.google.com/forms/d/e/1FAIpQLSdvwI1HOP3Uq7Ah3I6r236UXhDS0NCY5STGLll8uFekbI_MdQ/viewform"}],
+    {id:uid(),name:"New Member Education",owner:"Junior Tribune — Nicholas Pignolo",url:"https://docs.google.com/document/d/1c9oOse0jHfgR5cCZgEz7y9uYTRbqDMgW34geX3vcIjE/edit"},
+    {id:uid(),name:"Recruitment — Fall 2026",owner:"Senior Tribune",url:"https://docs.google.com/spreadsheets/d/1lkVMNEaD643MtbnwwNVf_22QkW34hnWq2LGKTWsupLU/edit"},
+    {id:uid(),name:"Budget & Finance",owner:"Quaestor — Tsogt Otgonsuren",url:"https://docs.google.com/spreadsheets/d/19Xkks5wupAB9kdBOfJs6G0-J2vPEOrDHZsGZZAYwGUY/edit"},
+    {id:uid(),name:"Alumni Mentorship",owner:"Public Relations Chair",url:"https://docs.google.com/document/d/1-H6SVwvn-ETWQ3poE-XA7H4L4w84FewRxNpALjFfRkc/edit"}],
   donate:{url:DONATE_FORM,goal:10000,message:"Your gift fuels our $19,795 annual scholarship and the future of the brotherhood. Scan the code or fill the form below to give.",suggested:[25,50,100,250]},
   creed:"We are the Rho Chapter of Kappa Delta Rho, founded in nineteen hundred and five. We stand upon five pillars — fellowship, leadership, scholarship, service, and tradition. We strive to be gentlemen of character, to treat every person with dignity and respect, to lead honorable lives, and to place honor above all things. This is our bond. This is our brotherhood.",
   members:[
@@ -1742,13 +1838,32 @@ const DEFAULTS={
     {id:uid(),date:"2025-09-05",title:"Social (12:00 AM)",sorority:"",theme:""},
     {id:uid(),date:"2025-09-25",title:"Mixer (10 PM \u2013 12 AM)",sorority:"Alpha Gamma Delta (AGD)",theme:""},
     {id:uid(),date:"2025-10-15",title:"Mixer (11 PM \u2013 12 AM)",sorority:"Alpha Gamma Delta (AGD)",theme:""}],
-  minutes:[{id:uid(),date:isoDaysAgo(3),title:"Weekly Chapter Meeting",url:URLS.minutes,summary:"Budget review, philanthropy planning, new member updates."},
-    {id:uid(),date:isoDaysAgo(10),title:"Exec Board Meeting",url:URLS.minutes,summary:"Set spring calendar and committee assignments."}],
+  minutes:[
+    {id:uid(),date:"2026-05-03",title:"Chapter Meeting Minutes 5/3/2026",url:"https://docs.google.com/document/d/1x0lwkjEEr9oNjFaivsdwY895goLd6sNpA7GinVTqDS8/edit"},
+    {id:uid(),date:"2026-04-26",title:"Chapter Meeting Minutes 4/26/2026",url:"https://docs.google.com/document/d/1-zy9Ji4HyV8rNLhcAHr4qMZx-XXCzUL6a-CvGL-cWAo/edit"},
+    {id:uid(),date:"2026-04-19",title:"Minutes 4/19/2026",url:"https://docs.google.com/document/d/1gfd4_lzSyOSnipZvXLR6IwmiF_2rVfKDDkcO7aKUqQ4/edit"},
+    {id:uid(),date:"2026-04-12",title:"Exec Meeting — April 12",url:"https://docs.google.com/document/d/1jfpD7GVfrEmWpqw_e-UnmyjOKCGMBKDHHbYmJW76GZ0/edit"},
+    {id:uid(),date:"2026-03-12",title:"Minutes 3/12/2026",url:"https://docs.google.com/document/d/1yE45juOSFo1_LnKdWIwr5KEabk68JbWE5TXnnfHdI-4/edit"},
+    {id:uid(),date:"2026-03-01",title:"Minutes 3/1/2026",url:"https://docs.google.com/document/d/1q5oMt9xpsU6zrvmhxpVAqYq7iQ6Df2Kfcq-Csa6_Fy0/edit"},
+    {id:uid(),date:"2026-02-08",title:"Minutes 2/8/2026",url:"https://docs.google.com/document/d/1i0oAgrG4WrpYEa0xKCrnbhM8Yi_tFMvTlLxYfx2n8dQ/edit"},
+    {id:uid(),date:"2026-02-01",title:"Minutes 2/1/2026",url:"https://docs.google.com/document/d/1aYsZ-pEF5s076eFRCt5gfaQRh6QoHNF5IXq06HzDxDA/edit"},
+    {id:uid(),date:"2026-01-27",title:"Minutes 1/27/2026",url:"https://docs.google.com/document/d/1ki0RZr2GVR8tVV6aoxWNikrzfliRPPV9OvasltWC6PA/edit"},
+    {id:uid(),date:"2026-01-12",title:"Minutes 1/12/2026",url:"https://docs.google.com/document/d/1dluBmS2hl1nSw9do0nMybgOT6Oe-rctrdGR9i4gNOJw/edit"},
+    {id:uid(),date:"2025-11-23",title:"Emergency Minutes 11/23/2025",url:"https://docs.google.com/document/d/1pU0EAW6SIYw-W2JGfwE-ZmQIfnORvzP8bRZjQ33iir4/edit"}],
   files:[
     {badge:"\u{1F5C2}",title:"General Drive",desc:"The chapter's main shared folder \u2014 everything lives here.",url:URLS.general,primary:true},
-    {badge:"\u{1F4CB}",title:"Meeting Minutes",desc:"Weekly chapter meeting notes & motions.",url:URLS.minutes},
-    {badge:"\u{1F4DC}",title:"Bylaws & Constitution",desc:"Governing documents of the Rho Chapter.",url:URLS.general},
-    {badge:"\u{1F465}",title:"Active Roster",desc:"Current brothers, contact info, and standing.",url:URLS.general}],
+    {badge:"\u{1F4CB}",title:"Meeting Minutes Folder",desc:"Weekly chapter meeting notes & motions.",url:URLS.minutes},
+    {badge:"\u{1F4B0}",title:"Budget — Spring 2026",desc:"KDR RHO Budget Spring 2026 (live sheet).",url:"https://docs.google.com/spreadsheets/d/19Xkks5wupAB9kdBOfJs6G0-J2vPEOrDHZsGZZAYwGUY/edit"},
+    {badge:"\u{1F4D1}",title:"Budget Proposal — Approved",desc:"Spring 2026 finalized & approved proposal.",url:"https://docs.google.com/document/d/1fJteInUQNBHcIzpDMFd7QRtbSNlJG-8VeKxtEe66FNA/edit"},
+    {badge:"\u{1F4C5}",title:"Rush Schedule — Fall 2026",desc:"Live recruitment planning sheet.",url:"https://docs.google.com/spreadsheets/d/1lkVMNEaD643MtbnwwNVf_22QkW34hnWq2LGKTWsupLU/edit"},
+    {badge:"\u{1F4B8}",title:"Rush Expense Report — S26",desc:"Spring 2026 recruitment spending.",url:"https://docs.google.com/document/d/1jsIg5qnH9RWNOjCUKSggygt3mqLc1CkeRFxmA8_kk5Q/edit"},
+    {badge:"\u{1F393}",title:"New Member Ed Syllabus",desc:"Junior Tribune's education program.",url:"https://docs.google.com/document/d/1c9oOse0jHfgR5cCZgEz7y9uYTRbqDMgW34geX3vcIjE/edit"},
+    {badge:"\u{1F510}",title:"Confidentiality Policies",desc:"KDR confidentiality & privacy policy.",url:"https://docs.google.com/document/d/16kG7657rgknW2zKYZG68GldcMgC1MvqMJSD0K1yb_Ho/edit"},
+    {badge:"\u{1F4DD}",title:"Official Bid Acceptance 2026",desc:"The chapter's bid acceptance document.",url:"https://docs.google.com/document/d/1gV2NzN25TYXkjyipnnExTU-KhOw9aKWv9G1rUjCPwGA/edit"},
+    {badge:"\u{1F3E0}",title:"635 High Street Packet",desc:"Complete chapter house packet.",url:"https://docs.google.com/document/d/1Jty6q7D8lI0Wa9NmgHNu4ARYIAjMVHG4HQvPTK4QUpA/edit"},
+    {badge:"\u{1F91D}",title:"Alumni Mentorship Program",desc:"Rho alumni mentorship structure.",url:"https://docs.google.com/document/d/1-H6SVwvn-ETWQ3poE-XA7H4L4w84FewRxNpALjFfRkc/edit"},
+    {badge:"\u{1F4E3}",title:"Consul Memo 008",desc:"Latest Consul memo (revised & expanded).",url:"https://docs.google.com/document/d/1TRlZhNDDFC_9jdDdlg9aY9v63ysttCk-mT89agSUlrY/edit"},
+    {badge:"\u{1F3AF}",title:"Recruitment Presentation",desc:"KDR recruitment slide deck.",url:"https://docs.google.com/presentation/d/18Ieuz1MAgVLJ86ov0VxDNkDFn6kOZ8RLM5qhUo849Y4/edit"}],
   finance:{
     cash:{labels:["Sep","Oct","Nov","Dec","Jan","Feb"],income:[4200,1800,1500,900,3800,1600],expense:[1200,2100,1700,2400,1100,1900]},
     alloc:{labels:["Social","Philanthropy","Operations","Recruitment","Formal","Reserve"],values:[1800,900,1400,700,2200,1500]},
@@ -1794,10 +1909,16 @@ const FB={enabled:false,db:null,meta:null,gallery:null,chat:null,bound:false};
    this to instant push sync when configured. */
 const CLOUD_STORE='https://kresentapp2.netlify.app/api/store';
 const BOARD_NS='rho-b7k4q9x2';
+let cloudDown=false;
+function cloudTrouble(){if(cloudDown)return;cloudDown=true;
+  try{setSync('offline');syncToast('Chapter cloud is unreachable — running on this device\'s copy. Nothing is lost; it re-syncs when the cloud is back.');}catch(e){}}
 if(typeof window!=='undefined'&&!window.storage&&(location.protocol==='http:'||location.protocol==='https:')){
   window.storage={_netlify:true,
-    get:async function(key){try{const r=await fetch(CLOUD_STORE+'?key='+encodeURIComponent(BOARD_NS+':'+key),{cache:'no-store'});if(!r.ok)return null;const t=await r.text();return t?{key:key,value:t}:null;}catch(e){return null;}},
-    set:async function(key,value){try{const r=await fetch(CLOUD_STORE+'?key='+encodeURIComponent(BOARD_NS+':'+key),{method:'PUT',body:value});return r.ok;}catch(e){return false;}}};
+    get:async function(key){try{const r=await fetch(CLOUD_STORE+'?key='+encodeURIComponent(BOARD_NS+':'+key),{cache:'no-store'});
+      if(r.status===503){cloudTrouble();return null;}
+      if(!r.ok)return null;cloudDown=false;const t=await r.text();return t?{key:key,value:t}:null;}catch(e){return null;}},
+    set:async function(key,value){try{const r=await fetch(CLOUD_STORE+'?key='+encodeURIComponent(BOARD_NS+':'+key),{method:'PUT',body:value});
+      if(r.status===503||r.status===502)cloudTrouble();return r.ok;}catch(e){return false;}}};
 }
 const hasStore=(typeof window!=="undefined"&&window.storage&&typeof window.storage.get==="function");
 const LS_KEY="rho-mainframe-state",LS_CHAT="rho-mainframe-chat",KEY_LS="rho-board-key";
@@ -1964,6 +2085,8 @@ function merge(s){const o=JSON.parse(JSON.stringify(DEFAULTS));
   if(s.recruit&&typeof s.recruit==='object'){o.recruit=Object.assign(o.recruit,s.recruit);if(!Array.isArray(o.recruit.pnms))o.recruit.pnms=[];if(!Array.isArray(o.recruit.events))o.recruit.events=[];}
   if(s.reqs&&typeof s.reqs==='object')o.reqs=Object.assign(o.reqs,s.reqs);
   if(s.doorcaps&&typeof s.doorcaps==='object')o.doorcaps=Object.assign(o.doorcaps,s.doorcaps);
+  if(Array.isArray(s.nmProgram)&&s.nmProgram.length)o.nmProgram=s.nmProgram;
+  if(s.nmChecks&&typeof s.nmChecks==='object')o.nmChecks=s.nmChecks;
   if(typeof s.creed==='string')o.creed=s.creed;
   if(s.donate)o.donate=Object.assign(o.donate,s.donate);
   if(s.recap)Object.assign(o.recap,s.recap);
@@ -1971,7 +2094,7 @@ function merge(s){const o=JSON.parse(JSON.stringify(DEFAULTS));
   if(s.giving)o.giving=Object.assign(o.giving,s.giving);
   return o;}
 let saveTimer=null,galTimer=null;
-async function save(){if(applyingRemote)return;flash();lsSave();
+async function save(){if(applyingRemote)return;flash();lsSave();/* local copy is ALWAYS kept — cloud outages can't lose the board */
   if(fbLive()){if(editing)savedWhileEditing=true;
     /* rev is assigned NOW so a remote echo arriving inside the debounce window is
        already recognizable; the meta listener also skips applying remote snapshots
@@ -2004,9 +2127,9 @@ function pushLog(kind,text){state.log.unshift({date:new Date().toISOString().sli
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download="rho-mainframe-backup.json";a.click();URL.revokeObjectURL(a.href);}
 function esc(s){return (s==null?'':''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
-const CRUMB={dash:'Dashboard',standing:'My Standing',meeting:'Chapter Meeting',recruit:'Recruitment Command',doorcount:'Function Control',register:'Event Registration',exec:'Exec Center',roster:'Roster',points:'Points & Families',social:'Social',calendar:'Calendar',giving:'Giving & Scholarship',finance:'Finance',minutes:'Meeting Minutes',officers:'Officers & Tasks',files:'Files',chat:'Chapter Chat',gallery:'Brotherhood Gallery',donate:'Support the Chapter',committees:'Committees & Workflow'};
+const CRUMB={dash:'Dashboard',standing:'My Standing',meeting:'Chapter Meeting',recruit:'Recruitment Command',doorcount:'Function Control',guests:'Guest Lists',newmember:'New Member Workstation',register:'Event Registration',exec:'Exec Center',roster:'Roster',points:'Points & Families',social:'Social',calendar:'Calendar',giving:'Giving & Scholarship',finance:'Finance',minutes:'Meeting Minutes',officers:'Officers & Tasks',files:'Files',chat:'Chapter Chat',gallery:'Brotherhood Gallery',donate:'Support the Chapter',committees:'Committees & Workflow'};
 function go(t){const changed=cur!==t;cur=t;document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active','anim');});const el=document.getElementById('v-'+t);if(el){el.classList.add('active');if(changed){void el.offsetWidth;el.classList.add('anim');sfxTick();}}document.querySelectorAll('#sidenav button').forEach(b=>b.classList.toggle('active',b.dataset.v===t));document.querySelectorAll('#mtab button').forEach(b=>b.classList.toggle('active',b.dataset.mt===t));document.getElementById('crumb').textContent=CRUMB[t]||'';document.body.classList.remove('nav-open');const sc=document.querySelector('.scroll');if(sc)sc.scrollTop=0;
-  setTimeout(()=>{if(t==='finance')buildCharts();if(t==='giving')buildGiveCharts();if(t==='dash'){buildHomeCharts();renderDonate();renderDashGallery();}if(t==='donate')renderDonate();if(t==='committees')renderCommittees();if(t==='gallery')renderGallery();if(t==='standing')renderStanding();if(t==='recruit')renderRecruit();if(t==='doorcount')renderDoorCount();if(t==='register')renderRegister();if(t==='meeting')renderMeeting();if(t==='exec')renderExec();if(t==='dash'){renderDashStanding();renderPresence();}},40);}
+  setTimeout(()=>{if(t==='finance')buildCharts();if(t==='giving')buildGiveCharts();if(t==='dash'){buildHomeCharts();renderDonate();renderDashGallery();}if(t==='donate')renderDonate();if(t==='committees')renderCommittees();if(t==='gallery')renderGallery();if(t==='standing')renderStanding();if(t==='recruit')renderRecruit();if(t==='doorcount')renderDoorCount();if(t==='guests')renderGuestCenter();if(t==='newmember')renderNM();if(t==='register')renderRegister();if(t==='meeting')renderMeeting();if(t==='exec')renderExec();if(t==='dash'){renderDashStanding();renderPresence();}},40);}
 function toggleEdit(){editing=!editing;document.body.classList.toggle('editing',editing);const b=document.getElementById('editBtn');b.classList.toggle('on',editing);b.innerHTML=editing?'\u2713 Done':'\u270E Edit';if(!editing)flushPending();renderAll();}
 function toggleFs(){if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
 function tickClock(){const n=new Date();const c=document.getElementById('clock');if(c)c.innerHTML=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+' &middot; <b>'+n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</b>';}
@@ -2645,7 +2768,9 @@ function renderRecruit(){const b=document.getElementById('pipeBoard');if(!b)retu
   if(m){const accepted=all.filter(p=>p.stage==='accepted').length;
     m.innerHTML=STAGES.map(([id,label])=>{const n=all.filter(p=>p.stage===id).length;
       return `<div class="rm-metric"><b>${n}</b><span>${esc(label)}</span></div>`;}).join('')+
-      `<div class="rm-metric conv"><b>${all.length?Math.round(100*accepted/all.length)+'%':'—'}</b><span>Conversion</span></div>`;}
+      `<div class="rm-metric conv"><b>${all.length?Math.round(100*accepted/all.length)+'%':'—'}</b><span>Conversion</span></div>`+
+      (function(){const dd=Math.ceil((new Date('2026-09-04T00:00:00')-new Date())/86400000);
+        return (dd>0&&dd<120)?`<div class="rm-metric conv"><b>${dd}d</b><span>🎉 to Bid Day</span></div>`:'';})();}
   renderRecInbox();
   b.innerHTML=STAGES.map(([id,label])=>{const col=act.filter(p=>p.stage===id).sort((a,b2)=>pnmAvgStars(b2)-pnmAvgStars(a));
     return `<div class="pipe-col"><div class="pipe-head">${esc(label)}<span>${col.length}</span></div>`+
@@ -3173,7 +3298,7 @@ function guestStoreKey(k){return 'rho-guest:'+k;}
 function guestLink(k,title){return location.origin+location.pathname+'#guest='+encodeURIComponent(k)+':'+encodeURIComponent(title||'Chapter Event');}
 async function loadGuests(k){try{const r=await window.storage.get(guestStoreKey(k));return r&&r.value?JSON.parse(r.value):[];}catch(e){return [];}}
 async function saveGuests(k,arr){try{await window.storage.set(guestStoreKey(k),JSON.stringify(arr));}catch(e){}}
-async function openGuestList(k,title){guestKeyOpen=k;
+async function openGuestList(k,title){guestKeyOpen=k;registerGuestList(k,title).catch(()=>{});
   const m=document.getElementById('guestModal');document.getElementById('guestTitle').textContent=title;
   m.classList.add('show');guestCache=await loadGuests(k);renderGuestList();
   const qb=document.getElementById('guestQr');qb.innerHTML='';
@@ -3184,17 +3309,40 @@ function closeGuestList(){guestKeyOpen=null;clearInterval(guestPollT);document.g
 function renderGuestList(){const l=document.getElementById('guestRows');if(!l)return;
   const inN=guestCache.filter(g=>g.in).length;
   document.getElementById('guestCounts').textContent=guestCache.length+' RSVP'+(guestCache.length===1?'':'s')+' · '+inN+' checked in';
-  l.innerHTML=guestCache.length?guestCache.map(g=>`<div class="hour-row">
-      <button class="sp-status ${g.in?'received':'pledged'}" onclick="toggleGuestIn('${g.id}')">${g.in?'✓ In':'RSVP’d'}</button>
-      <b>${esc(g.name)}</b><span class="hr-desc">${g.party>1?('+'+(g.party-1)+' guests · '):''}${esc(g.phone||'')}</span>
-      <button class="row-del" style="position:static" onclick="removeGuest('${g.id}')">×</button>
-    </div>`).join(''):'<p class="lead" style="font-size:12.5px">No RSVPs yet — share the QR or link.</p>';}
+  l.innerHTML=guestCache.length?guestCache.map(g=>`<div class="hour-row guest-row ${g.in?'crossed':''}" onclick="toggleGuestIn('${g.id}')" role="button" aria-pressed="${g.in?'true':'false'}">
+      <span class="sp-status ${g.in?'received':'pledged'}">${g.in?'✓ In':'Expected'}</span>
+      <b class="gr-name">${esc(g.name)}</b><span class="hr-desc">${g.party>1?('+'+(g.party-1)+' guests · '):''}${esc(g.phone||'')}</span>
+      <button class="row-del" style="position:static" onclick="event.stopPropagation();removeGuest('${g.id}')">×</button>
+    </div>`).join(''):'<p class="lead" style="font-size:12.5px">No names yet — share the QR, paste a list below, or add walk-ups.</p>';}
 async function toggleGuestIn(id){const g=guestCache.find(x=>x.id===id);if(!g)return;g.in=!g.in;renderGuestList();await saveGuests(guestKeyOpen,guestCache);}
 async function removeGuest(id){guestCache=guestCache.filter(x=>x.id!==id);renderGuestList();await saveGuests(guestKeyOpen,guestCache);}
 async function addGuestManual(){const n=document.getElementById('guestAddName');if(!n.value.trim())return;
   guestCache.push({id:uid(),name:n.value.trim(),phone:'',party:1,ts:Date.now(),in:true});n.value='';
   renderGuestList();await saveGuests(guestKeyOpen,guestCache);}
 function copyGuestLink(){try{navigator.clipboard.writeText(guestLink(guestKeyOpen,document.getElementById('guestTitle').textContent));const b=document.getElementById('guestCopyBtn');if(b){b.textContent='Copied ✓';setTimeout(()=>{b.textContent='Copy link';},1500);}}catch(e){}}
+/* ---- Guest Lists center: named door lists, cross-off, bulk add ---- */
+async function loadGuestRegistry(){try{const r=await window.storage.get('rho-guestlists');return r&&r.value?JSON.parse(r.value):[];}catch(e){return [];}}
+async function saveGuestRegistry(arr){try{await window.storage.set('rho-guestlists',JSON.stringify(arr));}catch(e){}}
+async function registerGuestList(k,title){const reg=await loadGuestRegistry();
+  if(!reg.some(x=>x.k===k)){reg.unshift({k,title,ts:Date.now()});await saveGuestRegistry(reg.slice(0,30));}}
+async function createGuestList(){const inp=document.getElementById('glNewName');const t=(inp.value||'').trim();if(!t)return;
+  const k='list-'+uid();inp.value='';await registerGuestList(k,t);renderGuestCenter();openGuestList(k,t);sfxTick();}
+async function deleteGuestList(k){if(!confirm('Delete this guest list?'))return;
+  let reg=await loadGuestRegistry();reg=reg.filter(x=>x.k!==k);await saveGuestRegistry(reg);
+  try{await window.storage.set(guestStoreKey(k),'[]');}catch(e){}renderGuestCenter();}
+async function renderGuestCenter(){const g=document.getElementById('guestListsGrid');if(!g)return;
+  const reg=await loadGuestRegistry();
+  if(!reg.length){g.innerHTML='<div class="card pad" style="color:var(--cream-dim);font-size:13px">No lists yet. Create one above — or open any rush event / social function and its guest list appears here too.</div>';return;}
+  const counts=await Promise.all(reg.map(async x=>{const arr=await loadGuests(x.k);return {n:arr.length,in:arr.filter(y=>y.in).length};}));
+  g.innerHTML=reg.map((x,i)=>`<div class="linkcard">
+    <div class="lc-top"><div class="badge">&#128203;</div><h4>${esc(x.title)}</h4></div>
+    <p><b style="color:var(--gold-br)">${counts[i].in}</b> of <b>${counts[i].n}</b> crossed off</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="openb" onclick="openGuestList('${x.k}','${escAttr(x.title)}')">Open list</button>
+    <button class="openb ghost" onclick="deleteGuestList('${x.k}')">Delete</button></div></div>`).join('');}
+async function bulkAddGuests(){const ta=document.getElementById('guestBulk');if(!ta)return;
+  const names=(ta.value||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);if(!names.length)return;
+  names.forEach(n=>guestCache.push({id:uid(),name:n,phone:'',party:1,ts:Date.now(),in:false}));
+  ta.value='';renderGuestList();await saveGuests(guestKeyOpen,guestCache);sfxTick();}
 /* guest-facing RSVP page (#guest=key:title) */
 function isGuestLink(){return /^#guest=/.test(location.hash);}
 function guestLinkParts(){const m=location.hash.match(/^#guest=([^:]+):(.*)$/);return m?{k:decodeURIComponent(m[1]),title:decodeURIComponent(m[2]||'Chapter Event')}:null;}
@@ -3225,6 +3373,39 @@ function rollFromCheckins(){const m=mlState();if(!m.active)return;
   if(!evs.length){alert('No check-in-enabled event today. Enable check-in on today’s meeting first (My Standing → Edit).');return;}
   Object.keys(m.roll).forEach(n=>{m.roll[n]=state.checkins.some(c=>evs.includes(c.eventId)&&c.who===n)?'Present':'Absent';});
   renderMeeting();save();}
+
+/* ================== NEW MEMBER WORKSTATION ================== */
+function addNewMember(){modalFields([{k:'name',l:'Name',v:''},{k:'year',l:'Class year',v:''},{k:'email',l:'Email',v:''}],'Add New Member',vals=>{
+  if(!vals.name.trim())return;state.members.push({id:uid(),name:vals.name.trim(),year:vals.year,email:vals.email,role:'',status:'new'});
+  pushLog('newmember',vals.name+' joined the pledge class');renderAll();save();sfxVote();});}
+function nmToggle(memberId,mid){if(!state.nmChecks[memberId])state.nmChecks[memberId]={};
+  state.nmChecks[memberId][mid]=!state.nmChecks[memberId][mid];renderNM();save();sfxTick();}
+function nmPct(memberId){const total=state.nmProgram.length;if(!total)return 0;
+  const c=state.nmChecks[memberId]||{};return Math.round(100*state.nmProgram.filter(m=>c[m.id]).length/total);}
+function renderNM(){const g=document.getElementById('nmGrid');if(!g)return;
+  const jt=document.getElementById('nmJt');if(jt)jt.textContent=officerHolder('Junior Tribune')||'—';
+  const nms=state.members.filter(m=>m.status==='new');
+  if(!nms.length){g.innerHTML='<div class="card pad" style="color:var(--cream-dim);font-size:13px;margin-bottom:18px">No new members yet — when bids are accepted on <b>Bid Day (Sep 4)</b>, add them here and their whole program tracks in one place.</div>';}
+  else g.innerHTML='<div class="grid gauto" style="margin-bottom:18px">'+nms.map(m=>{const pct=nmPct(m.id);const c=state.nmChecks[m.id]||{};
+    return `<div class="card pad nm-card">
+      <div class="nm-head"><div class="m-avatar">${esc(initials(m.name))}</div>
+        <div><b>${esc(m.name)}</b><span class="rg-meta">Class of ${esc(m.year||'—')}</span></div>
+        <span class="nm-pct" style="color:${pct>=100?'var(--good)':pct>=50?'var(--gold-br)':'var(--cream-dim)'}">${pct}%</span></div>
+      <div class="dct-bar" style="margin:10px 0"><div class="dct-fill" style="width:${pct}%;background:${pct>=100?'var(--good)':'var(--gold)'}"></div></div>
+      <div class="nm-list">${state.nmProgram.map(ms=>`<button class="nm-item ${c[ms.id]?'done':''}" onclick="nmToggle('${m.id}','${ms.id}')">${c[ms.id]?'☑':'☐'} ${esc(ms.title)}</button>`).join('')}</div>
+    </div>`;}).join('')+'</div>';
+  const pb=document.getElementById('nmProgramBox');if(pb){pb.innerHTML=state.nmProgram.map((ms,i)=>editing?
+    `<div class="inline-add" style="margin-bottom:6px"><input value="${escAttr(ms.title)}" onchange="state.nmProgram[${i}].title=this.value;renderNM();save()"><button onclick="state.nmProgram.splice(${i},1);renderNM();save()">×</button></div>`:
+    `<div class="pi-line note">- ${esc(ms.title)}</div>`).join('')+(editing?'<button class="mini-btn ok" style="margin-top:8px" onclick="state.nmProgram.push({id:uid(),title:\'New milestone\'});renderNM();save()">+ Add milestone</button>':'');}}
+
+/* ================== SHARE ================== */
+const SHARE_URL='https://kresentapp2.netlify.app/';
+function openShare(){const m=document.getElementById('shareModal');m.classList.add('show');
+  const q=document.getElementById('shareQr');q.innerHTML='';
+  try{new QRCode(q,{text:SHARE_URL,width:150,height:150,colorDark:'#0A1E3F',colorLight:'#F4ECD8',correctLevel:QRCode.CorrectLevel.M});}catch(e){}
+  const nb=document.getElementById('nativeShareBtn');if(nb)nb.style.display=navigator.share?'':'none';sfxTick();}
+function copyShare(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>{const el=document.getElementById('shareLink');el.textContent='Copied ✓';setTimeout(()=>{el.textContent='kresentapp2.netlify.app';},1400);});}catch(e){}}
+function nativeShare(){try{navigator.share({title:'Rho Chapter Mainframe',text:'The Rho Chapter Mainframe — our chapter command board. Open it and Add to Home Screen. Honor Super Omnia.',url:SHARE_URL});}catch(e){}}
 
 /* ================== DASHBOARD PERSONAL POINTS ================== */
 function renderDashStanding(){const c=document.getElementById('dashStanding');if(!c)return;const me=meName();
@@ -3354,7 +3535,7 @@ function newFunding(){modalFields([
     {k:'account',l:'Budget line (e.g. Social, Philanthropy)',v:''},
     {k:'needed',l:'Needed by (YYYY-MM-DD)',v:''}
   ],'Funding Request',vals=>{state.funding.unshift(Object.assign({id:uid(),ts:Date.now(),date:new Date().toISOString().slice(0,10),status:'Pending'},vals));renderFundingList();save();});}
-function renderFundingList(){const l=document.getElementById('fundingList');if(!l)return;
+function renderFundingList(){renderFundingPublic();const l=document.getElementById('fundingList');if(!l)return;
   l.innerHTML=state.funding.length?state.funding.map(r=>`<div class="reg-card card">
       <div class="rg-main"><b>${money(+r.amount||0)} — ${esc(r.purpose||'')}</b>
         <span class="rg-meta">${esc(r.who)}${r.position?' ('+esc(r.position)+')':''} · ${esc(r.account||'')} · filed ${esc(r.date)}${r.needed?' · needed '+esc(r.needed):''}</span></div>
@@ -3371,6 +3552,16 @@ function printFunding(id){const r=state.funding.find(x=>x.id===id);if(!r)return;
     ${r.needed?`<p>Funds needed by: ${fillLine(r.needed,140)}</p>`:''}
     <p style="margin-top:30px">Quaestor approval ______________________________ &nbsp; Date ______________</p>
     <p style="margin-top:14px">Consul approval ______________________________ &nbsp; Date ______________</p>`);}
+function renderFundingPublic(){const l=document.getElementById('fundingListPublic');if(!l)return;
+  const ex=(typeof execData!=='undefined'&&execData!==null);
+  l.innerHTML=state.funding.length?state.funding.map(r=>`<div class="reg-card card">
+      <div class="rg-main"><b>${money(+r.amount||0)} — ${esc(r.purpose||'')}</b>
+        <span class="rg-meta">${esc(r.who)}${r.position?' ('+esc(r.position)+')':''} · ${esc(r.account||'')} · filed ${esc(r.date)}</span></div>
+      <div class="rg-side">${ex?`<select class="rg-status ${r.status==='Approved'?'s-approved':r.status==='Denied'?'':'s-submitted'}" onchange="const f=state.funding.find(x=>x.id==='${r.id}');f.status=this.value;renderFundingList();save()">
+          ${['Pending','Approved','Denied'].map(x=>`<option ${r.status===x?'selected':''}>${x}</option>`).join('')}</select>`
+        :`<span class="sp-status ${r.status==='Approved'?'received':'pledged'}">${esc(r.status)}</span>`}
+        <div class="rg-btns"><button class="mini-btn ok" onclick="printFunding('${r.id}')">Print</button></div></div>
+    </div>`).join(''):'<p class="lead" style="font-size:12.5px">No reimbursement requests yet.</p>';}
 /* ---- Equipment sign-out (plain) ---- */
 function newEquipment(){modalFields([
     {k:'item',l:'Item / equipment',v:''},
@@ -3601,7 +3792,7 @@ function renderDoorCount(){const map=document.getElementById('dcMap');if(!map)re
 /* ---------- COMMAND PALETTE / GLOBAL SEARCH (Ctrl/Cmd+K) ---------- */
 let cmdItems=[],cmdSel=0;
 function cmdIndex(){const out=[];
-  const navs=[['dash','Dashboard','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['register','Event Registration','&#128221;'],['exec','Exec Center','&#128274;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
+  const navs=[['dash','Dashboard','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['guests','Guest Lists','&#128203;'],['newmember','New Member Workstation','&#127891;'],['register','Event Registration','&#128221;'],['exec','Exec Center','&#128274;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
   navs.forEach(n=>out.push({label:n[1],sub:'Section',icon:n[2],view:n[0]}));
   (state.members||[]).forEach(m=>{if(m.name)out.push({label:m.name,sub:(m.role?m.role+' · ':'')+(m.status==='alumni'?'Alumnus':m.status==='new'?'New Member':'Active Brother')+(m.year?" · '"+(''+m.year).slice(-2):''),icon:'&#128100;',view:'roster',url:m.email?('mailto:'+m.email):null});});
   (state.positions||[]).forEach(p=>{if(p.holder)out.push({label:p.holder,sub:p.roman+' · '+p.role,icon:'&#11088;',view:'officers'});});
@@ -3640,7 +3831,7 @@ function closeLightbox(e,force){if(force||(e&&e.target&&e.target.id==='lightbox'
 function renderAll(){renderCrest();renderStats();renderRoster();renderAnn();renderEvents();renderFiles();renderSources();syncNames();renderPositions();
   fillFamSelect();renderFamilies();renderLeaderboard();renderFamEdit();renderSocial();renderMinutes();renderTasks();
   renderGiveHero();renderPhiloTable();renderAlumniTable();renderScholTable();renderScholKpis();
-  renderBudgetTable();renderDuesTable();renderBalanceTable();buildVisibleCharts();renderCommittees();renderDonate();renderGallery();renderDashGallery();renderStanding();renderRecruit();renderDoorCount();renderRegister();renderMeeting();renderDashStanding();renderPresence();renderExec();renderDispatch();
+  renderBudgetTable();renderDuesTable();renderBalanceTable();buildVisibleCharts();renderCommittees();renderDonate();renderFundingList();renderNM();renderGallery();renderDashGallery();renderStanding();renderRecruit();renderDoorCount();renderRegister();renderMeeting();renderDashStanding();renderPresence();renderExec();renderDispatch();
   const gi=document.getElementById('philoGoal');if(gi)gi.oninput=()=>{state.finance.philanthropy.goal=+gi.value||0;buildGiveCharts();renderKpis();renderStats();renderGiveHero();save();};
   const ai=document.getElementById('scholAnnual');if(ai)ai.oninput=()=>{state.giving.scholarship.annual=+ai.value||0;renderScholKpis();renderGiveHero();renderStats();save();};}
 async function init(){

@@ -28,7 +28,9 @@ export default async (req) => {
 
   if (req.method === "GET") {
     const r = await fetch(apiRead, { headers: { Authorization: `Bearer ${token}` } });
-    if (!r.ok) return new Response(null, { status: 204, headers: cors }); /* absent key = empty */
+    if (r.status === 404) return new Response(null, { status: 204, headers: cors }); /* truly absent key */
+    if (!r.ok) return new Response(JSON.stringify({ error: "store-auth", status: r.status }),
+      { status: 503, headers: { ...cors, "content-type": "application/json" } }); /* NEVER report auth failure as empty */
     const t = await r.text();
     return new Response(t, { status: 200, headers: { ...cors, "content-type": "application/json", "cache-control": "no-store" } });
   }
