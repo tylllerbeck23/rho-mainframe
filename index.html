@@ -1165,6 +1165,37 @@
     .pn-move{display:flex}
     .pn-move button{width:34px;height:34px}
   }
+
+  /* House Channel */
+  .tv-mode{position:fixed;inset:0;z-index:1150;display:none;flex-direction:column;
+    background:radial-gradient(1100px 600px at 80% -10%,rgba(231,117,0,.13),transparent 60%),linear-gradient(165deg,#0A1F38,#071628 55%,#050F1E)}
+  .tv-mode.show{display:flex}
+  .tv-head{display:flex;align-items:center;gap:22px;padding:26px 40px;border-bottom:3px double var(--line)}
+  .tv-crest img,.tv-crest svg{height:64px}
+  .tv-title{font-family:'Cinzel';font-weight:800;font-size:24px;letter-spacing:4px;color:var(--cream)}
+  .tv-title span{display:block;font-size:11px;letter-spacing:6px;color:var(--gold);margin-top:4px}
+  .tv-clock{margin-left:auto;font-size:18px;color:var(--cream-dim);font-variant-numeric:tabular-nums}
+  .tv-clock b{color:var(--gold-br);font-size:26px}
+  .tv-stage{flex:1;display:flex;align-items:center;justify-content:center;padding:30px 60px;overflow:hidden}
+  .tv-slide{width:100%;max-width:1100px;animation:mbIn .6s ease}
+  .tv-kicker{font-family:'Cinzel';font-size:15px;font-weight:800;letter-spacing:5px;color:var(--orange-br);margin-bottom:18px}
+  .tv-big{font-family:'Cinzel';font-weight:800;font-size:52px;color:var(--cream);line-height:1.15;text-shadow:0 2px 0 rgba(0,0,0,.5)}
+  .tv-big span{display:block;font-family:'Montserrat';font-weight:500;font-size:19px;color:var(--cream-dim);margin-top:12px;letter-spacing:.5px}
+  .tv-rows{margin-top:28px}
+  .tv-row{display:flex;align-items:center;gap:16px;font-size:21px;color:var(--cream);padding:12px 0;border-bottom:1px solid var(--line-soft)}
+  .tv-row b{font-family:'Cinzel';color:var(--gold);min-width:52px}
+  .tv-row span{margin-left:auto;font-family:'Cinzel';font-weight:700;color:var(--gold-br)}
+  .tv-cols{display:grid;grid-template-columns:1.2fr 1fr;gap:60px}
+  .tv-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .tv-ph img{width:100%;height:340px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+  .tv-ph span{display:block;margin-top:10px;font-size:15px;color:var(--cream-dim)}
+  .tv-chips{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .tv-chips .dl-chip{font-size:16px;padding:8px 18px 8px 8px}
+  .tv-chips .dl-chip i{width:34px;height:34px;font-size:13px}
+  .tv-ticker{overflow:hidden;border-top:3px double var(--line);padding:14px 0;background:rgba(0,0,0,.3)}
+  .tv-ticker-inner{white-space:nowrap;display:inline-block;font-family:'Cinzel';font-size:15px;letter-spacing:2px;color:var(--gold);
+    animation:tvtick 40s linear infinite;padding-left:100vw}
+  @keyframes tvtick{to{transform:translateX(-100%)}}
 </style>
 </head>
 <body>
@@ -1192,6 +1223,7 @@
       <button data-v="calendar" onclick="go('calendar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Calendar</button>
       <div class="grp">Live Ops</div>
       <button class="nav-action gavel" onclick="enterMeetingMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13.5 4.5l6 6M11 7l6 6M14.5 3.5l6 6-2 2-6-6zM9 9l6 6-2 2-6-6z"/><path d="M3 21h9M5.5 18.5L11 13"/></svg>Chapter Meeting</button>
+      <button class="nav-action" onclick="openHouseChannel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="12" rx="1.5"/><path d="M9 21h6M12 17v4"/></svg>House Channel</button>
       <button class="nav-action rushlive" onclick="openRushMode()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>Rush Mode<span class="nav-live">LIVE</span></button>
       <button data-v="doorcount" onclick="go('doorcount')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 12h7v9M10 3v9"/></svg>Function Control</button>
       <button data-v="guests" onclick="go('guests')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 12h8M8 15h5"/></svg>Guest Lists</button>
@@ -1773,6 +1805,16 @@
       <p class="pg-sub">Give your name at the door. — The Brothers of Kappa Delta Rho</p>
     </div>
   </div>
+</div>
+<div class="tv-mode" id="tvMode">
+  <button class="rm-exit" onclick="closeTv()">Exit &times;</button>
+  <div class="tv-head">
+    <div class="tv-crest" id="tvCrest"></div>
+    <div class="tv-title">RHO CHAPTER &middot; &Kappa;&Delta;&Rho;<span>HONOR SUPER OMNIA</span></div>
+    <div class="tv-clock" id="tvClock"></div>
+  </div>
+  <div class="tv-stage" id="tvStage"></div>
+  <div class="tv-ticker"><div class="tv-ticker-inner" id="tvTicker"></div></div>
 </div>
 <div class="doorman" id="doormanMode">
   <button class="rm-exit" onclick="closeDoorman()" aria-label="Exit doorman">&times;</button>
@@ -3613,6 +3655,49 @@ function openShare(){const m=document.getElementById('shareModal');m.classList.a
 function copyShare(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>{const el=document.getElementById('shareLink');el.textContent='Copied ✓';setTimeout(()=>{el.textContent='kresentapp2.netlify.app';},1400);});}catch(e){}}
 function nativeShare(){try{navigator.share({title:'Rho Chapter Mainframe',text:'The Rho Chapter Mainframe — our chapter command board. Open it and Add to Home Screen. Honor Super Omnia.',url:SHARE_URL});}catch(e){}}
 
+/* ================== HOUSE CHANNEL — chapter-room TV mode ================== */
+let tvTimer=null,tvClockT=null,tvIdx=0;
+function isTvLink(){return location.hash==='#tv';}
+function openHouseChannel(){const tv=document.getElementById('tvMode');if(!tv)return;
+  document.getElementById('tvCrest').innerHTML=galCrestHTML();
+  tv.classList.add('show');tvIdx=0;tvSlide();
+  clearInterval(tvTimer);tvTimer=setInterval(()=>{tvIdx++;tvSlide();},12000);
+  clearInterval(tvClockT);tvClockT=setInterval(tvClock,1000);tvClock();
+  tvTicker();
+  try{const fs=document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();if(fs&&fs.catch)fs.catch(()=>{});}catch(e){}}
+function closeTv(){document.getElementById('tvMode').classList.remove('show');clearInterval(tvTimer);clearInterval(tvClockT);
+  try{if(document.fullscreenElement){const fs=document.exitFullscreen();if(fs&&fs.catch)fs.catch(()=>{});}}catch(e){}
+  if(location.hash==='#tv')history.replaceState(null,'',location.pathname);}
+function tvClock(){const el=document.getElementById('tvClock');if(!el)return;const n=new Date();
+  el.innerHTML=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+' &middot; <b>'+n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</b>';}
+function tvTicker(){const t=document.getElementById('tvTicker');if(!t)return;
+  const items=(state.announcements||[]).map(a=>a.text).filter(Boolean);
+  t.textContent=items.length?('  ◆  '+items.join('  ◆  ')+'  ◆  '):'  ◆  Welcome to the Rho Chapter house  ◆  Honor Super Omnia  ◆  ';}
+function tvSlide(){const st=document.getElementById('tvStage');if(!st)return;
+  const slides=[tvSlideEvents,tvSlideLeaders,tvSlidePhotos,tvSlideLive];
+  const html=slides[tvIdx%slides.length]();
+  st.innerHTML='<div class="tv-slide">'+html+'</div>';}
+function tvSlideEvents(){const now=new Date();now.setHours(0,0,0,0);
+  const evs=[...(state.events||[]),...((state.recruit&&state.recruit.events)||[])]
+    .filter(e=>e.date&&new Date(e.date+'T00:00:00')>=now)
+    .sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4);
+  if(!evs.length)return '<div class="tv-big">No upcoming events<span>Enjoy the quiet, brothers.</span></div>';
+  const next=evs[0];const days=Math.round((new Date(next.date+'T00:00:00')-now)/86400000);
+  return '<div class="tv-kicker">NEXT UP'+(days===0?' — TONIGHT':days===1?' — TOMORROW':' — IN '+days+' DAYS')+'</div>'
+    +'<div class="tv-big">'+esc(next.title)+'<span>'+new Date(next.date+'T00:00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+(next.loc?' · '+esc(next.loc):'')+'</span></div>'
+    +'<div class="tv-rows">'+evs.slice(1).map(e=>'<div class="tv-row"><b>'+new Date(e.date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</b>'+esc(e.title)+'</div>').join('')+'</div>';}
+function tvSlideLeaders(){const rows=memberTotals('all').slice(0,5);const fams=famTotals().slice(0,3);
+  return '<div class="tv-kicker">CHAPTER POINTS</div><div class="tv-cols"><div>'
+    +rows.map((r,i)=>'<div class="tv-row"><b>'+(i+1)+'</b>'+esc(r.who)+'<span>'+r.points+'</span></div>').join('')
+    +'</div><div>'+fams.map((f,i)=>'<div class="tv-row fam"><b>'+(i+1)+'</b>'+esc(f.name)+'<span>'+f.points+'</span></div>').join('')+'</div></div>';}
+function tvSlidePhotos(){const ps=(state.gallery||[]).slice(0,3);
+  if(!ps.length)return '<div class="tv-big">The Brotherhood<span>Add photos in the Gallery — they show here.</span></div>';
+  return '<div class="tv-kicker">THE BROTHERHOOD</div><div class="tv-photos">'+ps.map(p=>'<div class="tv-ph"><img src="'+p.src+'" alt=""><span>'+esc(p.cap||'')+'</span></div>').join('')+'</div>';}
+function tvSlideLive(){const list=presenceList();const inHouse=dcTotalIn();
+  return '<div class="tv-kicker">LIVE ON THE BOARD</div>'
+    +'<div class="tv-big">'+(list.length||'—')+'<span>brother'+(list.length===1?'':'s')+' connected right now'+(inHouse?' · '+inHouse+' in the basement':'')+'</span></div>'
+    +'<div class="tv-chips">'+list.slice(0,10).map(p=>'<span class="dl-chip"><i>'+esc(initials(p.name))+'</i>'+esc(p.name)+'</span>').join('')+'</div>';}
+
 /* ================== DASHBOARD PERSONAL POINTS ================== */
 function renderDashStanding(){const c=document.getElementById('dashStanding');if(!c)return;const me=meName();
   const names=state.members.filter(m=>m.status!=='alumni'&&m.name).map(m=>m.name);
@@ -4062,7 +4147,7 @@ function cmdIndex(){const out=[];
   out.push({label:'Check in with code',sub:'Action',icon:'&#10003;',view:'standing'});
   out.push({label:'New reimbursement',sub:'Action',icon:'&#36;',view:'finance'});
   out.push({label:'Raise a motion',sub:'Action',icon:'&#9995;',view:'meeting'});
-  out.push({label:'Post announcement',sub:'Action',icon:'&#128227;',view:'dash'});
+  out.push({label:'Post announcement',sub:'Action',icon:'&#128227;',view:'dash'});out.push({label:'Start House Channel (TV mode)',sub:'Action',icon:'&#128250;',view:'dash'});
   const navs=[['dash','Command Deck','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['guests','Guest Lists','&#128203;'],['newmember','New Member Workstation','&#127891;'],['register','Event Registration','&#128221;'],['exec','Exec Center','&#128274;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
   navs.forEach(n=>out.push({label:n[1],sub:'Section',icon:n[2],view:n[0]}));
   (state.members||[]).forEach(m=>{if(m.name)out.push({label:m.name,sub:(m.role?m.role+' · ':'')+(m.status==='alumni'?'Alumnus':m.status==='new'?'New Member':'Active Brother')+(m.year?" · '"+(''+m.year).slice(-2):''),icon:'&#128100;',view:'roster',url:m.email?('mailto:'+m.email):null});});
@@ -4085,7 +4170,7 @@ function cmdRender(q){q=(q||'').trim().toLowerCase();const r=document.getElement
   r.innerHTML=list.map((it,i)=>`<button class="cmd-row${i===cmdSel?' sel':''}" data-i="${i}" onmouseenter="cmdSel=${i};cmdHi()" onclick="cmdGo(${i})">
     <span class="cmd-ic">${it.icon||'&#9679;'}</span><span class="cmd-tx"><b>${esc(it.label)}</b><span>${esc(it.sub)}</span></span>${it.url?'<span class="cmd-open">&#8599;</span>':'<span class="cmd-open">&#8594;</span>'}</button>`).join('');}
 function cmdHi(){document.querySelectorAll('#cmdResults .cmd-row').forEach((el,i)=>el.classList.toggle('sel',i===cmdSel));}
-function cmdGo(i){const list=cmdItems._f||[];const it=list[i];if(!it)return;closeCmd();if(it.view)go(it.view);if(it.url){setTimeout(()=>{try{window.open(it.url,it.url.indexOf('mailto:')===0?'_self':'_blank');}catch(e){}},60);}}
+function cmdGo(i){const list=cmdItems._f||[];const it=list[i];if(!it)return;closeCmd();if(it.label&&it.label.indexOf('House Channel')>-1){openHouseChannel();return;}if(it.view)go(it.view);if(it.url){setTimeout(()=>{try{window.open(it.url,it.url.indexOf('mailto:')===0?'_self':'_blank');}catch(e){}},60);}}
 function cmdKey(e){const list=cmdItems._f||[];if(e.key==='ArrowDown'){e.preventDefault();cmdSel=Math.min(cmdSel+1,list.length-1);cmdHi();}else if(e.key==='ArrowUp'){e.preventDefault();cmdSel=Math.max(cmdSel-1,0);cmdHi();}else if(e.key==='Enter'){e.preventDefault();cmdGo(cmdSel);}else if(e.key==='Escape'){closeCmd();}}
 window.addEventListener('keydown',function(e){
   if(e.key==='/'&&!e.metaKey&&!e.ctrlKey){const t=e.target;if(!(t&&t.matches&&t.matches('input,textarea,select,[contenteditable]'))){e.preventDefault();openCmd();return;}}
@@ -4114,6 +4199,7 @@ async function init(){
   if(isGuestLink()){showGuestGate();return;}
   buildManifest();registerSW();const kc=document.getElementById('keyGateCrest');if(kc)kc.innerHTML=(typeof DEFAULT_CREST!=='undefined'&&DEFAULT_CREST)?('<img src="'+DEFAULT_CREST+'" alt="crest">'):EMBLEM;await loadState();const bc=document.getElementById('bootCrest');if(bc)bc.innerHTML=(typeof DEFAULT_CREST!=='undefined'&&DEFAULT_CREST)?('<img src="'+DEFAULT_CREST+'" alt="crest">'):EMBLEM;const cbx=document.getElementById('creedBox');if(cbx)cbx.value=state.creed||'';wireCalendar();generateRecap(false);renderAll();tickClock();setInterval(tickClock,30000);
   if(window.speechSynthesis){try{window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){};}catch(e){}}
+  if(isTvLink())setTimeout(openHouseChannel,600);
   const cn=document.getElementById('chatName');if(cn)cn.value=chatNick();loadChat();setInterval(()=>{if(!fbLive())loadChat();},5000);startIdle();fetchDonations();setInterval(fetchDonations,30000);wirePhotoInput();
   fetchTasks();if(taskTimer)clearInterval(taskTimer);taskTimer=setInterval(function(){if(tasksCsvUrl())fetchTasks();},45000);
   initDrawers();cloudLoadGallery();setTimeout(maybeInstallBanner,2500);setTimeout(weeklySnapshot,8000);setInterval(cloudRefreshBoard,30000);setInterval(cloudRefreshGallery,25000);setInterval(pollMotions,4000);
