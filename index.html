@@ -1156,8 +1156,8 @@
   .mini-btn{min-height:36px}
   .rc-mode{font-size:11px;padding:10px 15px}
   @media(max-width:880px){
-    .save-flash{bottom:calc(96px + env(safe-area-inset-bottom))}
-    .update-toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+    .save-flash{bottom:calc(118px + env(safe-area-inset-bottom))!important}
+    .update-toast{bottom:calc(118px + env(safe-area-inset-bottom))!important}
     aside{z-index:70;padding-bottom:calc(80px + env(safe-area-inset-bottom))}
     .scroll{padding-bottom:calc(96px + env(safe-area-inset-bottom))!important}
     .mtab button{font-size:10px;letter-spacing:.4px}
@@ -1196,6 +1196,30 @@
   .tv-ticker-inner{white-space:nowrap;display:inline-block;font-family:'Cinzel';font-size:15px;letter-spacing:2px;color:var(--gold);
     animation:tvtick 40s linear infinite;padding-left:100vw}
   @keyframes tvtick{to{transform:translateX(-100%)}}
+
+  /* Sweetheart */
+  .sh-hero{display:flex;gap:26px;align-items:center;padding:26px 28px;margin-bottom:22px;flex-wrap:wrap;
+    border-top:2px solid rgba(224,102,79,.55)!important;
+    background:radial-gradient(600px 300px at 85% -20%,rgba(224,102,79,.12),transparent 60%),linear-gradient(160deg,var(--navy-2),var(--navy-1))}
+  .sh-photo{flex:none;width:168px;height:168px;border-radius:50%;overflow:hidden;background:var(--ink);
+    border:3px solid var(--gold);outline:1px solid rgba(224,102,79,.5);outline-offset:5px;box-shadow:0 14px 34px -14px rgba(0,0,0,.7)}
+  body.editing .sh-photo{cursor:pointer}
+  .sh-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .sh-ph-empty{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:44px;gap:8px}
+  .sh-ph-empty span{font-size:10px;color:var(--cream-dim2);font-family:'Montserrat';letter-spacing:.5px}
+  .sh-id{flex:1;min-width:240px}
+  .sh-kicker{font-family:'Cinzel';font-size:10px;font-weight:800;letter-spacing:3.5px;color:#e08f7a;margin-bottom:8px}
+  .sh-name{font-family:'Cinzel';font-weight:800;font-size:34px;color:var(--cream);letter-spacing:1px;text-shadow:0 1px 0 rgba(0,0,0,.55)}
+  .sh-term{font-family:'Cinzel';font-size:11.5px;letter-spacing:2.5px;color:var(--gold);margin-top:6px;text-transform:uppercase}
+  .sh-bio{color:var(--cream-dim);font-size:13.5px;line-height:1.65;margin-top:12px;max-width:56ch}
+  .sh-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:var(--gold-br);margin-top:12px}
+  .sh-note{display:flex;gap:12px;align-items:flex-start;background:var(--navy-1);border:1px solid var(--line);border-left:3px solid rgba(224,102,79,.55);
+    border-radius:6px;padding:13px 16px;margin-bottom:9px;box-shadow:var(--shadow-sm)}
+  .sh-note-rose{font-size:16px;flex:none}
+  .sh-note .flex{flex:1;min-width:0}
+  .sh-note-text{color:var(--cream);font-size:13.5px;line-height:1.55}
+  .sh-note-by{color:var(--cream-dim2);font-size:11px;margin-top:5px;font-style:italic}
+  @media(max-width:760px){.sh-hero{flex-direction:column;text-align:center}.sh-id{min-width:0}.sh-bio{margin-inline:auto}}
 </style>
 </head>
 <body>
@@ -1231,6 +1255,7 @@
       <button data-v="roster" onclick="go('roster')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 6a3 3 0 010 6M21 20a5 5 0 00-5-5"/></svg>Roster</button>
       <button data-v="points" onclick="go('points')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0z"/></svg>Points & Families</button>
       <button data-v="gallery" onclick="go('gallery')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5L5 19"/></svg>Gallery</button>
+      <button data-v="sweetheart" onclick="go('sweetheart')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/><path d="M12 6v3M10.5 7.5h3" stroke-linecap="round"/></svg>Sweetheart</button>
       <button class="grp grp-toggle" data-drawer="admin" onclick="toggleDrawer('admin')">Administration</button>
       <div class="grp-body" id="drawer-admin">
       <button data-v="exec" onclick="go('exec')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>Exec Center</button>
@@ -1568,6 +1593,26 @@
         <input type="file" id="photoInput" accept="image/*" multiple hidden>
         <div class="gallery-filters" id="galleryFilters"></div>
         <div class="gallery-grid" id="galleryGrid"></div>
+      </section>
+
+      <section class="view" id="v-sweetheart">
+        <div class="sec">Chapter Sweetheart</div>
+        <div class="sh-hero card">
+          <div class="sh-photo" id="shPhoto" onclick="if(editing)document.getElementById('shPhotoInput').click()"></div>
+          <input type="file" id="shPhotoInput" accept="image/*" hidden>
+          <div class="sh-id">
+            <div class="sh-kicker">&#127801; &nbsp;THE SWEETHEART OF RHO CHAPTER&nbsp; &#127801;</div>
+            <h2 class="sh-name" id="shName"></h2>
+            <div class="sh-term" id="shTerm"></div>
+            <p class="sh-bio" id="shBio"></p>
+            <div class="sh-quote" id="shQuote"></div>
+            <div class="sh-edit" id="shEdit"></div>
+          </div>
+        </div>
+        <div class="sec-sub">From the Brothers</div>
+        <p class="lead" style="font-size:12.5px;margin-bottom:12px">Leave a note of appreciation — it shows for the whole chapter.</p>
+        <div id="shNotesList"></div>
+        <div class="inline-add" style="margin-top:12px"><input id="shNoteIn" placeholder="A note for our Sweetheart…" onkeydown="if(event.key===&#39;Enter&#39;)addShNote()"><button onclick="addShNote()">Send &#127801;</button></div>
       </section>
 
       <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
@@ -1997,6 +2042,8 @@ const DEFAULTS={
     {id:"nm9",title:"Brotherhood event attendance"},
     {id:"nm10",title:"Final review & initiation readiness"}],
   nmChecks:{},
+  sweetheart:{name:'Parm',title:'Rho Chapter Sweetheart',term:'2026–27',bio:'',quote:'',photo:''},
+  shNotes:[],
   doorcaps:{kitchen:45,kstorage:20,board:25,rec1:45,rec3:60,bar:12,stair:10,storage:5,wc:2,boiler:0},
   registrations:[],sponsors:[],letters:[],
   regDefaults:{org:"Kappa Delta Rho — Rho Chapter",rmo:"",rmoPhone:"",presPhone:""},
@@ -2299,7 +2346,7 @@ function flushPending(){
   if(pendingDoor){doorCounts=pendingDoor;pendingDoor=null;lsSaveDoor();renderDoorCount();}}
 function merge(s){const o=JSON.parse(JSON.stringify(DEFAULTS));
   if(s.chapter)Object.assign(o.chapter,s.chapter);
-  ["members","announcements","events","tasks","log","families","points","social","minutes","files","positions","chat","committees","gallery","hours","checkins","registrations","sponsors","votes","equipment","funding","letters"].forEach(k=>{if(Array.isArray(s[k]))o[k]=s[k];});
+  ["members","announcements","events","tasks","log","families","points","social","minutes","files","positions","chat","committees","gallery","hours","checkins","registrations","sponsors","votes","equipment","funding","letters","shNotes"].forEach(k=>{if(Array.isArray(s[k]))o[k]=s[k];});
   if(s.regDefaults&&typeof s.regDefaults==='object')o.regDefaults=Object.assign(o.regDefaults,s.regDefaults);
   if(s.meeting&&typeof s.meeting==='object')o.meeting=Object.assign(o.meeting,s.meeting);
   if(s.minutesLive&&typeof s.minutesLive==='object')o.minutesLive=s.minutesLive;
@@ -2311,6 +2358,7 @@ function merge(s){const o=JSON.parse(JSON.stringify(DEFAULTS));
   if(s.recruit&&typeof s.recruit==='object'){o.recruit=Object.assign(o.recruit,s.recruit);if(!Array.isArray(o.recruit.pnms))o.recruit.pnms=[];if(!Array.isArray(o.recruit.events))o.recruit.events=[];}
   if(s.reqs&&typeof s.reqs==='object')o.reqs=Object.assign(o.reqs,s.reqs);
   if(s.doorcaps&&typeof s.doorcaps==='object')o.doorcaps=Object.assign(o.doorcaps,s.doorcaps);
+  if(s.sweetheart&&typeof s.sweetheart==='object')o.sweetheart=Object.assign(o.sweetheart,s.sweetheart);
   if(Array.isArray(s.nmProgram)&&s.nmProgram.length)o.nmProgram=s.nmProgram;
   if(s.nmChecks&&typeof s.nmChecks==='object')o.nmChecks=s.nmChecks;
   if(typeof s.creed==='string')o.creed=s.creed;
@@ -2353,10 +2401,10 @@ function pushLog(kind,text){state.log.unshift({date:new Date().toISOString().sli
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download="rho-mainframe-backup.json";a.click();URL.revokeObjectURL(a.href);}
 function esc(s){return (s==null?'':''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function escAttr(s){return esc(s).replace(/"/g,'&quot;');}
-const CRUMB={dash:'Command Deck',standing:'My Standing',meeting:'Chapter Meeting',recruit:'Recruitment Command',doorcount:'Function Control',guests:'Guest Lists',newmember:'New Member Workstation',register:'Event Registration',exec:'Exec Center',roster:'Roster',points:'Points & Families',social:'Social',calendar:'Calendar',giving:'Giving & Scholarship',finance:'Finance',minutes:'Meeting Minutes',officers:'Officers & Tasks',files:'Files',chat:'Chapter Chat',gallery:'Brotherhood Gallery',donate:'Support the Chapter',committees:'Committees & Workflow'};
+const CRUMB={dash:'Command Deck',standing:'My Standing',meeting:'Chapter Meeting',recruit:'Recruitment Command',doorcount:'Function Control',guests:'Guest Lists',newmember:'New Member Workstation',sweetheart:'Chapter Sweetheart',register:'Event Registration',exec:'Exec Center',roster:'Roster',points:'Points & Families',social:'Social',calendar:'Calendar',giving:'Giving & Scholarship',finance:'Finance',minutes:'Meeting Minutes',officers:'Officers & Tasks',files:'Files',chat:'Chapter Chat',gallery:'Brotherhood Gallery',donate:'Support the Chapter',committees:'Committees & Workflow'};
 function go(t){const changed=cur!==t;cur=t;document.querySelectorAll('.view').forEach(v=>{v.classList.remove('active','anim');});const el=document.getElementById('v-'+t);if(el){el.classList.add('active');if(changed){void el.offsetWidth;el.classList.add('anim');sfxTick();}}const _tgt=document.querySelector('#sidenav button[data-v="'+t+'"]');if(_tgt){const _body=_tgt.closest('.grp-body');if(_body&&!_body.classList.contains('open'))toggleDrawer(_body.id.replace('drawer-',''),true);}
   document.querySelectorAll('#sidenav button').forEach(b=>b.classList.toggle('active',b.dataset.v===t));document.querySelectorAll('#mtab button').forEach(b=>b.classList.toggle('active',b.dataset.mt===t));document.getElementById('crumb').textContent=CRUMB[t]||'';document.body.classList.remove('nav-open');const sc=document.querySelector('.scroll');if(sc)sc.scrollTop=0;
-  setTimeout(()=>{if(t==='finance')buildCharts();if(t==='giving')buildGiveCharts();if(t==='dash'){buildHomeCharts();renderDonate();renderDashGallery();}if(t==='donate')renderDonate();if(t==='committees')renderCommittees();if(t==='gallery')renderGallery();if(t==='standing')renderStanding();if(t==='recruit')renderRecruit();if(t==='doorcount')renderDoorCount();if(t==='guests')renderGuestCenter();if(t==='newmember')renderNM();if(t==='register')renderRegister();if(t==='meeting')renderMeeting();if(t==='exec')renderExec();if(t==='dash'){renderDashStanding();renderPresence();if(innerWidth>=1700)document.querySelectorAll('.dash-fold').forEach(d=>d.open=true);}},40);}
+  setTimeout(()=>{if(t==='finance')buildCharts();if(t==='giving')buildGiveCharts();if(t==='dash'){buildHomeCharts();renderDonate();renderDashGallery();}if(t==='donate')renderDonate();if(t==='committees')renderCommittees();if(t==='gallery')renderGallery();if(t==='standing')renderStanding();if(t==='recruit')renderRecruit();if(t==='doorcount')renderDoorCount();if(t==='guests')renderGuestCenter();if(t==='newmember')renderNM();if(t==='sweetheart')renderSweetheart();if(t==='register')renderRegister();if(t==='meeting')renderMeeting();if(t==='exec')renderExec();if(t==='dash'){renderDashStanding();renderPresence();if(innerWidth>=1700)document.querySelectorAll('.dash-fold').forEach(d=>d.open=true);}},40);}
 function toggleEdit(){editing=!editing;document.body.classList.toggle('editing',editing);const b=document.getElementById('editBtn');b.classList.toggle('on',editing);b.innerHTML=editing?'\u2713 Done':'\u270E Edit';if(!editing)flushPending();renderAll();}
 function toggleFs(){if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}else{document.exitFullscreen&&document.exitFullscreen();}}
 function tickClock(){const n=new Date();const c=document.getElementById('clock');if(c)c.innerHTML=n.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})+' &middot; <b>'+n.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'</b>';}
@@ -3655,6 +3703,37 @@ function openShare(){const m=document.getElementById('shareModal');m.classList.a
 function copyShare(){try{navigator.clipboard.writeText(SHARE_URL).then(()=>{const el=document.getElementById('shareLink');el.textContent='Copied ✓';setTimeout(()=>{el.textContent='kresentapp2.netlify.app';},1400);});}catch(e){}}
 function nativeShare(){try{navigator.share({title:'Rho Chapter Mainframe',text:'The Rho Chapter Mainframe — our chapter command board. Open it and Add to Home Screen. Honor Super Omnia.',url:SHARE_URL});}catch(e){}}
 
+/* ================== CHAPTER SWEETHEART ================== */
+function renderSweetheart(){const sh=state.sweetheart||{};
+  const ph=document.getElementById('shPhoto');if(!ph)return;
+  ph.innerHTML=sh.photo?('<img src="'+sh.photo+'" alt="'+escAttr(sh.name||'Sweetheart')+'">'):
+    ('<div class="sh-ph-empty">&#127801;'+(editing?'<span>Tap to add her photo</span>':'')+'</div>');
+  document.getElementById('shName').textContent=sh.name||'—';
+  document.getElementById('shTerm').textContent=(sh.title||'Chapter Sweetheart')+(sh.term?' · '+sh.term:'');
+  const bio=document.getElementById('shBio');bio.textContent=sh.bio||'';bio.style.display=sh.bio?'':'none';
+  const q=document.getElementById('shQuote');q.innerHTML=sh.quote?('&ldquo;'+esc(sh.quote)+'&rdquo;'):'';q.style.display=sh.quote?'':'none';
+  const ed=document.getElementById('shEdit');
+  ed.innerHTML=editing?`<div class="tse-row" style="margin-top:12px"><input value="${escAttr(sh.name||'')}" placeholder="Name" onchange="state.sweetheart.name=this.value;renderSweetheart();save()">
+    <input value="${escAttr(sh.term||'')}" placeholder="Term (e.g. 2026–27)" onchange="state.sweetheart.term=this.value;renderSweetheart();save()"></div>
+    <div class="tse-row" style="margin-top:8px"><input value="${escAttr(sh.bio||'')}" placeholder="A line about her" onchange="state.sweetheart.bio=this.value;renderSweetheart();save()">
+    <input value="${escAttr(sh.quote||'')}" placeholder="Her quote (optional)" onchange="state.sweetheart.quote=this.value;renderSweetheart();save()"></div>`:'';
+  const l=document.getElementById('shNotesList');
+  l.innerHTML=(state.shNotes||[]).length?state.shNotes.map((n,i)=>`<div class="sh-note"><span class="sh-note-rose">&#127801;</span>
+      <div class="flex"><div class="sh-note-text">${esc(n.text)}</div><div class="sh-note-by">— ${esc(n.by||'A brother')}${n.date?' · '+esc(n.date):''}</div></div>
+      ${editing?`<button class="row-del" style="position:static" onclick="state.shNotes.splice(${i},1);renderSweetheart();save()">×</button>`:''}
+    </div>`).join(''):'<div class="card pad" style="color:var(--cream-dim);font-size:13px">No notes yet — be the first.</div>';}
+function addShNote(){const inp=document.getElementById('shNoteIn');const t=(inp.value||'').trim();if(!t)return;
+  state.shNotes.unshift({id:uid(),text:t,by:meName()||chatNick()||'A brother',date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),ts:Date.now()});
+  if(state.shNotes.length>60)state.shNotes.length=60;
+  inp.value='';renderSweetheart();save();sfxVote();}
+function wireShPhoto(){const inp=document.getElementById('shPhotoInput');if(!inp||inp._wired)return;inp._wired=true;
+  inp.addEventListener('change',e=>{const f=e.target.files[0];inp.value='';if(!f)return;
+    const rd=new FileReader();rd.onload=()=>{const img=new Image();img.onload=()=>{
+      const max=900;let w=img.width,h=img.height;if(w>max||h>max){if(w>=h){h=Math.round(h*max/w);w=max;}else{w=Math.round(w*max/h);h=max;}}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);
+      try{state.sweetheart.photo=cv.toDataURL('image/jpeg',0.85);}catch(err){state.sweetheart.photo=rd.result;}
+      renderSweetheart();save();};img.src=rd.result;};rd.readAsDataURL(f);});}
+
 /* ================== HOUSE CHANNEL — chapter-room TV mode ================== */
 let tvTimer=null,tvClockT=null,tvIdx=0;
 function isTvLink(){return location.hash==='#tv';}
@@ -4148,7 +4227,7 @@ function cmdIndex(){const out=[];
   out.push({label:'New reimbursement',sub:'Action',icon:'&#36;',view:'finance'});
   out.push({label:'Raise a motion',sub:'Action',icon:'&#9995;',view:'meeting'});
   out.push({label:'Post announcement',sub:'Action',icon:'&#128227;',view:'dash'});out.push({label:'Start House Channel (TV mode)',sub:'Action',icon:'&#128250;',view:'dash'});
-  const navs=[['dash','Command Deck','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['guests','Guest Lists','&#128203;'],['newmember','New Member Workstation','&#127891;'],['register','Event Registration','&#128221;'],['exec','Exec Center','&#128274;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
+  const navs=[['dash','Command Deck','&#127968;'],['standing','My Standing','&#127919;'],['meeting','Chapter Meeting','&#9878;'],['recruit','Recruitment Command','&#129309;'],['doorcount','Function Control','&#128682;'],['guests','Guest Lists','&#128203;'],['newmember','New Member Workstation','&#127891;'],['sweetheart','Chapter Sweetheart','&#127801;'],['register','Event Registration','&#128221;'],['exec','Exec Center','&#128274;'],['roster','Roster','&#128101;'],['points','Points & Families','&#127942;'],['social','Social','&#127881;'],['calendar','Calendar','&#128197;'],['chat','Chapter Chat','&#128172;'],['gallery','Brotherhood Gallery','&#128247;'],['giving','Giving & Scholarship','&#129309;'],['donate','Donate','&#128176;'],['finance','Finance','&#128202;'],['minutes','Meeting Minutes','&#128221;'],['officers','Officers & Tasks','&#11088;'],['committees','Committees','&#128203;'],['files','Files','&#128193;']];
   navs.forEach(n=>out.push({label:n[1],sub:'Section',icon:n[2],view:n[0]}));
   (state.members||[]).forEach(m=>{if(m.name)out.push({label:m.name,sub:(m.role?m.role+' · ':'')+(m.status==='alumni'?'Alumnus':m.status==='new'?'New Member':'Active Brother')+(m.year?" · '"+(''+m.year).slice(-2):''),icon:'&#128100;',view:'roster',url:m.email?('mailto:'+m.email):null});});
   (state.positions||[]).forEach(p=>{if(p.holder)out.push({label:p.holder,sub:p.roman+' · '+p.role,icon:'&#11088;',view:'officers'});});
@@ -4189,7 +4268,7 @@ function closeLightbox(e,force){if(force||(e&&e.target&&e.target.id==='lightbox'
 function renderAll(){renderCrest();renderStats();renderRoster();renderAnn();renderEvents();renderFiles();renderSources();syncNames();renderPositions();
   fillFamSelect();renderFamilies();renderLeaderboard();renderFamEdit();renderSocial();renderMinutes();renderTasks();
   renderGiveHero();renderPhiloTable();renderAlumniTable();renderScholTable();renderScholKpis();
-  renderBudgetTable();renderDuesTable();renderBalanceTable();buildVisibleCharts();renderCommittees();renderDonate();renderFundingList();renderNM();renderGallery();renderDashGallery();renderStanding();renderRecruit();renderDoorCount();renderRegister();renderMeeting();renderDashStanding();renderPresence();renderExec();renderDispatch();
+  renderBudgetTable();renderDuesTable();renderBalanceTable();buildVisibleCharts();renderCommittees();renderDonate();renderFundingList();renderNM();renderSweetheart();renderGallery();renderDashGallery();renderStanding();renderRecruit();renderDoorCount();renderRegister();renderMeeting();renderDashStanding();renderPresence();renderExec();renderDispatch();
   const gi=document.getElementById('philoGoal');if(gi)gi.oninput=()=>{state.finance.philanthropy.goal=+gi.value||0;buildGiveCharts();renderKpis();renderStats();renderGiveHero();save();};
   const ai=document.getElementById('scholAnnual');if(ai)ai.oninput=()=>{state.giving.scholarship.annual=+ai.value||0;renderScholKpis();renderGiveHero();renderStats();save();};}
 async function init(){
@@ -4200,7 +4279,7 @@ async function init(){
   buildManifest();registerSW();const kc=document.getElementById('keyGateCrest');if(kc)kc.innerHTML=(typeof DEFAULT_CREST!=='undefined'&&DEFAULT_CREST)?('<img src="'+DEFAULT_CREST+'" alt="crest">'):EMBLEM;await loadState();const bc=document.getElementById('bootCrest');if(bc)bc.innerHTML=(typeof DEFAULT_CREST!=='undefined'&&DEFAULT_CREST)?('<img src="'+DEFAULT_CREST+'" alt="crest">'):EMBLEM;const cbx=document.getElementById('creedBox');if(cbx)cbx.value=state.creed||'';wireCalendar();generateRecap(false);renderAll();tickClock();setInterval(tickClock,30000);
   if(window.speechSynthesis){try{window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){};}catch(e){}}
   if(isTvLink())setTimeout(openHouseChannel,600);
-  const cn=document.getElementById('chatName');if(cn)cn.value=chatNick();loadChat();setInterval(()=>{if(!fbLive())loadChat();},5000);startIdle();fetchDonations();setInterval(fetchDonations,30000);wirePhotoInput();
+  const cn=document.getElementById('chatName');if(cn)cn.value=chatNick();loadChat();setInterval(()=>{if(!fbLive())loadChat();},5000);startIdle();fetchDonations();setInterval(fetchDonations,30000);wirePhotoInput();wireShPhoto();
   fetchTasks();if(taskTimer)clearInterval(taskTimer);taskTimer=setInterval(function(){if(tasksCsvUrl())fetchTasks();},45000);
   initDrawers();cloudLoadGallery();setTimeout(maybeInstallBanner,2500);setTimeout(weeklySnapshot,8000);setInterval(cloudRefreshBoard,30000);setInterval(cloudRefreshGallery,25000);setInterval(pollMotions,4000);
   setSync(fbLive()?'live':(window.storage&&window.storage._netlify?'cloud':(fbConfigured()?(BOARD_KEY?'offline':'locked'):'local')));
